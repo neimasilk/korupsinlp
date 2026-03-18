@@ -63,7 +63,8 @@ class ScraperSession:
         """GET that returns None instead of raising on error."""
         try:
             return self.get(url, **kwargs)
-        except requests.RequestException:
+        except requests.RequestException as e:
+            print(f"    [!] Request failed: {type(e).__name__}: {e}")
             return None
 
     def test_connection(self, url: str) -> dict:

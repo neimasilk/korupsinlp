@@ -1,6 +1,5 @@
 """Scrape individual verdict detail pages."""
 
-import json
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -37,12 +36,13 @@ FIELD_MAP = {
 def extract_metadata(html: str) -> dict:
     """Extract metadata fields from a verdict detail page.
 
-    Adapted from okkymabruri/putusan field extraction patterns.
+    The MA site uses a table with label-value rows for metadata,
+    and a tab-content div for the full verdict text.
     """
     soup = BeautifulSoup(html, "lxml")
     metadata = {}
 
-    # Pattern 1: Table rows with label-value pairs
+    # Pattern: Table rows with label-value pairs
     for table in soup.find_all("table"):
         rows = table.find_all("tr")
         for row in rows:
@@ -53,27 +53,28 @@ def extract_metadata(html: str) -> dict:
                 if label in FIELD_MAP and value:
                     metadata[FIELD_MAP[label]] = value
 
-    # Pattern 2: Definition list (dl/dt/dd)
-    for dl in soup.find_all("dl"):
-        dts = dl.find_all("dt")
-        dds = dl.find_all("dd")
-        for dt, dd in zip(dts, dds):
-            label = dt.get_text(strip=True).rstrip(":")
-            value = dd.get_text(strip=True)
-            if label in FIELD_MAP and value:
-                metadata[FIELD_MAP[label]] = value
-
-    # Extract PDF link
+    # Extract PDF link — pattern: /direktori/download_file/{hash}/pdf/{hash}
+    # Must match /pdf/ in path (not /zip/) to get the actual PDF download
     for link in soup.find_all("a", href=True):
-        href = link.get("href", "")
-        if href.endswith(".pdf") or "/pdf/" in href:
+        href = link["href"]
+        if "/download_file/" in href and "/pdf/" in href:
             metadata["pdf_url"] = urljoin(BASE_URL, href)
             break
 
-    # Extract the full text content (for parser)
-    content_div = soup.find("div", class_=["entry-content", "content", "detail-putusan"])
-    if content_div:
-        metadata["full_text"] = content_div.get_text(separator="\n", strip=True)
+    # Extract full text from the tab-content div
+    # The verdict content is typically in div.tab-content or div.tab-container
+    for selector in [
+        "div.tab-content",
+        "div.tab-container",
+        "div.entry-content",
+        "div.content",
+    ]:
+        content_div = soup.select_one(selector)
+        if content_div:
+            text = content_div.get_text(separator="\n", strip=True)
+            if len(text) > 200:  # Skip if too short (probably nav, not content)
+                metadata["full_text"] = text
+                break
 
     return metadata
 
@@ -81,7 +82,7 @@ def extract_metadata(html: str) -> dict:
 def save_html(html: str, verdict_id: str) -> Path:
     """Save raw HTML to disk."""
     RAW_DIR.mkdir(parents=True, exist_ok=True)
-    safe_name = verdict_id.replace("/", "_").replace("\\", "_")
+    safe_name = verdict_id.replace("/", "_").replace("\\", "_").replace(" ", "_")
     path = RAW_DIR / f"{safe_name}.html"
     path.write_text(html, encoding="utf-8")
     return path
@@ -100,7 +101,7 @@ def scrape_detail(session: ScraperSession, url: str) -> dict | None:
     metadata["url"] = url
 
     # Save raw HTML using case number or URL hash as ID
-    verdict_id = metadata.get("case_number", str(hash(url)))
+    verdict_id = metadata.get("case_number", str(abs(hash(url))))
     html_path = save_html(resp.text, verdict_id)
     metadata["html_path"] = str(html_path)
 

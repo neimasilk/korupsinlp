@@ -6,12 +6,12 @@ Usage: python -m scripts.01_test_connection
 import sys
 from pathlib import Path
 
-# Add project root to path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.config import BASE_URL, SEARCH_URL, TARGET_COURTS
+from src.config import BASE_URL, COURT_SLUGS
 from src.scraper.base import ScraperSession
-from src.scraper.listing import build_search_url, extract_verdict_urls, get_total_pages
+from src.scraper.listing import build_listing_url, extract_verdict_urls, get_total_pages
+from src.scraper.detail import extract_metadata
 
 
 def main():
@@ -33,55 +33,63 @@ def main():
     if not result['reachable']:
         all_pass = False
 
-    # Test 2: Search page reachable
+    # Test 2: Listing page for korupsi verdicts
     print("\n" + "=" * 60)
-    print("TEST 2: Search page reachability")
+    print("TEST 2: Korupsi listing page")
     print("=" * 60)
-    result = session.test_connection(SEARCH_URL)
-    print(f"  URL: {result['url']}")
+    court_slug = list(COURT_SLUGS.keys())[0]
+    listing_url = build_listing_url(court_slug)
+    result = session.test_connection(listing_url)
+    print(f"  URL: {listing_url}")
     print(f"  Reachable: {result['reachable']}")
     print(f"  Status: {result['status_code']}")
+    print(f"  Size: {result['content_length']} bytes")
     if not result['reachable']:
         all_pass = False
 
-    # Test 3: Search for tipikor verdicts at first target court
+    # Test 3: Extract verdict URLs from listing
+    urls = []
     print("\n" + "=" * 60)
-    print("TEST 3: Search for tipikor verdicts")
+    print("TEST 3: Extract verdict URLs from listing")
     print("=" * 60)
-    court_key = list(TARGET_COURTS.keys())[0]
-    court_name = TARGET_COURTS[court_key]
-    search_url = build_search_url(court_name, page=1)
-    print(f"  Court: {court_name}")
-    print(f"  URL: {search_url}")
-
-    resp = session.get_safe(search_url)
-    if resp is None:
-        print("  FAILED: Could not fetch search results")
-        all_pass = False
-    else:
+    resp = session.get_safe(listing_url)
+    if resp:
         urls = extract_verdict_urls(resp.text)
         total_pages = get_total_pages(resp.text)
-        print(f"  Status: {resp.status_code}")
         print(f"  Verdict URLs found: {len(urls)}")
         print(f"  Total pages: {total_pages}")
+        print(f"  Estimated total verdicts: ~{len(urls) * total_pages}")
         if urls:
             print(f"  Sample URL: {urls[0]}")
         else:
-            print("  WARNING: No verdict URLs found — HTML structure may have changed")
+            print("  WARNING: No verdict URLs found — selector may need update")
             all_pass = False
+    else:
+        print("  FAILED: Could not fetch listing page")
+        all_pass = False
 
-    # Test 4: Fetch a verdict detail page (if we found any)
+    # Test 4: Fetch a verdict detail page
     if urls:
         print("\n" + "=" * 60)
-        print("TEST 4: Fetch verdict detail page")
+        print("TEST 4: Fetch and parse verdict detail page")
         print("=" * 60)
         detail_url = urls[0]
         print(f"  URL: {detail_url}")
-        result = session.test_connection(detail_url)
-        print(f"  Reachable: {result['reachable']}")
-        print(f"  Status: {result['status_code']}")
-        print(f"  Size: {result['content_length']} bytes")
-        if not result['reachable']:
+        resp = session.get_safe(detail_url)
+        if resp:
+            metadata = extract_metadata(resp.text)
+            print(f"  Status: {resp.status_code}")
+            print(f"  Case Number: {metadata.get('case_number', 'N/A')}")
+            print(f"  Court: {metadata.get('lembaga_peradilan', 'N/A')}")
+            print(f"  Amar: {metadata.get('amar', 'N/A')[:80]}")
+            print(f"  Catatan Amar: {metadata.get('catatan_amar', 'N/A')[:80]}")
+            print(f"  Has full_text: {bool(metadata.get('full_text'))}")
+            print(f"  Has PDF URL: {bool(metadata.get('pdf_url'))}")
+            print(f"  Fields found: {len(metadata)}")
+            if not metadata.get('case_number'):
+                print("  WARNING: Could not extract case number")
+        else:
+            print("  FAILED: Could not fetch detail page")
             all_pass = False
 
     # Summary

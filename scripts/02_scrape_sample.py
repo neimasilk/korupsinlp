@@ -1,14 +1,15 @@
-"""Script 02: Scrape 100 verdicts from 5 courts (20 each).
+"""Script 02: Scrape 100 verdicts from MA korupsi listings.
 
-Usage: python -m scripts.02_scrape_sample
+Usage: python -m scripts.02_scrape_sample [--count N]
 """
 
+import argparse
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from src.config import TARGET_COURTS, VERDICTS_PER_COURT
+from src.config import COURT_SLUGS, SAMPLE_SIZE
 from src.db import init_db, transaction, insert_verdict, log_scrape
 from src.scraper.base import ScraperSession
 from src.scraper.listing import scrape_listing
@@ -17,20 +18,28 @@ from src.scraper.pdf_extractor import process_pdf
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--count", type=int, default=SAMPLE_SIZE,
+                        help="Number of verdicts to scrape")
+    parser.add_argument("--start-page", type=int, default=5,
+                        help="Listing page to start from (higher = older verdicts)")
+    args = parser.parse_args()
+
     init_db()
     session = ScraperSession()
 
     total_success = 0
     total_fail = 0
 
-    for court_key, court_name in TARGET_COURTS.items():
+    for court_slug, court_name in COURT_SLUGS.items():
         print(f"\n{'='*60}")
-        print(f"COURT: {court_name}")
+        print(f"COURT: {court_name} (slug: {court_slug})")
         print(f"{'='*60}")
 
         # Step 1: Get listing URLs
-        print(f"\n[1] Scraping listing pages...")
-        urls = scrape_listing(session, court_name, max_verdicts=VERDICTS_PER_COURT)
+        print(f"\n[1] Scraping listing pages for up to {args.count} verdicts (from page {args.start_page})...")
+        urls = scrape_listing(session, court_slug, max_verdicts=args.count,
+                              start_page=args.start_page)
         print(f"    Found {len(urls)} verdict URLs")
 
         if not urls:
@@ -40,28 +49,29 @@ def main():
         # Step 2: Scrape each detail page
         print(f"\n[2] Scraping detail pages...")
         for i, url in enumerate(urls, 1):
-            print(f"    [{i}/{len(urls)}] {url[:80]}...", end=" ")
+            print(f"    [{i}/{len(urls)}] ", end="")
 
             metadata = scrape_detail(session, url)
 
             if metadata is None:
-                print("FAIL")
+                print(f"FAIL {url[:60]}")
                 total_fail += 1
                 with transaction() as conn:
                     log_scrape(conn, url, None, False, "detail_fetch_failed")
                 continue
 
-            print("OK", end="")
+            case_num = metadata.get("case_number", "?")
+            print(f"OK {case_num}", end="")
 
             # Step 3: Try PDF if available
             if metadata.get("pdf_url"):
-                verdict_id = metadata.get("case_number", str(hash(url)))
+                verdict_id = metadata.get("case_number", str(abs(hash(url))))
                 pdf_result = process_pdf(session, metadata["pdf_url"], verdict_id)
                 metadata["pdf_path"] = pdf_result["pdf_path"]
                 if pdf_result["pdf_text"]:
-                    metadata["full_text"] = (
-                        metadata.get("full_text", "") + "\n" + pdf_result["pdf_text"]
-                    )
+                    # Append PDF text to full_text
+                    existing = metadata.get("full_text", "")
+                    metadata["full_text"] = (existing + "\n" + pdf_result["pdf_text"]).strip()
                     print(" +PDF", end="")
                 elif pdf_result["is_scanned"]:
                     print(" (scanned)", end="")
@@ -90,13 +100,15 @@ def main():
             total_success += 1
 
     # Summary
+    total = total_success + total_fail
     print(f"\n{'='*60}")
     print(f"SCRAPING COMPLETE")
     print(f"{'='*60}")
     print(f"  Success: {total_success}")
     print(f"  Failed:  {total_fail}")
-    print(f"  Total:   {total_success + total_fail}")
-    print(f"  Rate:    {total_success/(total_success+total_fail)*100:.1f}%" if (total_success+total_fail) > 0 else "  Rate: N/A")
+    print(f"  Total:   {total}")
+    if total > 0:
+        print(f"  Rate:    {total_success/total*100:.1f}%")
 
     return 0
 

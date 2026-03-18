@@ -12,25 +12,38 @@ DB_PATH = DATA_DIR / "korupsinlp.db"
 
 # === Website ===
 BASE_URL = "https://putusan3.mahkamahagung.go.id"
-SEARCH_URL = f"{BASE_URL}/search.html"
-TIPIKOR_KLASIFIKASI = "Tipikor"
 
-# Target courts for sampling (5 cities)
-TARGET_COURTS = {
-    "jakarta": "Pengadilan Negeri Jakarta Pusat",
-    "surabaya": "Pengadilan Negeri Surabaya",
-    "makassar": "Pengadilan Negeri Makassar",
-    "medan": "Pengadilan Negeri Medan",
-    "bandung": "Pengadilan Negeri Bandung",
+# Direktori URL patterns (discovered from live site)
+# Listing: /direktori/index/pengadilan/{court_slug}/kategori/korupsi-1.html
+# Pagination: .../page/{n}.html
+# Year filter: .../tahunjenis/putus/tahun/{year}.html
+# Detail: /direktori/putusan/{hash}.html
+# PDF: /direktori/download_file/{hash}/pdf/{hash}
+DIREKTORI_URL = f"{BASE_URL}/direktori/index"
+KORUPSI_KATEGORI = "korupsi-1"
+
+# Court slugs (verified working against live site)
+# Focus on MA level — kasasi decisions from courts nationwide
+COURT_SLUGS = {
+    "mahkamah-agung": "Mahkamah Agung",
 }
 
-VERDICTS_PER_COURT = 20  # 20 × 5 = 100 total
+# For future expansion: PN-level courts (some timeout on large result sets)
+PN_COURT_SLUGS = {
+    "pn-bandung": "PN Bandung",
+    "pn-jakarta-pusat": "PN Jakarta Pusat",
+    "pn-surabaya": "PN Surabaya",
+    "pn-makassar": "PN Makassar",
+    "pn-medan": "PN Medan",
+}
+
+SAMPLE_SIZE = 100  # Total verdicts to scrape for feasibility
 
 # === Scraping ===
 REQUEST_DELAY = 2.0  # seconds between requests
-REQUEST_TIMEOUT = 30  # seconds
+REQUEST_TIMEOUT = 90  # seconds (MA site can be slow)
 MAX_RETRIES = 3
-RETRY_BACKOFF = 2.0  # exponential backoff multiplier
+RETRY_BACKOFF = 3.0  # exponential backoff multiplier
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "

@@ -1,38 +1,34 @@
-"""Scrape listing pages to collect verdict URLs."""
+"""Scrape listing pages to collect verdict URLs from Direktori Putusan MA."""
 
 import re
-from urllib.parse import urljoin, urlencode
+from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
-from src.config import BASE_URL, SEARCH_URL, TIPIKOR_KLASIFIKASI
+from src.config import BASE_URL, DIREKTORI_URL, KORUPSI_KATEGORI
 from src.scraper.base import ScraperSession
 
 
-def build_search_url(court: str, page: int = 1) -> str:
-    """Build the search URL for tipikor verdicts at a given court."""
-    params = {
-        "q": "",
-        "t_pidn": "",
-        "t_pn": court,
-        "t_cat": TIPIKOR_KLASIFIKASI,
-        "t_subcat": "",
-        "t_tp": "",
-        "page": page,
-    }
-    return f"{SEARCH_URL}?{urlencode(params)}"
+def build_listing_url(court_slug: str, page: int = 1) -> str:
+    """Build a direktori listing URL for korupsi verdicts.
+
+    URL pattern: /direktori/index/pengadilan/{slug}/kategori/korupsi-1/page/{n}.html
+    Page 1 omits the /page/ segment.
+    """
+    base = f"{DIREKTORI_URL}/pengadilan/{court_slug}/kategori/{KORUPSI_KATEGORI}"
+    if page > 1:
+        return f"{base}/page/{page}.html"
+    return f"{base}.html"
 
 
 def extract_verdict_urls(html: str) -> list[str]:
-    """Extract verdict detail page URLs from a search results page."""
+    """Extract verdict detail page URLs from a listing page."""
     soup = BeautifulSoup(html, "lxml")
     urls = []
 
-    # Verdict links are typically in search result entries
-    # Pattern adapted from okkymabruri/putusan
-    for link in soup.select("a[href]"):
-        href = link.get("href", "")
-        # Verdict detail pages match pattern: /direktori/putusan/...
+    for link in soup.find_all("a", href=True):
+        href = link["href"]
+        # Verdict detail pages: /direktori/putusan/{hash}.html
         if "/direktori/putusan/" in href:
             full_url = urljoin(BASE_URL, href)
             if full_url not in urls:
@@ -42,39 +38,41 @@ def extract_verdict_urls(html: str) -> list[str]:
 
 
 def get_total_pages(html: str) -> int:
-    """Extract total number of pages from pagination."""
+    """Extract total pages from pagination links.
+
+    Pagination pattern: .../page/{n}.html with "Last" link pointing to final page.
+    """
     soup = BeautifulSoup(html, "lxml")
-
-    # Look for pagination info
-    pagination = soup.select(".pagination a, .page-link")
-    if not pagination:
-        return 1
-
     max_page = 1
-    for link in pagination:
+
+    for link in soup.find_all("a", href=True):
+        href = link["href"]
         text = link.get_text(strip=True)
-        if text.isdigit():
-            max_page = max(max_page, int(text))
-        # Also check href for page numbers
-        href = link.get("href", "")
-        match = re.search(r"page=(\d+)", href)
-        if match:
-            max_page = max(max_page, int(match.group(1)))
+
+        # Match /page/{n}.html
+        m = re.search(r"/page/(\d+)\.html", href)
+        if m:
+            max_page = max(max_page, int(m.group(1)))
 
     return max_page
 
 
-def scrape_listing(session: ScraperSession, court: str,
-                   max_verdicts: int = 20) -> list[str]:
+def scrape_listing(session: ScraperSession, court_slug: str,
+                   max_verdicts: int = 100, start_page: int = 1) -> list[str]:
     """Scrape listing pages for a court until we have enough verdict URLs.
+
+    Args:
+        start_page: Page to start from (higher = older verdicts).
+                    Useful to skip recent verdicts that may not be uploaded yet.
 
     Returns list of verdict detail page URLs.
     """
     all_urls = []
-    page = 1
+    page = start_page
 
     while len(all_urls) < max_verdicts:
-        url = build_search_url(court, page)
+        url = build_listing_url(court_slug, page)
+        print(f"  [.] Fetching page {page}: {url}")
         resp = session.get_safe(url)
 
         if resp is None:
