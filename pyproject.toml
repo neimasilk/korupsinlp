@@ -1,0 +1,29 @@
+[project]
+name = "korupsinlp"
+version = "0.1.0"
+description = "Computational analysis of Indonesian corruption verdicts"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.0",
+    "pdfminer.six>=20231228",
+    "pandas>=2.1",
+]
+
+[project.optional-dependencies]
+selenium = [
+    "selenium>=4.15",
+    "webdriver-manager>=4.0",
+]
+dev = [
+    "pytest>=7.4",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
