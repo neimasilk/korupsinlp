@@ -14,6 +14,8 @@ from src.parser.fields import (
     extract_nama_terdakwa,
     extract_tahun,
     extract_daerah,
+    extract_pemohon_kasasi,
+    _strip_watermark,
 )
 from src.parser.normalizer import normalize_duration_to_months, normalize_rupiah, court_to_province
 from src.parser.pipeline import parse_verdict
@@ -164,6 +166,78 @@ class TestPipeline:
         assert result["daerah"] == "Surabaya"
         assert result["tahun"] == 2022
         assert result["nama_hakim"] is not None
+
+
+# === extract_pemohon_kasasi ===
+
+class TestExtractPemohonKasasi:
+    def test_kasasi_terdakwa(self):
+        text = "kasasi yang dimohonkan oleh Terdakwa, telah memutus"
+        assert extract_pemohon_kasasi(text) == "terdakwa"
+
+    def test_kasasi_jpu(self):
+        text = "kasasi yang dimohonkan oleh Penuntut Umum pada Kejaksaan"
+        assert extract_pemohon_kasasi(text) == "penuntut_umum"
+
+    def test_pk_terpidana(self):
+        text = "peninjauan kembali yang dimohonkan oleh Terpidana"
+        assert extract_pemohon_kasasi(text) == "terdakwa"
+
+    def test_no_match(self):
+        assert extract_pemohon_kasasi("tidak ada kasasi") is None
+
+
+# === Watermark stripping ===
+
+class TestWatermarkStrip:
+    def test_strip_ma_watermark(self):
+        text = "some text Direktori Putusan Mahkamah Agung Republik Indonesia\nputusan.mahkamahagung.go.id\n\nMahkamah Agung Republik Indonesia\n more text"
+        cleaned = _strip_watermark(text)
+        assert "Direktori Putusan" not in cleaned
+        assert "some text" in cleaned
+        assert "more text" in cleaned
+
+    def test_no_watermark(self):
+        text = "normal text without watermark"
+        assert _strip_watermark(text) == text
+
+
+# === Tuntutan with defendant name ===
+
+class TestTuntutanWithName:
+    def test_penjara_terhadap_terdakwa(self):
+        """Tuntutan where defendant name appears between 'penjara' and 'selama'."""
+        text = (
+            "Tuntutan Pidana Penuntut Umum: "
+            "2. Menjatuhkan pidana penjara terhadap Terdakwa "
+            "AHMAD SYARIF, S.H. selama 5 (lima) tahun"
+        )
+        assert extract_tuntutan_bulan(text) == 60
+
+
+# === MENGADILI vonis strategy ===
+
+class TestVonisMengadili:
+    def test_mengadili_spaced(self):
+        """Vonis from M E N G A D I L I section."""
+        text = (
+            "Tuntutan Pidana: penjara selama 8 tahun "
+            "M E N G A D I L I: "
+            "Menjatuhkan pidana penjara selama 4 (empat) tahun"
+        )
+        assert extract_vonis_bulan(text) == 48  # from MENGADILI, not tuntutan
+
+    def test_last_match_fallback(self):
+        """Falls back to last penjara match when no MENGADILI and no prefix match."""
+        # Both matches must be outside the first 500 chars (Strategy 2 prefix)
+        padding = "x " * 300  # 600 chars
+        text = (
+            padding +
+            "penjara selama 6 tahun " +
+            padding +
+            "penjara selama 3 tahun"
+        )
+        assert extract_vonis_bulan(text) == 36
 
 
 if __name__ == "__main__":

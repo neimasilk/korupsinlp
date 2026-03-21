@@ -71,6 +71,7 @@ def main():
                 "nama_terdakwa": result.get("nama_terdakwa") or v.get("nama_terdakwa"),
                 "nama_hakim": result["nama_hakim"],
                 "nama_jaksa": result["nama_jaksa"],
+                "pemohon_kasasi": result.get("pemohon_kasasi"),
                 "parsed_at": result["parsed_at"],
                 "parse_source": result["parse_source"],
                 "parse_errors": result["parse_errors"],

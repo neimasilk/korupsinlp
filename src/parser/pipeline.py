@@ -11,6 +11,8 @@ from src.parser.fields import (
     extract_nama_terdakwa,
     extract_tahun,
     extract_daerah,
+    extract_pemohon_kasasi,
+    _strip_watermark,
 )
 from src.parser.normalizer import court_to_province
 
@@ -40,6 +42,10 @@ def parse_verdict(metadata: dict, text: str | None = None) -> dict:
         combined = amar + "\n" + combined
     if catatan_amar:
         combined = catatan_amar + "\n" + combined
+
+    # Strip MA watermark/disclaimer from PDF text — these blocks inflate
+    # character offsets and break window-based extraction
+    combined = _strip_watermark(combined)
 
     # === P0 Fields ===
 
@@ -99,6 +105,9 @@ def parse_verdict(metadata: dict, text: str | None = None) -> dict:
     result["nama_jaksa"] = _extract_jaksa(combined)
     if result["nama_jaksa"] is None:
         errors.append("nama_jaksa: not found")
+
+    # Pemohon kasasi — who filed the appeal (terdakwa vs penuntut_umum)
+    result["pemohon_kasasi"] = extract_pemohon_kasasi(combined)
 
     # === Derived fields ===
     if result["daerah"]:

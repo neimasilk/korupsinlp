@@ -2,144 +2,138 @@
 
 ## Status: **Fase 1 — Corpus Building in progress**
 
-148 verdicts scraped, 102 with PDF (100% download success). Parser re-run with all fixes applied. Paper 1 outline drafted.
+205 verdicts scraped, 182 PDFs downloaded (100% success), 103 PDF-parsed so far. 80 new PDFs awaiting re-parse. Major parser improvements and new field (pemohon_kasasi) added.
 
 ## What Was Done (Session 4)
 
-### 1. Second Scrape Run (Success)
-- Added 53 new verdicts (95 → 148 total) from pages 1,4,5,6
-- 28 new PDFs downloaded (100% success rate)
-- Total: 102 verdicts with PDF, 46 HTML-only
-- Confirmed: pagination non-deterministic (multi-run strategy works)
+### 1. Scraping Scaled (148 → 205 verdicts)
+- Second scrape run: pages 1,4,5,6 → 53 new verdicts
+- Third scrape run: pages 7-15 → 57 new verdicts (detail scrape interrupted mid-way by MA server slowness)
+- 80 new PDFs downloaded (100% success rate, total 182 PDFs)
+- **80 new PDFs need re-parsing** (script 03 must be run next session)
 
-### 2. Full Re-Parse with Fixed Extractors
-All 148 verdicts re-parsed with:
-- MENGADILI section strategy for vonis (fixed tuntutan/vonis confusion)
-- "Tuntutan Pidana" section header for tuntutan
-- `_clean_daerah()` for PDF text artifacts
-- Expanded COURT_REGION_MAP
+### 2. Critical Parser Fix: Tuntutan Extraction (27.7% → 64.2%)
+Three fixes combined:
+1. **Window expansion**: 800 → 2500 chars after "Tuntutan Pidana" header (kasasi PDFs have long pasal citations before the sentence)
+2. **MA watermark stripping**: PDF pages contain ~500 chars of Direktori Putusan disclaimer that inflates offsets. New `_strip_watermark()` regex removes these globally in pipeline
+3. **Defendant name tolerance**: "penjara terhadap Terdakwa [NAME] selama X tahun" — regex now allows up to 150 chars between "penjara" and "selama" to skip defendant names
 
-**Updated numbers (148 verdicts):**
-```
-P0 Fields:
-  vonis_bulan      69.6%  (103/148)  GO
-  kerugian_negara  60.8%   (90/148)  GO
-  daerah           84.5%  (125/148)  GO
-  tahun            87.2%  (129/148)  GO
-  P0 Average:      75.5%            GO
+Result: tuntutan_bulan went from 27.7% (41/148) to 64.2% (95/148) on old dataset.
 
-  Joint P0 (all):  58.8%  (87/148)  — below 60% due to HTML-only verdicts
-  Joint P0 (PDF):  83.3%  (85/102)  — true quality metric
+### 3. New Field: pemohon_kasasi (Who Filed the Appeal)
+- Extracts "dimohonkan oleh Terdakwa/Penuntut Umum" from PDF header
+- DB column added, extractor in `fields.py`, wired in pipeline
+- **Major finding on 102 PDF-parsed verdicts:**
+  - 52% kasasi filed by JPU (Penuntut Umum) — prosecutors wanting harsher sentences
+  - 40% filed by Terdakwa (defendant)
+  - 8% unknown
+- **This is a confounding variable** — JPU vs terdakwa kasasi are fundamentally different processes
 
-P1 Fields:
-  tuntutan_bulan   27.7%   (41/148)
-  pasal            71.6%  (106/148)
-  nama_terdakwa    58.8%   (87/148)
+### 4. Research Critique & Findings
 
-P2 Fields:
-  nama_hakim       87.2%  (129/148)
-  nama_jaksa        1.4%    (2/148)
-```
+**Sentencing by pemohon kasasi (suggestive, not yet significant):**
 
-**Critical insight:** PDF-parsed verdicts are 83.3% joint P0 vs 4.3% for HTML-only. For Fase 1 corpus, should ONLY count PDF-parsed verdicts as usable.
+| Pemohon | Mean Vonis | Mean Ratio (v/t) | n |
+|---------|-----------|------------------|---|
+| JPU | 4.5 yr | 79.9% | 43-52 |
+| Terdakwa | 3.6 yr | 63.7% | 38-40 |
 
-### 3. Statistical Analysis (102 PDF-parsed verdicts)
-Key findings for Paper 1:
+Welch's t-test: t=1.04, p>0.05 (need more data to confirm)
 
-| Metric | Value |
-|--------|-------|
-| Mean sentence | 4.2 years (50.1 months) |
-| Median sentence | 4.0 years (48 months) |
-| Range | 1.0 — 15.0 years |
-| Median kerugian | Rp 2.07 billion |
-| Max kerugian | Rp 300 trillion (PT Timah Tbk — verified real) |
-| Mean discount ratio | 54.9% (vonis/tuntutan) |
-| Median discount | 50.0% |
-| Pearson r (log_kerugian vs vonis) | 0.44 (moderate positive) |
+**Kerugian-vonis correlation:** r=0.44 (moderate positive, n=85)
 
-**Vonis by kerugian bracket:**
 | Kerugian Bracket | Mean Vonis | n |
 |-----------------|------------|---|
-| <100M | 3.1 years | 7 |
-| 100M-1B | 3.6 years | 28 |
-| 1B-10B | 3.9 years | 28 |
-| 10B-100B | 5.3 years | 15 |
-| >100B | 8.4 years | 7 |
+| <100M | 3.1 yr | 7 |
+| 100M-1B | 3.6 yr | 28 |
+| 1B-10B | 3.9 yr | 28 |
+| 10B-100B | 5.3 yr | 15 |
+| >100B | 8.4 yr | 7 |
 
-**By primary charge (UU 31/1999):**
-| Article | Mean Vonis | n | Notes |
-|---------|-----------|---|-------|
-| Pasal 2 (kerugian negara) | 4.1 yr | 75 | Dominant (76%) |
-| Pasal 3 (penyalahgunaan) | 5.8 yr | 4 | Small n |
-| Pasal 11/12 (suap) | 3.1 yr | 9 | Lightest sentences |
+**PT Timah Rp300T verified real** — includes Rp271T environmental damage.
 
-**Discount by region (n≥2):**
-- Medan/Padang: ~36-40% ratio (biggest discounts)
-- Jakarta Pusat: 53% ratio
-- Makassar: 61% ratio (least discount)
+**Risks identified (research critique):**
+1. Selection bias deeper than acknowledged — 52% are JPU kasasi (upward vonis bias)
+2. H1 (Disproporsionalitas) not testable without mitigating/aggravating factor extraction
+3. Discount analysis needs stratification by pemohon_kasasi
+4. Paper venue: target LREC-COLING, not main ACL (regex pipeline insufficient novelty for main track)
+5. Manifesto over-scope: kill H2/H3/H5/H6 until Paper 1 published
 
-**Notable cases:**
-- 2 cases where vonis > tuntutan (rare — legally interesting)
-- 4 mega-corruption cases (kerugian > Rp 1T), all Jakarta Pusat
-- PT Timah Tbk: Rp 300T kerugian includes Rp 271T environmental damage
+### 5. Watermark Stripping (Global)
+- `_strip_watermark()` added to `fields.py` — removes MA disclaimer blocks
+- Applied globally in `pipeline.py` before all extractors
+- Improves all field extraction on PDF text
 
-### 4. Golden Set Framework (Ready for Human)
-- Template at `data/golden_set/golden_template.csv` (20 verdicts)
-- Validation script at `scripts/05_validate_golden.py`
-- Needs human annotation: read PDFs, fill `human_*` columns
-- Script computes per-field precision/recall/F1 with error examples
+### 6. Tests Expanded (25 → 34 tests, all passing)
+New tests for:
+- `extract_pemohon_kasasi` (terdakwa, JPU, PK terpidana)
+- `_strip_watermark` (with/without watermark)
+- Tuntutan with defendant name between penjara/selama
+- MENGADILI section vonis strategy
+- Last-match fallback for vonis
 
-### 5. Paper 1 Outline (Drafted)
-- At `reports/paper1_outline.md`
-- Title: "CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Decisions and Sentencing Patterns"
-- 9 sections, 3 research questions, 7 planned figures
-- Targets: LREC-COLING, ACL Resource track
+### 7. Paper 1 Outline (Drafted)
+At `reports/paper1_outline.md`:
+- "CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Decisions and Sentencing Patterns"
+- 3 RQs, 9 sections, 7 planned figures
+- pemohon_kasasi finding as novel contribution
 
-### 6. Code Changes
+### 8. Code Changes
 | File | Change |
 |------|--------|
-| `src/parser/fields.py` | MENGADILI 3-strategy vonis extractor, _clean_daerah() |
-| `src/parser/normalizer.py` | +8 court-region mappings |
-| `scripts/05_validate_golden.py` | New: golden set validation |
+| `src/parser/fields.py` | +`_strip_watermark()`, +`extract_pemohon_kasasi()`, tuntutan window 800→2500, regex `.{0,150}?` for defendant names |
+| `src/parser/pipeline.py` | Global watermark stripping, +pemohon_kasasi extraction |
+| `src/db.py` | +`pemohon_kasasi TEXT` column |
+| `scripts/03_parse_sample.py` | +pemohon_kasasi in update_data |
+| `tests/test_parser.py` | +9 new tests (34 total) |
 | `reports/paper1_outline.md` | New: Paper 1 outline |
+| `scripts/05_validate_golden.py` | New: golden set validation |
+| `scripts/download_pdfs.py` | New: batch PDF download |
+
+## CRITICAL: First Thing Next Session
+
+```bash
+source .venv/Scripts/activate
+python -m scripts.03_parse_sample    # Re-parse all 205 with new PDFs
+python -m scripts.04_feasibility_report
+```
+
+This will parse the 80 new PDFs that were downloaded but not yet processed.
 
 ## What Needs To Be Done (Session 5)
 
-### Step 1: Golden Set Annotation (HUMAN TASK — CRITICAL)
-- Read 20 PDFs manually
-- Fill human_* columns in `data/golden_set/golden_template.csv`
+### Step 1: Re-parse (IMMEDIATE)
+Run script 03 to parse the 80 new PDFs. Expected: ~182 PDF-parsed verdicts (up from 103).
+
+### Step 2: Golden Set Annotation (HUMAN TASK)
+- Template at `data/golden_set/golden_template.csv`
+- Read 20 PDFs manually, fill `human_*` columns
 - Run `python -m scripts.05_validate_golden`
 - Target: >80% accuracy per P0 field
 
-### Step 2: Scale Scraping
-- Run scraper on pages 7-20+ (multi-run, different days)
+### Step 3: Continue Scaling
+- Scrape pages 16-30+ (third run was interrupted at detail scraping)
 - Target: 500+ verdicts with PDFs
-- Download all PDFs immediately after scraping
-- Parse after each batch
+- Each page yields ~20 new verdicts
 
-### Step 3: Improve Extraction
-Based on golden set results, fix top error patterns:
-- tuntutan_bulan at 27.7% — needs more regex patterns for kasasi format variations
-- nama_terdakwa at 58.8% — need better name extraction from kasasi headers
-- pasal classification — improve primary article identification
+### Step 4: Improve Extraction
+- nama_terdakwa at 58.8% — needs better PDF header parsing
+- Vonis > tuntutan outliers (10 cases) — verify with golden set
+- Extract mitigating/aggravating factors from pertimbangan hakim (needed for H1)
 
-### Step 4: Paper 1 Draft
-- Fill in outline with real numbers
-- Generate figures (histograms, scatter plots, maps)
-- Write methodology section
-- Ethics section re: public data
-
-### Step 5: Pre-registration
-- Register hypotheses on OSF before running full analysis
-- Key hypotheses: kerugian-vonis relationship, geographic variation, temporal trends
+### Step 5: Paper 1 Draft
+- Fill in outline with updated numbers from 200+ verdicts
+- Generate figures (histograms, scatter, maps)
+- Pemohon kasasi as novel contribution
+- Write methodology + limitations sections
 
 ## Known Issues
-- HTML-only verdicts (46/148) are effectively useless — 4.3% joint P0
-- Pasal classification misses 86/99 cases (fall to "Other") — extractor returns raw numbers without "Pasal" prefix
-- Temporal coverage skewed to 2024-2026 (recency bias from MA listing)
+- 80 new PDFs not yet parsed (must run script 03 first)
+- 10 cases where vonis > tuntutan — some are extraction errors, some real (JPU kasasi)
+- MA server extremely slow on detail pages (97-200s response time)
 - nama_jaksa effectively impossible from kasasi data (1.4%)
-- Need upsert for re-scraping (currently INSERT OR IGNORE)
-- Pagination non-deterministic — must do 3-5 scrape runs
+- Temporal coverage skewed to 2024-2026
+- Pasal classification needs improvement (76% classified as "Other")
 
 ## Key Research Constraint
-**ALL data is MA kasasi/PK decisions — biased toward appealed cases.** First-instance PN Tipikor verdicts are not available at scale on the MA website. All research designs must account for this selection bias explicitly.
+**ALL data is MA kasasi/PK decisions.** 52% are JPU kasasi (prosecutor appeal for harsher sentence), 40% terdakwa kasasi. This selection must be controlled for in all analysis. Geographic and sentencing patterns must be stratified by pemohon_kasasi.

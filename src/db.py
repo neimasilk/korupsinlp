@@ -62,6 +62,9 @@ def init_db(db_path: Path = DB_PATH):
                 nama_hakim TEXT,
                 nama_jaksa TEXT,
 
+                -- Appeal metadata
+                pemohon_kasasi TEXT,  -- 'terdakwa' or 'penuntut_umum'
+
                 -- Parse metadata
                 parsed_at TEXT,
                 parse_source TEXT,  -- 'html' or 'pdf'

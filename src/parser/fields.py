@@ -2,6 +2,22 @@
 
 import re
 
+# MA watermark/disclaimer text injected into PDF pages — strip to avoid
+# breaking character-window-based extraction
+_MA_WATERMARK_RE = re.compile(
+    r'Direktori Putusan Mahkamah Agung Republik Indonesia\s*'
+    r'putusan\.mahkamahagung\.go\.id\s*'
+    r'(?:Mahkamah Agung Republik Indonesia\s*){0,5}'
+    r'(?:Disclaimer\s*Kepaniteraan.*?(?:heli\.telepon@telepon\.co\.id|pelaksanaan fungsi peradilan\.)\s*'
+    r'(?:Namun dalam hal-hal tertentu.*?\n)?)?',
+    re.DOTALL,
+)
+
+
+def _strip_watermark(text: str) -> str:
+    """Remove MA watermark/disclaimer blocks from PDF text."""
+    return _MA_WATERMARK_RE.sub(' ', text)
+
 
 def _find_penjara(text_lower: str) -> float | None:
     """Find prison sentence duration in a text fragment."""
@@ -112,13 +128,17 @@ def extract_tuntutan_bulan(text: str) -> float | None:
     text_lower = text.lower()
 
     # Strategy 1: Find "tuntutan pidana" section header, then search within
-    # next 800 chars for penjara. This handles kasasi PDFs that quote the
-    # full prosecution demand as a numbered list.
+    # next 2500 chars for penjara. Kasasi PDFs quote full tuntutan as numbered
+    # list with long pasal citations before the sentence. Window must be large
+    # enough to skip past "1. Menyatakan..." (pasal citations) to reach
+    # "2. Menjatuhkan pidana penjara..."
     tuntutan_header = re.search(r'tuntutan\s+pidana', text_lower)
     if tuntutan_header:
-        section = text_lower[tuntutan_header.start():tuntutan_header.start() + 800]
+        section = text_lower[tuntutan_header.start():tuntutan_header.start() + 2500]
+        # Allow up to 150 chars between "penjara" and "selama" to skip
+        # defendant names: "penjara terhadap Terdakwa X selama 2 tahun"
         m = re.search(
-            r'(?:pidana\s+)?penjara\s+(?:selama\s+)?'
+            r'(?:pidana\s+)?penjara\s+(?:.{0,150}?selama\s+)?'
             r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
             r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
             section,
@@ -129,7 +149,7 @@ def extract_tuntutan_bulan(text: str) -> float | None:
             return years * 12 + months
 
         m = re.search(
-            r'(?:pidana\s+)?penjara\s+(?:selama\s+)?'
+            r'(?:pidana\s+)?penjara\s+(?:.{0,150}?selama\s+)?'
             r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
             section,
         )
@@ -433,3 +453,38 @@ _COURT_ABBREVS = {
 def _expand_court_abbrev(abbrev: str) -> str:
     """Expand court abbreviation to full city name."""
     return _COURT_ABBREVS.get(abbrev, abbrev)
+
+
+def extract_pemohon_kasasi(text: str) -> str | None:
+    """Extract who filed the kasasi/PK appeal.
+
+    Returns 'terdakwa', 'penuntut_umum', or None.
+    Critical for interpreting sentencing data — JPU kasasi means prosecutor
+    thought sentence was too light (upward bias), terdakwa kasasi means
+    defendant thought it was too heavy (downward bias).
+    """
+    if not text:
+        return None
+
+    cleaned = _strip_watermark(text)
+    text_lower = cleaned.lower()[:5000]  # Only check header area
+
+    # Kasasi: "dimohonkan oleh Terdakwa/Penuntut Umum"
+    m = re.search(
+        r'(?:dimohonkan|diajukan)\s+oleh\s+(terdakwa|penuntut\s+umum)',
+        text_lower,
+    )
+    if m:
+        who = m.group(1).strip()
+        return 'penuntut_umum' if 'penuntut' in who else 'terdakwa'
+
+    # PK: "dimohonkan oleh Terpidana/Penuntut Umum"
+    m = re.search(
+        r'(?:dimohonkan|diajukan)\s+oleh\s+(terpidana|penuntut\s+umum)',
+        text_lower,
+    )
+    if m:
+        who = m.group(1).strip()
+        return 'penuntut_umum' if 'penuntut' in who else 'terdakwa'
+
+    return None
