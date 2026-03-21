@@ -3,23 +3,9 @@
 import re
 
 
-def extract_vonis_bulan(text: str) -> float | None:
-    """Extract prison sentence in months from verdict text.
-
-    Handles patterns like:
-    - "pidana penjara selama 4 (empat) tahun"
-    - "penjara selama 2 tahun 6 bulan"
-    - "penjara 18 (delapan belas) bulan"
-    - "penjara menjadi 1 (satu) tahun dan 6 (enam) bulan" (kasasi perbaikan)
-    """
-    if not text:
-        return None
-
-    text_lower = text.lower()
-
-    # Pattern: penjara [selama/menjadi/] X tahun [dan Y bulan]
-    # "menjadi" is common in kasasi decisions that modify the sentence
-    # Some catatan amar use "Pidana penjara 8 (delapan) tahun" without selama/menjadi
+def _find_penjara(text_lower: str) -> float | None:
+    """Find prison sentence duration in a text fragment."""
+    # Tahun [dan bulan]
     m = re.search(
         r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
@@ -31,7 +17,7 @@ def extract_vonis_bulan(text: str) -> float | None:
         months = int(m.group(2)) if m.group(2) else 0
         return years * 12 + months
 
-    # Pattern: penjara [selama/menjadi/] X bulan (standalone)
+    # Bulan only
     m = re.search(
         r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
@@ -40,13 +26,75 @@ def extract_vonis_bulan(text: str) -> float | None:
     if m:
         return float(m.group(1))
 
-    # Pattern: seumur hidup
-    if re.search(r'penjara\s+seumur\s+hidup', text_lower):
-        return -1  # Sentinel for life sentence
+    return None
 
-    # Pattern: pidana mati
+
+def extract_vonis_bulan(text: str) -> float | None:
+    """Extract prison sentence in months from verdict text.
+
+    For kasasi PDFs, the text contains multiple 'penjara' mentions:
+    1. Tuntutan section (prosecution demand) — NOT what we want
+    2. Lower court decision quote — NOT what we want
+    3. MENGADILI section (MA's actual decision) — THIS is the vonis
+
+    Strategy: search the MENGADILI section first, then catatan_amar prefix,
+    then fall back to LAST match in full text.
+    """
+    if not text:
+        return None
+
+    text_lower = text.lower()
+
+    # Strategy 1: Find MENGADILI section (the actual court decision)
+    # MA verdicts use "M E N G A D I L I" (spaced) or "MENGADILI"
+    mengadili_patterns = [
+        r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i',
+        r'mengadili\s*:',
+        r'mengadili\s*\n',
+    ]
+    for pat in mengadili_patterns:
+        m = re.search(pat, text_lower)
+        if m:
+            amar_section = text_lower[m.start():]
+            result = _find_penjara(amar_section)
+            if result is not None:
+                return result
+
+    # Strategy 2: Search in the first 500 chars (catatan_amar prefix from pipeline)
+    prefix = text_lower[:500]
+    result = _find_penjara(prefix)
+    if result is not None:
+        return result
+
+    # Strategy 3: Use the LAST penjara match in the full text
+    # (the final sentence is more likely to be the actual vonis)
+    all_matches = list(re.finditer(
+        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+        r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+        text_lower,
+    ))
+    if all_matches:
+        m = all_matches[-1]
+        years = int(m.group(1))
+        months = int(m.group(2)) if m.group(2) else 0
+        return years * 12 + months
+
+    all_matches = list(re.finditer(
+        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
+        text_lower,
+    ))
+    if all_matches:
+        return float(all_matches[-1].group(1))
+
+    # Seumur hidup
+    if re.search(r'penjara\s+seumur\s+hidup', text_lower):
+        return -1
+
+    # Pidana mati
     if re.search(r'pidana\s+mati', text_lower):
-        return -2  # Sentinel for death sentence
+        return -2
 
     return None
 
@@ -54,14 +102,41 @@ def extract_vonis_bulan(text: str) -> float | None:
 def extract_tuntutan_bulan(text: str) -> float | None:
     """Extract prosecution demand in months.
 
-    Looks for "menuntut ... penjara selama ..." or "dituntut ... penjara ..."
+    Looks for "tuntutan pidana" section header, then finds penjara within it.
+    Kasasi PDFs quote the full tuntutan as a numbered list, so periods in
+    "1." "2." etc. must be allowed — we use a character limit instead of [^.].
     """
     if not text:
         return None
 
     text_lower = text.lower()
 
-    # Find the tuntutan section
+    # Strategy 1: Find "tuntutan pidana" section header, then search within
+    # next 800 chars for penjara. This handles kasasi PDFs that quote the
+    # full prosecution demand as a numbered list.
+    tuntutan_header = re.search(r'tuntutan\s+pidana', text_lower)
+    if tuntutan_header:
+        section = text_lower[tuntutan_header.start():tuntutan_header.start() + 800]
+        m = re.search(
+            r'(?:pidana\s+)?penjara\s+(?:selama\s+)?'
+            r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+            r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+            section,
+        )
+        if m:
+            years = int(m.group(1))
+            months = int(m.group(2)) if m.group(2) else 0
+            return years * 12 + months
+
+        m = re.search(
+            r'(?:pidana\s+)?penjara\s+(?:selama\s+)?'
+            r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
+            section,
+        )
+        if m:
+            return float(m.group(1))
+
+    # Strategy 2: Original pattern — menuntut/dituntut near penjara (no period between)
     tuntutan_match = re.search(
         r'(?:menuntut|dituntut|tuntutan)[^.]*?'
         r'penjara\s+selama\s+'
@@ -268,6 +343,26 @@ def extract_tahun(text: str, metadata: dict | None = None) -> int | None:
     return None
 
 
+def _clean_daerah(name: str) -> str:
+    """Clean up common daerah extraction artifacts from PDF text."""
+    # PDF text extraction sometimes merges city name with next word
+    # e.g., "Padangkarena" = "Padang" + "karena"
+    known_suffixes = [
+        "karena", "tanggal", "nomor", "dalam", "dengan", "yang",
+        "pada", "untuk", "telah", "tersebut", "sebagai",
+    ]
+    lower = name.lower()
+    for suffix in known_suffixes:
+        if lower.endswith(suffix) and len(lower) > len(suffix) + 2:
+            cleaned = name[:len(name) - len(suffix)]
+            if len(cleaned) >= 3:
+                return cleaned
+    # Strip "Negeri " prefix if accidentally captured
+    if name.startswith("Negeri "):
+        return name[7:]
+    return name
+
+
 def extract_daerah(text: str, metadata: dict | None = None) -> str | None:
     """Extract region/court location from metadata or text.
 
@@ -280,7 +375,7 @@ def extract_daerah(text: str, metadata: dict | None = None) -> str | None:
             # Direct court name
             m = re.search(r'(?:Pengadilan\s+(?:Negeri|Tinggi|Tindak Pidana Korupsi)\s+)(.+)', lembaga, re.IGNORECASE)
             if m:
-                return m.group(1).strip()
+                return _clean_daerah(m.group(1).strip())
             return lembaga
 
     # Extract origin court from text — MA verdicts reference the lower court
@@ -292,12 +387,13 @@ def extract_daerah(text: str, metadata: dict | None = None) -> str | None:
             text,
         )
         if m:
-            return m.group(1).strip()
+            return _clean_daerah(m.group(1).strip())
 
         # Short form: case number like "19/Pid.Sus-TPK/2025/PN Smg"
         m = re.search(r'/PN\s+([A-Z][A-Za-z.]+)', text)
         if m:
-            return _expand_court_abbrev(m.group(1).strip().rstrip('.'))
+            raw = m.group(1).strip().rstrip('.')
+            return _expand_court_abbrev(_clean_daerah(raw))
 
     return None
 

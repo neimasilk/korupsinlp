@@ -12,6 +12,7 @@ from src.config import P0_FIELDS, P1_FIELDS, P2_FIELDS
 from src.db import init_db, get_verdicts, transaction, update_verdict
 from src.parser.pipeline import parse_verdict
 from src.scraper.detail import extract_metadata
+from src.scraper.pdf_extractor import extract_pdf_text
 
 
 def main():
@@ -44,7 +45,19 @@ def main():
         if v.get("lembaga_peradilan"):
             metadata["lembaga_peradilan"] = v["lembaga_peradilan"]
 
-        result = parse_verdict(metadata, html_text)
+        # Extract PDF text if available — PDFs have full verdict text,
+        # HTML detail pages only have metadata
+        text = html_text
+        parse_source = "html"
+        pdf_path = v.get("pdf_path")
+        if pdf_path and Path(pdf_path).exists():
+            pdf_text = extract_pdf_text(Path(pdf_path))
+            if pdf_text and len(pdf_text) > 200:
+                text = pdf_text
+                parse_source = "pdf"
+
+        result = parse_verdict(metadata, text)
+        result["parse_source"] = parse_source
 
         # Update DB
         with transaction() as conn:

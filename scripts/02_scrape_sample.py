@@ -21,8 +21,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--count", type=int, default=SAMPLE_SIZE,
                         help="Number of verdicts to scrape")
-    parser.add_argument("--start-page", type=int, default=5,
+    parser.add_argument("--start-page", type=int, default=1,
                         help="Listing page to start from (higher = older verdicts)")
+    parser.add_argument("--year", type=int, default=None,
+                        help="Filter by decision year (e.g. 2023). More reliable pagination.")
     args = parser.parse_args()
 
     init_db()
@@ -37,9 +39,10 @@ def main():
         print(f"{'='*60}")
 
         # Step 1: Get listing URLs
-        print(f"\n[1] Scraping listing pages for up to {args.count} verdicts (from page {args.start_page})...")
+        year_info = f", year={args.year}" if args.year else ""
+        print(f"\n[1] Scraping listing pages for up to {args.count} verdicts (from page {args.start_page}{year_info})...")
         urls = scrape_listing(session, court_slug, max_verdicts=args.count,
-                              start_page=args.start_page)
+                              start_page=args.start_page, year=args.year)
         print(f"    Found {len(urls)} verdict URLs")
 
         if not urls:
@@ -91,6 +94,7 @@ def main():
                     "pdf_path": metadata.get("pdf_path"),
                     "lembaga_peradilan": metadata.get("lembaga_peradilan"),
                     "amar": metadata.get("amar"),
+                    "catatan_amar": metadata.get("catatan_amar"),
                     "nama_terdakwa": metadata.get("nama_terdakwa"),
                     "date_decided": metadata.get("tanggal_dibacakan"),
                 }

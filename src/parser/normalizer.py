@@ -31,6 +31,15 @@ COURT_REGION_MAP = {
     "Jambi": "Jambi",
     "Serang": "Banten",
     "Yogyakarta": "DI Yogyakarta",
+    "Tanjung Karang": "Lampung",
+    "Tanjungkarang": "Lampung",
+    "Pangkalpinang": "Bangka Belitung",
+    "Gorontalo": "Gorontalo",
+    "Kendari": "Sulawesi Tenggara",
+    "Purbalingga": "Jawa Tengah",
+    "Mungkid": "Jawa Tengah",
+    "Sintang": "Kalimantan Barat",
+    "Koto Baru": "Sumatera Barat",
 }
 
 

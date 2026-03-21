@@ -23,19 +23,25 @@ DIREKTORI_URL = f"{BASE_URL}/direktori/index"
 KORUPSI_KATEGORI = "korupsi-1"
 
 # Court slugs (verified working against live site)
-# Focus on MA level — kasasi decisions from courts nationwide
-COURT_SLUGS = {
+# MA level — kasasi decisions (biased toward appealed cases, often sparse)
+MA_COURT_SLUGS = {
     "mahkamah-agung": "Mahkamah Agung",
 }
 
-# For future expansion: PN-level courts (some timeout on large result sets)
+# PN Tipikor courts — first-instance verdicts with full text
+# These have complete kerugian_negara, tuntutan, vonis, and pertimbangan hakim
 PN_COURT_SLUGS = {
     "pn-bandung": "PN Bandung",
     "pn-jakarta-pusat": "PN Jakarta Pusat",
     "pn-surabaya": "PN Surabaya",
     "pn-makassar": "PN Makassar",
     "pn-medan": "PN Medan",
+    "pn-semarang": "PN Semarang",
 }
+
+# Active court slugs — change this to switch data source
+# Default: MA for backward compatibility. Switch to PN_COURT_SLUGS for richer data.
+COURT_SLUGS = MA_COURT_SLUGS
 
 SAMPLE_SIZE = 100  # Total verdicts to scrape for feasibility
 

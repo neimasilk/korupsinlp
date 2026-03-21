@@ -1,21 +1,29 @@
 """Scrape listing pages to collect verdict URLs from Direktori Putusan MA."""
 
 import re
+from pathlib import Path
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
-from src.config import BASE_URL, DIREKTORI_URL, KORUPSI_KATEGORI
+from src.config import BASE_URL, DIREKTORI_URL, KORUPSI_KATEGORI, RAW_DIR
 from src.scraper.base import ScraperSession
 
 
-def build_listing_url(court_slug: str, page: int = 1) -> str:
+def build_listing_url(court_slug: str, page: int = 1,
+                      year: int | None = None) -> str:
     """Build a direktori listing URL for korupsi verdicts.
 
-    URL pattern: /direktori/index/pengadilan/{slug}/kategori/korupsi-1/page/{n}.html
-    Page 1 omits the /page/ segment.
+    URL patterns:
+      Default: /direktori/index/pengadilan/{slug}/kategori/korupsi-1/page/{n}.html
+      Year-filtered: .../tahunjenis/putus/tahun/{year}/page/{n}.html
+
+    Year-filtered URLs produce smaller, faster-loading pages and are more
+    reliable for pagination than the default (which fails on page 5+).
     """
     base = f"{DIREKTORI_URL}/pengadilan/{court_slug}/kategori/{KORUPSI_KATEGORI}"
+    if year:
+        base = f"{base}/tahunjenis/putus/tahun/{year}"
     if page > 1:
         return f"{base}/page/{page}.html"
     return f"{base}.html"
@@ -47,7 +55,6 @@ def get_total_pages(html: str) -> int:
 
     for link in soup.find_all("a", href=True):
         href = link["href"]
-        text = link.get_text(strip=True)
 
         # Match /page/{n}.html
         m = re.search(r"/page/(\d+)\.html", href)
@@ -57,21 +64,32 @@ def get_total_pages(html: str) -> int:
     return max_page
 
 
+def _save_debug_html(html: str, label: str):
+    """Save listing page HTML for debugging pagination failures."""
+    debug_dir = RAW_DIR / "debug_listing"
+    debug_dir.mkdir(parents=True, exist_ok=True)
+    path = debug_dir / f"{label}.html"
+    path.write_text(html, encoding="utf-8")
+    return path
+
+
 def scrape_listing(session: ScraperSession, court_slug: str,
-                   max_verdicts: int = 100, start_page: int = 1) -> list[str]:
+                   max_verdicts: int = 100, start_page: int = 1,
+                   year: int | None = None) -> list[str]:
     """Scrape listing pages for a court until we have enough verdict URLs.
 
     Args:
         start_page: Page to start from (higher = older verdicts).
-                    Useful to skip recent verdicts that may not be uploaded yet.
+        year: If set, use year-filtered URL pattern (more reliable pagination).
 
     Returns list of verdict detail page URLs.
     """
     all_urls = []
     page = start_page
+    consecutive_empty = 0
 
     while len(all_urls) < max_verdicts:
-        url = build_listing_url(court_slug, page)
+        url = build_listing_url(court_slug, page, year=year)
         print(f"  [.] Fetching page {page}: {url}")
         resp = session.get_safe(url)
 
@@ -81,9 +99,21 @@ def scrape_listing(session: ScraperSession, court_slug: str,
 
         urls = extract_verdict_urls(resp.text)
         if not urls:
-            print(f"  [i] No more results at page {page}")
-            break
+            # Save debug HTML to diagnose why no results
+            debug_path = _save_debug_html(
+                resp.text,
+                f"{court_slug}_page{page}_year{year or 'all'}_empty"
+            )
+            print(f"  [i] No results at page {page} (HTML saved: {debug_path})")
+            print(f"      Response size: {len(resp.text)} bytes, status: {resp.status_code}")
+            consecutive_empty += 1
+            if consecutive_empty >= 2:
+                print(f"  [!] 2 consecutive empty pages — stopping")
+                break
+            page += 1
+            continue
 
+        consecutive_empty = 0
         all_urls.extend(urls)
         print(f"  [+] Page {page}: found {len(urls)} verdicts (total: {len(all_urls)})")
 

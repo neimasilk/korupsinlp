@@ -50,6 +50,7 @@ def init_db(db_path: Path = DB_PATH):
                 nama_terdakwa TEXT,
                 lembaga_peradilan TEXT,
                 amar TEXT,
+                catatan_amar TEXT,
 
                 -- Parsed fields
                 vonis_bulan REAL,
