@@ -476,5 +476,27 @@
         "interpretation": "Can detect effects >= 1.09 years (0.336 d) at 80% power"
       }
     }
+  },
+  "tuntutan_diagnostics": {
+    "vif_m7": {
+      "log10_tuntutan": 1.4247322151287911,
+      "log10_kerugian": 1.4247322151287902
+    },
+    "mediation_path": {
+      "r2": 0.2981137161206092,
+      "b": 0.1266202151601158,
+      "p": 9.742199512486349e-20,
+      "pearson_r": 0.5459979085313506
+    },
+    "same_sample_n236": {
+      "kerugian_only_r2": 0.3220853650333473,
+      "log_tuntutan_only_r2": 0.4291696881878799,
+      "linear_tuntutan_only_r2": 0.5948595397451713,
+      "linear_tuntutan_plus_kerugian_r2": 0.6154169756876451,
+      "best_model_tuntutan_b": 0.5410543298061833,
+      "best_model_tuntutan_p": 1.6473012879605104e-30,
+      "best_model_kerugian_b": 0.48299707144302545,
+      "best_model_kerugian_p": 0.0005022276223715968
+    }
   }
 }

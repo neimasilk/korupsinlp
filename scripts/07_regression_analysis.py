@@ -117,7 +117,48 @@ def run_tuntutan_models(rows_t, rows_all):
         len(rows_all),
     )
 
-    return models
+    # --- Diagnostics ---
+    # VIF for M7 (tuntutan + kerugian)
+    from statsmodels.stats.outliers_influence import variance_inflation_factor
+    X7_raw = np.column_stack([log_tunt_a, log_k_a])
+    X7_const = sm.add_constant(X7_raw)
+    vif_tuntutan = variance_inflation_factor(X7_const, 1)
+    vif_kerugian = variance_inflation_factor(X7_const, 2)
+
+    # Kerugian-tuntutan mediation path
+    Xmed = sm.add_constant(log_k_a)
+    m_med = sm.OLS(log_tunt_a, Xmed).fit()
+
+    # Same-sample comparison (n=236): kerugian only, log tuntutan only, linear tuntutan only
+    tunt_yr_a = np.array([r[1] for r in rows_all])
+    m_k_236 = sm.OLS(vonis_a, sm.add_constant(log_k_a)).fit()
+    m_lt_236 = sm.OLS(vonis_a, sm.add_constant(log_tunt_a)).fit()
+    m_t_236 = sm.OLS(vonis_a, sm.add_constant(tunt_yr_a)).fit()
+    # Best combined: linear tuntutan + log kerugian
+    X_best = sm.add_constant(np.column_stack([tunt_yr_a, log_k_a]))
+    m_best = sm.OLS(vonis_a, X_best).fit()
+
+    diagnostics = {
+        "vif_m7": {"log10_tuntutan": float(vif_tuntutan), "log10_kerugian": float(vif_kerugian)},
+        "mediation_path": {
+            "r2": float(m_med.rsquared),
+            "b": float(m_med.params[1]),
+            "p": float(m_med.pvalues[1]),
+            "pearson_r": float(np.corrcoef(log_tunt_a, log_k_a)[0, 1]),
+        },
+        "same_sample_n236": {
+            "kerugian_only_r2": float(m_k_236.rsquared),
+            "log_tuntutan_only_r2": float(m_lt_236.rsquared),
+            "linear_tuntutan_only_r2": float(m_t_236.rsquared),
+            "linear_tuntutan_plus_kerugian_r2": float(m_best.rsquared),
+            "best_model_tuntutan_b": float(m_best.params[1]),
+            "best_model_tuntutan_p": float(m_best.pvalues[1]),
+            "best_model_kerugian_b": float(m_best.params[2]),
+            "best_model_kerugian_p": float(m_best.pvalues[2]),
+        },
+    }
+
+    return models, diagnostics
 
 
 def run_sensitivity(results_dict):
@@ -416,7 +457,7 @@ def main():
     print(f"\n  Tuntutan-only dataset: n={len(rows_t)}")
     print(f"  Tuntutan+kerugian dataset: n={len(rows_all)}")
 
-    tunt_models = run_tuntutan_models(rows_t, rows_all)
+    tunt_models, tunt_diagnostics = run_tuntutan_models(rows_t, rows_all)
 
     print(f"\n{'Model':30s} {'n':>5s} {'R2':>8s} {'adj_R2':>8s} {'AIC':>10s} {'BIC':>10s}")
     for name, (model, _, n_obs) in tunt_models.items():
@@ -430,6 +471,23 @@ def main():
             p = model.pvalues[i]
             sig = "***" if p < 0.001 else "**" if p < 0.01 else "*" if p < 0.05 else ""
             print(f"  {name:20s}: b={model.params[i]:8.3f} (SE={model.bse[i]:.3f}), p={p:.4f} {sig}")
+
+    # Print diagnostics
+    vif = tunt_diagnostics["vif_m7"]
+    print(f"\n--- M7 Multicollinearity (VIF) ---")
+    print(f"  VIF log10_tuntutan = {vif['log10_tuntutan']:.2f}")
+    print(f"  VIF log10_kerugian = {vif['log10_kerugian']:.2f}")
+
+    med = tunt_diagnostics["mediation_path"]
+    print(f"\n--- Mediation Path: log10(tuntutan) ~ log10(kerugian) ---")
+    print(f"  r = {med['pearson_r']:.3f}, R2 = {med['r2']:.3f}, b = {med['b']:.4f}, p = {med['p']:.2e}")
+
+    ss = tunt_diagnostics["same_sample_n236"]
+    print(f"\n--- Same-Sample Comparison (n=236) ---")
+    print(f"  Kerugian only:          R2 = {ss['kerugian_only_r2']:.3f}")
+    print(f"  Log tuntutan only:      R2 = {ss['log_tuntutan_only_r2']:.3f}")
+    print(f"  Linear tuntutan only:   R2 = {ss['linear_tuntutan_only_r2']:.3f}")
+    print(f"  Linear tuntutan + kerugian: R2 = {ss['linear_tuntutan_plus_kerugian_r2']:.3f} (BEST)")
 
     # ===== PART C: SENSITIVITY ANALYSES =====
     print("\n" + "=" * 60)
@@ -516,6 +574,9 @@ def main():
                 for i, name in enumerate(labels)
             },
         }
+
+    # Tuntutan diagnostics (VIF, mediation, same-sample)
+    results["tuntutan_diagnostics"] = tunt_diagnostics
 
     out_path = REPORTS_DIR / "regression_results.json"
     with open(out_path, "w") as f:

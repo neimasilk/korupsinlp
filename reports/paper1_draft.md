@@ -2,7 +2,7 @@
 
 ## Abstract
 
-We present CorpusKorupsi, the first large-scale structured corpus of Indonesian corruption court verdicts extracted from the Supreme Court (Mahkamah Agung) public repository. From 557 cassation and case-review decisions spanning 2011–2026, we extract seven structured fields — prison sentence, prosecution demand, state financial loss, region, year, defendant name, and legal articles — using a regex-based pipeline validated against a 20-case golden set (100% vonis accuracy). We document a two-level sentencing structure: **prosecution demand (tuntutan) is the strongest predictor of sentence severity** (R²=0.60 linear, n=302), while **state financial loss (kerugian negara) predicts both tuntutan and vonis** (ρ=0.56, R²=0.35). When both are included, each retains independent significance (p<0.001), suggesting judges consider raw case magnitude beyond the prosecution's framing. We find **no significant effect** of appeal filer identity (pemohon kasasi, p=0.95, d=0.01, power to detect ≥1.09yr), geographic jurisdiction (p=0.52), or year (p=0.74) after controlling for case magnitude. The sentencing discount (vonis/tuntutan ratio, mean 84%) is not predicted by any extracted variable (R²=0.01), suggesting judicial discretion operates independently of observable case characteristics. Our corpus, extraction pipeline, and golden set are released to support computational legal studies in the Indonesian context.
+We present CorpusKorupsi, the first large-scale structured corpus of Indonesian corruption court verdicts extracted from the Supreme Court (Mahkamah Agung) public repository. From 557 cassation and case-review decisions spanning 2011–2026, we extract seven structured fields — prison sentence, prosecution demand, state financial loss, region, year, defendant name, and legal articles — using a regex-based pipeline validated against a 20-case golden set (100% vonis accuracy). We document a two-level sentencing structure: **prosecution demand (tuntutan) is the strongest predictor of sentence severity** (R²=0.60 linear, n=302), while **state financial loss (kerugian negara) predicts both tuntutan and vonis** (ρ=0.56, R²=0.35). When both are included, each retains independent significance (p<0.001), suggesting judges consider raw case magnitude beyond the prosecution's framing. We find **no significant effect** of appeal filer identity (pemohon kasasi, p=0.95, d=0.01, power to detect ≥1.09yr), geographic jurisdiction (p=0.52), or year (p=0.74) after controlling for case magnitude. On the same sample (n=236), tuntutan (R²=0.60) outperforms kerugian (R²=0.32), and combining both yields R²=0.62. The sentencing discount (vonis/tuntutan ratio, mean 84%) is not predicted by any extracted variable (R²=0.01), suggesting judicial discretion operates independently of observable case characteristics. Our corpus, extraction pipeline, and golden set are released to support computational legal studies in the Indonesian context.
 
 ## 1. Introduction
 
@@ -204,7 +204,7 @@ Linear regression: vonis (years) = 1.60 × log₁₀(kerugian) − 10.12, R²=0.
 ### 6.5 Geographic Distribution
 40+ court regions represented. Jakarta Pusat has dramatically higher mean sentences (7.07yr vs 4.63yr overall, Welch's t=4.87, p<0.0001), with a median kerugian of Rp32.2B compared to Rp1.0B for other regions (31× higher). Top regions by case count: Jakarta Pusat (47), Surabaya (32), Bandung (23), Makassar (20), Medan (16).
 
-**Critically, the Jakarta Pusat effect disappears when controlling for kerugian**: in a multivariate regression (Section 6.7), the Jakarta Pusat coefficient becomes non-significant (p=0.54). The higher sentences reflect the concentration of national mega-corruption cases (PT Timah Rp300T, Johnny Plate/BTS Rp8T, Jiwasraya Rp3.3T) rather than jurisdictional harshness.
+**Critically, the Jakarta Pusat effect disappears when controlling for kerugian**: in a multivariate regression (Section 6.7), the Jakarta Pusat coefficient becomes non-significant (p=0.52 in M4). The higher sentences reflect the concentration of national mega-corruption cases (PT Timah Rp300T, Johnny Plate/BTS Rp8T, Jiwasraya Rp3.3T) rather than jurisdictional harshness.
 
 ### 6.6 Acquittal Patterns
 Of 17 acquittals (5.0% of 344 cases with vonis≥0), 12 (71%) were filed by the defendant (terdakwa kasasi), 3 by the prosecutor (JPU kasasi), and 2 unknown. This asymmetry is expected: defendants appealing convictions are more likely to succeed than prosecutors appealing for harsher sentences. Acquittals span 2019–2025 with no obvious temporal trend, and are geographically dispersed (Jakarta Pusat 3, Medan 2, Makassar 1, Pekanbaru 2, and 9 other regions).
@@ -239,7 +239,9 @@ Prosecution demand (tuntutan) is available for 302 cases. Two specifications rev
 
 The linear specification (M9: vonis = 0.49 + 0.63 × tuntutan_years, R²=0.60) outperforms the log specification (M6: R²=0.42), indicating that judges discount tuntutan by a roughly constant *proportion* rather than by a fixed amount. Each additional year of prosecution demand yields ~0.63 additional years of sentence — a systematic ~37% discount.
 
-This R²=0.60 substantially exceeds kerugian alone (R²=0.35), establishing tuntutan as the strongest predictor of sentence severity in our dataset.
+**Same-sample comparison** (n=236, cases with all three fields): kerugian alone R²=0.32, log tuntutan R²=0.43, linear tuntutan R²=0.60. This confirms the ranking on a common sample, ruling out selection effects from different sample compositions.
+
+We note that the strong tuntutan-vonis correlation is partly mechanical — both are measured in the same units (years of imprisonment), and the prosecution demand is designed to bound the sentence. The substantively interesting findings are not the correlation itself but (a) the specific discount rate (~37%), (b) its unpredictability (Section 6.7.4), and (c) the independent contribution of kerugian beyond tuntutan (Section 6.7.3).
 
 #### 6.7.3 Combined Model: Mediation Structure (n=236)
 
@@ -250,7 +252,9 @@ When tuntutan and kerugian are both available (n=236), both retain independent s
 | M7 | log₁₀(tuntutan) + log₁₀(kerugian) | 0.492 | 0.488 | 1082 |
 | M8 | + pemohon + JP + year | 0.496 | 0.485 | 1096 |
 
-In M7, both log₁₀(tuntutan) (b=5.79, p<0.001) and log₁₀(kerugian) (b=0.82, p<0.001) are significant. Adding pemohon kasasi (p=0.28), Jakarta Pusat (p=0.32), and year (p=0.97) in M8 adds no predictive power. This suggests a **mediation structure**: kerugian influences tuntutan (prosecution calibrates demand to case magnitude), and tuntutan influences vonis (judges follow prosecution framing) — but kerugian also independently affects vonis beyond its effect through tuntutan. Judges consider raw case magnitude, not only the prosecutor's demand.
+In M7, both log₁₀(tuntutan) (b=5.79, p<0.001) and log₁₀(kerugian) (b=0.82, p<0.001) are significant. Variance inflation factors are low (VIF=1.42 for both), confirming that multicollinearity does not inflate these estimates. Adding pemohon kasasi (p=0.28), Jakarta Pusat (p=0.32), and year (p=0.97) in M8 adds no predictive power.
+
+This pattern suggests a **mediation structure**: kerugian influences tuntutan (r=0.55, R²=0.30 for log₁₀(tuntutan) ~ log₁₀(kerugian)), and tuntutan influences vonis — but kerugian also independently affects vonis beyond its effect through tuntutan. A linear tuntutan + log kerugian specification yields R²=0.62 (n=236), the best-performing model, with both predictors significant (tuntutan b=0.54, p<0.001; kerugian b=0.48, p<0.001). Judges appear to consider raw case magnitude, not only the prosecutor's demand.
 
 #### 6.7.4 Discount Ratio: Unpredictable Judicial Discretion
 
