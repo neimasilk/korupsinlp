@@ -155,22 +155,28 @@
 | Golden set (n=20) | 100% vonis accuracy |
 
 **Session 8 additions**: Related Work with 17 real citations, multivariate regression (Section 6.7),
-acquittal analysis (Section 6.6), References section. Key regression finding: only log10(kerugian)
-is significant (b=1.33, p<0.001); pemohon (p=0.77), JP (p=0.23), year (p=0.65) all non-significant.
+acquittal analysis (Section 6.6), References section.
 
-### Multivariate Regression (n=254, Session 8)
-| Model | R² | adj R² | BIC | Key finding |
-|-------|-----|--------|------|-------------|
-| M1: log10(kerugian) | 0.334 | 0.332 | 1237 | **Best by BIC** |
-| M4: + pemohon + JP + year | 0.339 | 0.328 | 1252 | Additional vars not significant |
-| F-test M1 vs M4 | | | | F=0.54, p=0.65 |
-| 10-fold CV (M4) | | | | Mean R²=0.25, MAE=2.09yr |
+**Session 9 additions**: Tuntutan models (M6-M9), sensitivity analysis, power analysis, MNAR finding,
+paper rewrite with mediation structure narrative. Key new finding: tuntutan R²=0.60 (linear), both
+tuntutan and kerugian independently significant (p<0.001). Discount ratio unpredictable (R²=0.01).
 
-### Kerugian-Vonis Brackets (n=254)
-| Kerugian | n | Mean Vonis | Median Vonis |
-|----------|---|------------|--------------|
-| <100M | 21 | 2.8 yr | 2.0 yr |
-| 100M-1B | 92 | 3.5 yr | 3.0 yr |
-| 1B-10B | 76 | 4.6 yr | 5.0 yr |
-| 10B-100B | 46 | 6.9 yr | 7.0 yr |
-| >100B | 19 | 10.4 yr | 10.0 yr |
+### Regression Models (Session 9, cleaned data)
+| Model | Predictors | R² | n | Key finding |
+|-------|-----------|-----|---|-------------|
+| M1 | log10(kerugian) | 0.347 | 251 | Kerugian baseline |
+| M4 | + pemohon + JP + year | 0.349 | 251 | Additional vars not significant |
+| M6 | log10(tuntutan) | 0.418 | 302 | Tuntutan > kerugian |
+| M9 | tuntutan (linear) | **0.600** | 302 | **Best predictor** |
+| M7 | log10(tuntutan) + log10(kerugian) | 0.492 | 236 | Both p<0.001 |
+| M8 | + pemohon + JP + year | 0.496 | 236 | Additional vars not significant |
+| Md | discount ratio model | 0.013 | 236 | Unpredictable |
+
+### Sensitivity (Session 9)
+| Analysis | Finding |
+|----------|---------|
+| PT Timah removed | R² 0.347 -> 0.349 (minimal) |
+| Mega-cases removed (>100B) | R² 0.347 -> 0.222 (substantial) |
+| Missing data (MNAR) | With kerugian: 4.92yr vs without: 3.67yr (p=0.002) |
+| Power (pemohon null) | MDE=1.09yr at 80% power (null claim credible) |
+| 10-fold CV (M1) | Mean R²=0.26, MAE=2.06yr |
