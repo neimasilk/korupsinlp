@@ -1,0 +1,14 @@
+{
+  "corpus_name": "KorpusKorupsi v1.0",
+  "description": "Structured corpus of Indonesian Supreme Court corruption verdicts",
+  "source": "putusan3.mahkamahagung.go.id",
+  "total_records": 557,
+  "with_valid_sentence": 327,
+  "acquittals": 17,
+  "temporal_range": "2011-2026",
+  "regions": 74,
+  "mean_sentence_years": 4.63,
+  "median_sentence_years": 4.0,
+  "license": "CC-BY-4.0 (data), MIT (code)",
+  "citation": "Amien, M. (2026). CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Verdicts and Sentencing Patterns."
+}

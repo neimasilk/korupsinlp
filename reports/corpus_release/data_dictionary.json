@@ -1,0 +1,63 @@
+{
+  "corpus_id": {
+    "type": "integer",
+    "description": "Sequential identifier (1-based) for corpus ordering"
+  },
+  "case_number": {
+    "type": "string",
+    "description": "MA case number, e.g., '384 K/PID.SUS/2026'. Format: [number] K/PID.SUS/[year] for kasasi, [number] PK/PID.SUS/[year] for peninjauan kembali.",
+    "missing": "69 records (12.4%) have no case number — empty scrapes from server errors"
+  },
+  "date_decided": {
+    "type": "string",
+    "description": "Decision date in Indonesian format, e.g., '28 Januari 2026'"
+  },
+  "tahun": {
+    "type": "integer",
+    "description": "Year of MA decision (extracted from case number or date). Range: 2011-2026.",
+    "missing": "103 records (18.5%) — mostly empty scrapes"
+  },
+  "daerah": {
+    "type": "string",
+    "description": "Court jurisdiction/region, mapped from Pengadilan Negeri name to province-level. 40+ unique values. Example: 'Jakarta Pusat', 'Surabaya', 'Bandung'.",
+    "missing": "162 records (29.1%) — cases without PDF or unrecognized court names"
+  },
+  "nama_terdakwa": {
+    "type": "string",
+    "description": "Defendant's full name as stated in the verdict (public record). May include titles (S.E., S.T., Drs., H., etc.) and patronymic (bin/binti).",
+    "missing": "215 records (38.6%)"
+  },
+  "pemohon_kasasi": {
+    "type": "string",
+    "description": "Who filed the cassation appeal. Values: 'penuntut_umum' (prosecutor/JPU), 'terdakwa' (defendant). Critical confounding variable for sentencing analysis.",
+    "missing": "235 records (42.2%)"
+  },
+  "pasal": {
+    "type": "string",
+    "description": "Legal articles charged, semicolon-separated. Most cite Pasal 2 or 3 of UU 31/1999 jo UU 20/2001 (Anti-Corruption Law).",
+    "missing": "207 records (37.2%)"
+  },
+  "vonis_bulan": {
+    "type": "float",
+    "description": "Prison sentence imposed by MA, in months. 0 = acquittal (membebaskan/melepaskan). NULL = not extracted. Range: 0-216 months (0-18 years).",
+    "missing": "213 records (38.2%) — includes empty scrapes and extraction failures"
+  },
+  "tuntutan_bulan": {
+    "type": "float",
+    "description": "Prosecution demand (tuntutan pidana), in months. The sentence the prosecutor requested.",
+    "missing": "237 records (42.5%)"
+  },
+  "kerugian_negara": {
+    "type": "float",
+    "description": "State financial loss (kerugian keuangan negara) in Indonesian Rupiah. Range: ~Rp15M to Rp300T. NULL for gratification/bribery cases where no state loss figure is stated. 3 suspected extraction artifacts (<Rp1M) have been set to NULL.",
+    "missing": "284 records (51.0%) — many legitimately have no kerugian (suap cases)"
+  },
+  "amar": {
+    "type": "string",
+    "description": "Verdict summary category from MA metadata. Values include: 'Kabul' (granted), 'Tolak' (rejected), 'Tolak Perbaikan' (rejected with modification), 'Tidak dapat diterima' (inadmissible)."
+  },
+  "nama_hakim": {
+    "type": "string",
+    "description": "Panel of MA judges, semicolon-separated. Typically 3 judges per panel."
+  }
+}
