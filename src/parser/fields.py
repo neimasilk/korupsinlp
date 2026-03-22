@@ -45,36 +45,195 @@ def _find_penjara(text_lower: str) -> float | None:
     return None
 
 
+def _find_all_mengadili(text_lower: str) -> list[int]:
+    """Find all MENGADILI section positions in text."""
+    positions = []
+    for pat in [r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i', r'mengadili\s*:', r'mengadili\s*\n']:
+        for m in re.finditer(pat, text_lower):
+            # Don't add duplicates (close positions from different patterns)
+            if not any(abs(m.start() - p) < 50 for p in positions):
+                positions.append(m.start())
+    return sorted(positions)
+
+
+def _extract_mengadili_sentence(text_lower: str, start: int, end: int | None = None) -> float | None:
+    """Extract prison sentence from a bounded MENGADILI section.
+
+    Only extracts from "menjatuhkan pidana...penjara" pattern to avoid
+    picking up subsidiary penalties or quoted sentences.
+    """
+    section = text_lower[start:end] if end else text_lower[start:start + 5000]
+
+    # Priority: "menjatuhkan pidana...penjara selama X tahun"
+    m = re.search(
+        r'menjatuhkan\s+pidana\s+(?:kepada\s+terdakwa\s+)?'
+        r'(?:oleh\s+karena\s+itu\s+)?(?:dengan\s+)?'
+        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+        r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+        section,
+    )
+    if m:
+        years = int(m.group(1))
+        months = int(m.group(2)) if m.group(2) else 0
+        return years * 12 + months
+
+    # Bulan only in sentencing context
+    m = re.search(
+        r'menjatuhkan\s+pidana\s+(?:kepada\s+terdakwa\s+)?'
+        r'(?:oleh\s+karena\s+itu\s+)?(?:dengan\s+)?'
+        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
+        section,
+    )
+    if m:
+        return float(m.group(1))
+
+    return None
+
+
+def _find_quoted_lower_court_sentence(text_lower: str, mengadili_pos: int) -> float | None:
+    """Find the lower court sentence quoted before the MA MENGADILI section.
+
+    When MA says "Menolak permohonan kasasi", the lower court sentence stands.
+    The MA verdict quotes the PN/PT amar putusan earlier in the text, typically
+    near patterns like "Putusan Pengadilan Negeri/Tinggi X" or "amar putusannya".
+    We search backwards from the MENGADILI position.
+    """
+    # Search the text before the MENGADILI section for quoted court decisions
+    # Look in the last 30,000 chars before MENGADILI (PN amar is typically quoted
+    # in the case narrative)
+    search_start = max(0, mengadili_pos - 30000)
+    search_text = text_lower[search_start:mengadili_pos]
+
+    # Find all "Putusan Pengadilan" references with subsequent penjara sentences
+    court_patterns = [
+        r'putusan\s+pengadilan\s+(?:negeri|tinggi|tindak\s+pidana)',
+        r'amar\s+putusan(?:nya)?\s+(?:sebagai\s+berikut|adalah|berbunyi)',
+    ]
+
+    best_result = None
+    best_pos = -1
+
+    for pat in court_patterns:
+        for m in re.finditer(pat, search_text):
+            section = search_text[m.start():m.start() + 2000]
+            pm = re.search(
+                r'(?:menjatuhkan|menghukum)\s+pidana.*?penjara\s+'
+                r'(?:selama\s+|menjadi\s+)?'
+                r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+                r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+                section,
+            )
+            if pm and m.start() > best_pos:
+                years = int(pm.group(1))
+                months = int(pm.group(2)) if pm.group(2) else 0
+                best_result = years * 12 + months
+                best_pos = m.start()
+
+    return best_result
+
+
+def _find_sendiri_sentence(text_lower: str, mengadili_pos: int) -> float | None:
+    """Find sentence in MENGADILI SENDIRI subsection within an MENGADILI section.
+
+    MA verdicts often have nested subsections:
+    M E N G A D I L I → Mengabulkan → MENGADILI SENDIRI → actual sentence
+    or: M E N G A D I L I → ... → MENGADILI KEMBALI → MENGADILI SENDIRI → sentence
+    """
+    section = text_lower[mengadili_pos:mengadili_pos + 10000]
+    # Find the LAST "mengadili sendiri" in the section (the MA's own)
+    sendiri_matches = list(re.finditer(r'mengadili\s+sendiri', section))
+    if not sendiri_matches:
+        return None
+    sendiri_pos = sendiri_matches[-1].start()
+    sendiri_text = section[sendiri_pos:sendiri_pos + 5000]
+    return _find_penjara(sendiri_text)
+
+
+def _find_memperbaiki_sentence(text_lower: str, mengadili_pos: int) -> float | None:
+    """Find sentence in Memperbaiki section within an MENGADILI section.
+
+    When MA says "Memperbaiki Putusan X mengenai pidana...menjadi pidana penjara
+    selama Y tahun", the modified sentence follows "menjadi".
+    """
+    section = text_lower[mengadili_pos:mengadili_pos + 5000]
+    m = re.search(r'memperbaiki\s+putusan', section)
+    if not m:
+        return None
+    memperbaiki_text = section[m.start():]
+    return _find_penjara(memperbaiki_text)
+
+
 def extract_vonis_bulan(text: str) -> float | None:
     """Extract prison sentence in months from verdict text.
 
-    For kasasi PDFs, the text contains multiple 'penjara' mentions:
-    1. Tuntutan section (prosecution demand) — NOT what we want
-    2. Lower court decision quote — NOT what we want
-    3. MENGADILI section (MA's actual decision) — THIS is the vonis
+    For kasasi PDFs, the text contains multiple MENGADILI sections:
+    1. Lower court (PN) MENGADILI — the original verdict
+    2. Appeals court (PT) MENGADILI — if applicable
+    3. Supreme Court (MA) MENGADILI — the cassation decision
 
-    Strategy: search the MENGADILI section first, then catatan_amar prefix,
-    then fall back to LAST match in full text.
+    Strategy (in priority order):
+    1. Strict "menjatuhkan pidana...penjara" in last MENGADILI section
+    2. MENGADILI SENDIRI subsection within last MENGADILI
+    3. Memperbaiki subsection within last MENGADILI
+    4. Previous MENGADILI section (for simple kasasi-ditolak)
+    5. Quoted lower court sentence (last resort for menolak-only)
+    6. General penjara sweep in MENGADILI sections
+    7. Acquittal detection (membebaskan/melepaskan → 0)
+    8. Fallback to catatan_amar prefix, then last-match in full text
     """
     if not text:
         return None
 
     text_lower = text.lower()
 
-    # Strategy 1: Find MENGADILI section (the actual court decision)
-    # MA verdicts use "M E N G A D I L I" (spaced) or "MENGADILI"
-    mengadili_patterns = [
-        r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i',
-        r'mengadili\s*:',
-        r'mengadili\s*\n',
-    ]
-    for pat in mengadili_patterns:
-        m = re.search(pat, text_lower)
-        if m:
-            amar_section = text_lower[m.start():]
-            result = _find_penjara(amar_section)
+    # Strategy 1: Find all MENGADILI sections, use the correct one
+    mengadili_positions = _find_all_mengadili(text_lower)
+
+    if mengadili_positions:
+        last_pos = mengadili_positions[-1]
+
+        # 1a. Strict "menjatuhkan pidana" in last MENGADILI (5000 char window)
+        result = _extract_mengadili_sentence(text_lower, last_pos)
+        if result is not None:
+            return result
+
+        # 1b. MENGADILI SENDIRI subsection (handles nested sections,
+        #     dual-kasasi cases where both menolak+mengabulkan appear)
+        result = _find_sendiri_sentence(text_lower, last_pos)
+        if result is not None:
+            return result
+
+        # 1c. Memperbaiki section (MA modifies specific aspect of sentence)
+        result = _find_memperbaiki_sentence(text_lower, last_pos)
+        if result is not None:
+            return result
+
+        # 1d. Previous MENGADILI section (simple kasasi-ditolak)
+        if len(mengadili_positions) >= 2:
+            prev_pos = mengadili_positions[-2]
+            result = _extract_mengadili_sentence(text_lower, prev_pos, last_pos)
             if result is not None:
                 return result
+
+        # 1e. Quoted lower court sentence (menolak without memperbaiki)
+        last_section = text_lower[last_pos:last_pos + 500]
+        if 'menolak' in last_section[:200]:
+            result = _find_quoted_lower_court_sentence(text_lower, last_pos)
+            if result is not None:
+                return result
+
+        # 1f. General penjara sweep in MENGADILI sections
+        for pos in reversed(mengadili_positions):
+            result = _find_penjara(text_lower[pos:pos + 5000])
+            if result is not None:
+                return result
+
+        # 1g. Acquittal detection
+        acquittal_section = text_lower[last_pos:last_pos + 5000]
+        if re.search(r'(?:membebaskan|melepaskan)\s+(?:terdakwa|terpidana)', acquittal_section):
+            return 0
 
     # Strategy 2: Search in the first 500 chars (catatan_amar prefix from pipeline)
     prefix = text_lower[:500]
@@ -83,7 +242,6 @@ def extract_vonis_bulan(text: str) -> float | None:
         return result
 
     # Strategy 3: Use the LAST penjara match in the full text
-    # (the final sentence is more likely to be the actual vonis)
     all_matches = list(re.finditer(
         r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
@@ -283,45 +441,84 @@ def extract_pasal(text: str) -> str | None:
     return "; ".join(unique[:10])
 
 
+def _clean_nama(name: str) -> str | None:
+    """Clean extracted defendant name: strip titles, trim, validate."""
+    name = name.strip().rstrip(",;.")
+    # Remove leading dots (PDF artifact from merged text)
+    name = name.lstrip(".")
+    # Remove leading/trailing whitespace again
+    name = name.strip()
+    if len(name) < 3:
+        return None
+    return name
+
+
 def extract_nama_terdakwa(text: str) -> str | None:
     """Extract defendant name from verdict text.
 
-    Handles patterns:
-    - "Terdakwa NAMA BIN NAMA"
-    - "VS NAMA (Terdakwa)" — MA kasasi format
-    - "atas nama NAMA"
+    Strategy order:
+    1. Structured PDF header: "Nama : FULL_NAME;" (most reliable)
+    2. Merged PDF header (no spaces): "Nama:FULL_NAME;"
+    3. MA kasasi format: "VS NAMA (Terdakwa)"
+    4. Standard: "Terdakwa NAMA"
+    5. "atas nama NAMA"
     """
     if not text:
         return None
 
-    # MA kasasi format: "Penuntut Umum VS NAMA_TERDAKWA (Terdakwa)"
+    # Strategy 1: Structured PDF header — "Nama  : FULL_NAME;"
+    # This is the identity block at the top of every MA kasasi PDF.
+    # Handles "Nama : X bin Y;" or "Nama : X, S.H., binti Y;"
+    # Also handles "Nama lengkap : X;" variant
+    # Terminated by semicolon before "Tempat Lahir" or "Tempat lahir"
+    m = re.search(
+        r'Nama\s*(?:lengkap\s*)?:\s*(.+?)\s*;\s*(?:Tempat\s*[Ll]ahir|TempatLahir)',
+        text,
+    )
+    if m:
+        name = _clean_nama(m.group(1))
+        if name:
+            return name
+
+    # Strategy 2: Merged PDF text (no spaces between tokens)
+    # e.g., "Nama:.SANDRAMARIATUN,S.H.,bintiH.HENDROMARTONO;"
+    m = re.search(
+        r'Nama:\.?([^;]{3,80});(?:TempatLahir|Tempat)',
+        text,
+    )
+    if m:
+        name = _clean_nama(m.group(1))
+        if name:
+            return name
+
+    # Strategy 3: MA kasasi format: "Penuntut Umum VS NAMA_TERDAKWA (Terdakwa)"
     m = re.search(
         r'VS\s+(.+?)\s*\(Terdakwa\)',
         text,
     )
     if m:
-        name = m.group(1).strip().rstrip(",;.")
-        if len(name) > 3:
+        name = _clean_nama(m.group(1))
+        if name:
             return name
 
-    # Standard: "Terdakwa NAMA"
+    # Strategy 4: Standard: "Terdakwa NAMA"
     m = re.search(
         r'(?:terdakwa|Terdakwa)\s*:?\s*([A-Z][A-Z\s.,]+?)(?:\s*(?:bin|binti|als|alias)\s|[,;]|\s{2,})',
         text,
     )
     if m:
-        name = m.group(1).strip().rstrip(",;.")
-        if len(name) > 3:
+        name = _clean_nama(m.group(1))
+        if name:
             return name
 
-    # "atas nama NAMA"
+    # Strategy 5: "atas nama NAMA"
     m = re.search(
         r'atas\s+nama\s+([A-Z][A-Z\s.,]+?)(?:\s*(?:bin|binti|als|alias)\s|[,;]|\s{2,})',
         text,
     )
     if m:
-        name = m.group(1).strip().rstrip(",;.")
-        if len(name) > 3:
+        name = _clean_nama(m.group(1))
+        if name:
             return name
 
     return None
@@ -469,18 +666,28 @@ def extract_pemohon_kasasi(text: str) -> str | None:
     cleaned = _strip_watermark(text)
     text_lower = cleaned.lower()[:5000]  # Only check header area
 
-    # Kasasi: "dimohonkan oleh Terdakwa/Penuntut Umum"
+    # Kasasi/PK: "dimohonkan oleh Terdakwa/Terpidana/Penuntut Umum"
+    # Handle merged PDF text: "dimohonkanoleh" or "olehterdakwa"
     m = re.search(
-        r'(?:dimohonkan|diajukan)\s+oleh\s+(terdakwa|penuntut\s+umum)',
+        r'(?:dimohonkan|diajukan)\s*oleh\s*(terdakwa|terpidana|penuntut\s*umum)',
         text_lower,
     )
     if m:
         who = m.group(1).strip()
         return 'penuntut_umum' if 'penuntut' in who else 'terdakwa'
 
-    # PK: "dimohonkan oleh Terpidana/Penuntut Umum"
+    # Broader: "kasasi yang dimohonkan oleh" with possible line breaks
     m = re.search(
-        r'(?:dimohonkan|diajukan)\s+oleh\s+(terpidana|penuntut\s+umum)',
+        r'kasasi\s+yang\s+dimohonkan\s*oleh\s*(terdakwa|terpidana|penuntut\s*umum)',
+        text_lower,
+    )
+    if m:
+        who = m.group(1).strip()
+        return 'penuntut_umum' if 'penuntut' in who else 'terdakwa'
+
+    # PK variant: "peninjauan kembali yang dimohonkan oleh"
+    m = re.search(
+        r'peninjauan\s*kembali\s+yang\s+dimohonkan\s*oleh\s*(terdakwa|terpidana|penuntut\s*umum)',
         text_lower,
     )
     if m:
@@ -488,3 +695,80 @@ def extract_pemohon_kasasi(text: str) -> str | None:
         return 'penuntut_umum' if 'penuntut' in who else 'terdakwa'
 
     return None
+
+
+def extract_faktor_pertimbangan(text: str) -> dict:
+    """Extract aggravating (memberatkan) and mitigating (meringankan) factors.
+
+    MA kasasi verdicts may either:
+    1. List factors explicitly: "Hal-hal yang memberatkan: - factor1; - factor2"
+    2. Reference factors in summary: "telah mempertimbangkan keadaan yang
+       memberatkan dan meringankan"
+    3. Quote the lower court's factor list verbatim
+
+    Returns dict with 'memberatkan' and 'meringankan' as lists of strings,
+    plus 'has_factors' boolean indicating whether explicit factors were found.
+    """
+    result = {"memberatkan": [], "meringankan": [], "has_factors": False}
+    if not text:
+        return result
+
+    cleaned = _strip_watermark(text)
+
+    result["memberatkan"] = _extract_factor_list(cleaned, "memberatkan")
+    result["meringankan"] = _extract_factor_list(cleaned, "meringankan")
+
+    result["has_factors"] = bool(result["memberatkan"] or result["meringankan"])
+    return result
+
+
+def _extract_factor_list(text: str, factor_type: str) -> list[str]:
+    """Extract a list of factors of given type from text.
+
+    Looks for patterns like:
+    - "Hal-hal yang memberatkan: - factor1; - factor2;"
+    - "Keadaan yang memberatkan: 1. factor1; 2. factor2;"
+    """
+    text_lower = text.lower()
+
+    header_patterns = [
+        rf'(?:hal[- ]hal|keadaan)\s+yang\s+{factor_type}\s*:',
+        rf'{factor_type}\s*:',
+    ]
+
+    for pat in header_patterns:
+        m = re.search(pat, text_lower)
+        if not m:
+            continue
+
+        start = m.end()
+        # End at the other factor type header, or "Menimbang", or "MENGADILI"
+        other_type = "meringankan" if factor_type == "memberatkan" else "memberatkan"
+        end_patterns = [
+            rf'(?:hal[- ]hal|keadaan)\s+yang\s+{other_type}',
+            r'menimbang',
+            r'm\s*e\s*n\s*g\s*a\s*d\s*i\s*l\s*i',
+            r'mengingat',
+            r'demikianlah',
+        ]
+        end = start + 2000
+        for ep in end_patterns:
+            em = re.search(ep, text_lower[start:start + 2000])
+            if em:
+                end = min(end, start + em.start())
+
+        section = text[start:end]
+
+        # Split by bullet/number delimiters
+        factors = re.split(r'\s*(?:[-•]\s+|\d+\.\s+|;\s*[-•\d])', section)
+        cleaned = []
+        for f in factors:
+            f = f.strip().rstrip(";.,")
+            if len(f) > 10 and re.search(r'[a-zA-Z]', f):
+                if len(f) > 300:
+                    f = f[:300] + "..."
+                cleaned.append(f)
+        if cleaned:
+            return cleaned
+
+    return []

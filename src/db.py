@@ -65,6 +65,10 @@ def init_db(db_path: Path = DB_PATH):
                 -- Appeal metadata
                 pemohon_kasasi TEXT,  -- 'terdakwa' or 'penuntut_umum'
 
+                -- Pertimbangan hakim factors
+                faktor_memberatkan TEXT,  -- JSON list of aggravating factors
+                faktor_meringankan TEXT,  -- JSON list of mitigating factors
+
                 -- Parse metadata
                 parsed_at TEXT,
                 parse_source TEXT,  -- 'html' or 'pdf'

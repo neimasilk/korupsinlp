@@ -12,6 +12,7 @@ from src.parser.fields import (
     extract_tahun,
     extract_daerah,
     extract_pemohon_kasasi,
+    extract_faktor_pertimbangan,
     _strip_watermark,
 )
 from src.parser.normalizer import court_to_province
@@ -108,6 +109,11 @@ def parse_verdict(metadata: dict, text: str | None = None) -> dict:
 
     # Pemohon kasasi — who filed the appeal (terdakwa vs penuntut_umum)
     result["pemohon_kasasi"] = extract_pemohon_kasasi(combined)
+
+    # Pertimbangan hakim — aggravating/mitigating factors
+    faktor = extract_faktor_pertimbangan(combined)
+    result["faktor_memberatkan"] = json.dumps(faktor["memberatkan"], ensure_ascii=False) if faktor["memberatkan"] else None
+    result["faktor_meringankan"] = json.dumps(faktor["meringankan"], ensure_ascii=False) if faktor["meringankan"] else None
 
     # === Derived fields ===
     if result["daerah"]:

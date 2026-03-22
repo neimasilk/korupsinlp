@@ -12,7 +12,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-GOLDEN_PATH = Path("data/golden_set/golden_template.csv")
+GOLDEN_PATH = Path("data/golden_set/golden_20_verified.csv")
+GOLDEN_TEMPLATE_PATH = Path("data/golden_set/golden_template.csv")
 
 # Tolerance for numeric comparisons
 NUMERIC_TOLERANCE = 0.05  # 5% tolerance for vonis/tuntutan

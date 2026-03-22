@@ -15,6 +15,7 @@ from src.parser.fields import (
     extract_tahun,
     extract_daerah,
     extract_pemohon_kasasi,
+    extract_faktor_pertimbangan,
     _strip_watermark,
 )
 from src.parser.normalizer import normalize_duration_to_months, normalize_rupiah, court_to_province
@@ -186,6 +187,16 @@ class TestExtractPemohonKasasi:
     def test_no_match(self):
         assert extract_pemohon_kasasi("tidak ada kasasi") is None
 
+    def test_merged_text_dimohonkanoleh(self):
+        """Merged PDF: 'dimohonkanoleh Penuntut Umum' (no space)."""
+        text = "kasasi yang dimohonkanoleh Penuntut Umum pada Kejaksaan"
+        assert extract_pemohon_kasasi(text) == "penuntut_umum"
+
+    def test_merged_text_olehterdakwa(self):
+        """Merged PDF: 'dimohonkan olehTerdakwa' (no space)."""
+        text = "peninjauan kembali yang dimohonkan olehTerpidana, telah memutus"
+        assert extract_pemohon_kasasi(text) == "terdakwa"
+
 
 # === Watermark stripping ===
 
@@ -238,6 +249,195 @@ class TestVonisMengadili:
             "penjara selama 3 tahun"
         )
         assert extract_vonis_bulan(text) == 36
+
+    def test_kasasi_ditolak_uses_previous_mengadili(self):
+        """When MA rejects kasasi, use the previous MENGADILI section sentence."""
+        text = (
+            "M E N G A D I L I: "
+            "Menjatuhkan pidana kepada Terdakwa dengan pidana penjara selama 5 (lima) tahun "
+            "dan pidana denda sebesar Rp50.000.000 "
+            "M E N G A D I L I: "
+            "Menolak permohonan kasasi dari Pemohon Kasasi "
+            "Membebankan kepada Terdakwa membayar biaya perkara Rp2.500"
+        )
+        # Should get 60 (5yr) from first MENGADILI, not from last
+        assert extract_vonis_bulan(text) == 60
+
+    def test_kasasi_ditolak_quoted_pn_sentence(self):
+        """Single MENGADILI (Menolak) — finds quoted PN sentence before it."""
+        pn_quote = (
+            "Putusan Pengadilan Negeri Surabaya yang amar putusannya sebagai berikut: "
+            "1. Menyatakan terdakwa terbukti bersalah; "
+            "2. Menjatuhkan pidana kepada terdakwa dengan pidana penjara selama 5 (lima) tahun "
+            "dan denda sebesar Rp50.000.000; "
+        )
+        ma_mengadili = (
+            "M E N G A D I L I: "
+            "Menolak permohonan kasasi dari Pemohon Kasasi "
+        )
+        text = pn_quote + "x " * 100 + ma_mengadili
+        assert extract_vonis_bulan(text) == 60
+
+    def test_mengadili_sendiri_overrides(self):
+        """MA MENGADILI SENDIRI takes precedence over lower court sentence."""
+        text = (
+            "M E N G A D I L I: "
+            "Menjatuhkan pidana kepada Terdakwa dengan pidana penjara selama 5 (lima) tahun "
+            "M E N G A D I L I: "
+            "Menjatuhkan pidana kepada Terdakwa dengan pidana penjara selama 3 (tiga) tahun "
+        )
+        # Should get 36 (3yr) from last MENGADILI (MA's own sentence)
+        assert extract_vonis_bulan(text) == 36
+
+    def test_acquittal_bebas(self):
+        """When MA acquits (membebaskan), return 0 instead of lower court sentence."""
+        # PN sentence quoted earlier, then MA acquits
+        pn_text = "penjara selama 5 (lima) tahun "
+        ma_text = (
+            "M E N G A D I L I: "
+            "Mengabulkan permohonan kasasi dari Pemohon Kasasi "
+            "MENGADILI SENDIRI: "
+            "1. Menyatakan Terdakwa tidak terbukti; "
+            "2. Membebaskan Terdakwa oleh karena itu dari segala dakwaan; "
+        )
+        text = pn_text + "x " * 200 + ma_text
+        assert extract_vonis_bulan(text) == 0
+
+    def test_acquittal_lepas(self):
+        """When MA releases (melepaskan/ontslag), return 0."""
+        pn_text = "penjara selama 10 (sepuluh) tahun "
+        ma_text = (
+            "M E N G A D I L I: "
+            "Mengabulkan permohonan kasasi "
+            "MENGADILI SENDIRI: "
+            "1. Menyatakan Terdakwa terbukti melakukan perbuatan akan tetapi "
+            "bukan merupakan tindak pidana; "
+            "2. Melepaskan Terdakwa tersebut dari segala tuntutan hukum; "
+        )
+        text = pn_text + "x " * 200 + ma_text
+        assert extract_vonis_bulan(text) == 0
+
+    def test_partial_acquittal_with_conviction(self):
+        """Freed from primary charge but convicted on subsidiary — return the sentence."""
+        text = (
+            "M E N G A D I L I: "
+            "Mengabulkan permohonan kasasi "
+            "MENGADILI SENDIRI: "
+            "1. Membebaskan Terdakwa dari dakwaan Primair; "
+            "2. Menyatakan Terdakwa terbukti melakukan dakwaan Subsidair; "
+            "3. Menjatuhkan pidana kepada Terdakwa dengan pidana penjara selama 7 (tujuh) tahun "
+        )
+        # Should get 84 (7yr) — convicted on subsidiary charge
+        assert extract_vonis_bulan(text) == 84
+
+    def test_memperbaiki_sentence(self):
+        """Memperbaiki: MA modifies the sentence. Use the modified sentence."""
+        text = (
+            "penjara selama 3 (tiga) tahun "  # original PT sentence in earlier text
+            "x " * 200 +
+            "M E N G A D I L I: "
+            "Menolak permohonan kasasi dari Pemohon Kasasi "
+            "Memperbaiki Putusan Pengadilan Tinggi mengenai pidana yang dijatuhkan "
+            "kepada Terdakwa menjadi pidana penjara selama 2 (dua) tahun "
+        )
+        # Should get 24 (2yr) from memperbaiki, NOT 36 (3yr) from original
+        assert extract_vonis_bulan(text) == 24
+
+    def test_dual_kasasi_mengabulkan_jpu(self):
+        """Both JPU and terdakwa filed kasasi. JPU accepted → MENGADILI SENDIRI."""
+        text = (
+            "penjara selama 4 (empat) tahun "  # lower court sentence
+            "x " * 200 +
+            "M E N G A D I L I: "
+            "Menolak permohonan kasasi dari Pemohon Kasasi I/Terdakwa "
+            "Mengabulkan permohonan kasasi dari Pemohon Kasasi II/PENUNTUT UMUM "
+            "Membatalkan Putusan Pengadilan Tinggi "
+            "MENGADILI SENDIRI: "
+            "1. Menyatakan Terdakwa terbukti bersalah; "
+            "2. Menjatuhkan pidana kepada Terdakwa dengan pidana penjara selama 6 (enam) tahun "
+        )
+        # Should get 72 (6yr) from MENGADILI SENDIRI, NOT 48 (4yr) from lower court
+        assert extract_vonis_bulan(text) == 72
+
+
+# === nama_terdakwa from PDF header ===
+
+class TestNamaTerdakwaPDFHeader:
+    def test_structured_header_with_bin(self):
+        """Nama : X bin Y; Tempat Lahir : Z"""
+        text = 'Nama  : ISWANTO, S.Pd.I., bin (almarhum) ISMANI; Tempat Lahir  : Rembang;'
+        result = extract_nama_terdakwa(text)
+        assert result == "ISWANTO, S.Pd.I., bin (almarhum) ISMANI"
+
+    def test_structured_header_with_binti(self):
+        text = 'Nama : H. RASKAMA ABDUL HALIM bin NARA; Tempat Lahir : Majalengka;'
+        result = extract_nama_terdakwa(text)
+        assert result == "H. RASKAMA ABDUL HALIM bin NARA"
+
+    def test_merged_pdf_text(self):
+        """No spaces — merged PDF extraction."""
+        text = 'Nama:.SANDRAMARIATUN,S.H.,bintiH.HENDROMARTONO;TempatLahir:Surakarta;'
+        result = extract_nama_terdakwa(text)
+        assert result == "SANDRAMARIATUN,S.H.,bintiH.HENDROMARTONO"
+
+    def test_header_with_almarhum(self):
+        text = 'Nama : MUSTAFA AL HAMID bin (almarhum) ZAYD MUCHSIN AL HAMID;  Tempat Lahir : Probolinggo;'
+        result = extract_nama_terdakwa(text)
+        assert result == "MUSTAFA AL HAMID bin (almarhum) ZAYD MUCHSIN AL HAMID"
+
+    def test_header_simple_name(self):
+        text = 'Nama  : AZHAR bin ABDULLAH MAHMUD; Tempat Lahir  : Idi;'
+        result = extract_nama_terdakwa(text)
+        assert result == "AZHAR bin ABDULLAH MAHMUD"
+
+    def test_vs_terdakwa_fallback(self):
+        """Falls back to VS pattern when no header."""
+        text = 'Penuntut Umum VS JOHN DOE (Terdakwa)'
+        assert extract_nama_terdakwa(text) == "JOHN DOE"
+
+
+# === extract_faktor_pertimbangan ===
+
+class TestFaktorPertimbangan:
+    def test_explicit_factors(self):
+        text = (
+            "Hal-hal yang memberatkan: "
+            "- Terdakwa tidak mendukung program pemerintah; "
+            "- Perbuatan Terdakwa merugikan keuangan negara; "
+            "Hal-hal yang meringankan: "
+            "- Terdakwa bersikap sopan di persidangan; "
+            "- Terdakwa belum pernah dihukum; "
+            "Menimbang bahwa berdasarkan pertimbangan tersebut"
+        )
+        result = extract_faktor_pertimbangan(text)
+        assert result["has_factors"] is True
+        assert len(result["memberatkan"]) == 2
+        assert len(result["meringankan"]) == 2
+        assert "merugikan" in result["memberatkan"][1].lower()
+
+    def test_keadaan_format(self):
+        text = (
+            "Keadaan yang memberatkan: "
+            "1. Perbuatan Terdakwa meresahkan masyarakat; "
+            "Keadaan yang meringankan: "
+            "1. Terdakwa mengakui perbuatannya; "
+            "Mengingat Pasal 2"
+        )
+        result = extract_faktor_pertimbangan(text)
+        assert result["has_factors"] is True
+        assert len(result["memberatkan"]) >= 1
+        assert len(result["meringankan"]) >= 1
+
+    def test_no_factors(self):
+        text = "telah cukup mempertimbangkan keadaan yang memberatkan dan meringankan"
+        result = extract_faktor_pertimbangan(text)
+        assert result["has_factors"] is False
+
+    def test_empty_text(self):
+        result = extract_faktor_pertimbangan("")
+        assert result["has_factors"] is False
+        assert result["memberatkan"] == []
+        assert result["meringankan"] == []
 
 
 if __name__ == "__main__":

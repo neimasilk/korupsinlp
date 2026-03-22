@@ -1,6 +1,5 @@
 # Data (scraped content, PDFs)
 data/
-reports/*.md
 !reports/.gitkeep
 
 # Python

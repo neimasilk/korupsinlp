@@ -1,0 +1,79 @@
+{
+  "n": 327,
+  "descriptive": {
+    "n_vonis": 327,
+    "mean_vonis_yr": 4.6304791029561665,
+    "median_vonis_yr": 4.0,
+    "std_vonis_yr": 3.2809156194780833,
+    "mean_tuntutan_yr": 6.577538631346578,
+    "mean_ratio": 0.840902521929087,
+    "median_ratio": 0.7,
+    "n_ratio": 302,
+    "n_kerugian": 254,
+    "median_kerugian": 1406527500.0
+  },
+  "pemohon_kasasi": {
+    "n_jpu": 181,
+    "mean_jpu": 4.775782688766115,
+    "n_terdakwa": 113,
+    "mean_terdakwa": 4.75,
+    "t_stat": 0.06785891808304345,
+    "p_value": 0.9459502772423881,
+    "cohens_d": 0.00802133779533982,
+    "u_stat": 9876.0,
+    "u_p": 0.62023784445535
+  },
+  "kerugian": {
+    "brackets": [
+      {
+        "label": "<100M",
+        "n": 21,
+        "mean": 2.7976190476190474,
+        "median": 2.0
+      },
+      {
+        "label": "100M-1B",
+        "n": 92,
+        "mean": 3.4782608695652173,
+        "median": 3.0
+      },
+      {
+        "label": "1B-10B",
+        "n": 76,
+        "mean": 4.55701754385965,
+        "median": 5.0
+      },
+      {
+        "label": "10B-100B",
+        "n": 46,
+        "mean": 6.880434782608695,
+        "median": 7.0
+      },
+      {
+        "label": ">100B",
+        "n": 19,
+        "mean": 10.368421052631579,
+        "median": 10.0
+      }
+    ],
+    "spearman_rho": 0.5588751227326667,
+    "spearman_p": 2.8760066231136183e-22,
+    "pearson_r": 0.5782273352971774,
+    "pearson_p": 4.6197317124241434e-24,
+    "slope": 1.4104848387866291,
+    "intercept": -8.278544358466462,
+    "r_squared": 0.33434685128487535
+  },
+  "geographic_top10": {
+    "Jakarta Pusat": 47,
+    "Surabaya": 32,
+    "Bandung": 23,
+    "Makassar": 20,
+    "Medan": 16,
+    "Kupang": 14,
+    "Banda Aceh": 13,
+    "Semarang": 11,
+    "Samarinda": 11,
+    "Padang": 10
+  }
+}

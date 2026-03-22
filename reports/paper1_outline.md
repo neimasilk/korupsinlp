@@ -7,9 +7,10 @@
 - Backup: Indonesian NLP workshop, or Southeast Asian NLP venue
 
 ## Core Contribution
-1. **Novel dataset**: First large-scale structured corpus of Indonesian corruption verdicts (target: 3,000+ cases from Mahkamah Agung)
-2. **Extraction methodology**: Regex-based pipeline for Indonesian legal document parsing (benchmarked against human golden set)
-3. **Descriptive findings**: First computational census of sentencing patterns, geographic distribution, and state losses in Indonesian corruption cases
+1. **Novel dataset**: First large-scale structured corpus of Indonesian corruption verdicts (500+ MA kasasi/PK decisions, target: 1,000+)
+2. **Extraction methodology**: Regex-based pipeline for Indonesian legal document parsing with 85.5% P0 field extraction rate
+3. **Novel finding**: Pemohon kasasi (appeal filer) as confounding variable — 60% JPU kasasi vs 40% terdakwa kasasi, with systematically different sentencing patterns
+4. **Descriptive findings**: First computational census of sentencing patterns, geographic distribution, and state losses in Indonesian corruption cases
 
 ## Outline
 
@@ -79,9 +80,16 @@
 - Caution against interpreting as crime trends
 
 #### 6.5 Sentencing Discount
-- vonis/tuntutan ratio distribution (mean ~55%, median 50%)
-- Cases where vonis > tuntutan (rare, legally interesting)
+- vonis/tuntutan ratio distribution (mean 66.2%, median 60.0%, n=172)
+- Cases where vonis > tuntutan: 15 cases (8.7%) — mostly JPU kasasi where MA increased sentences
 - Predictors of discount magnitude (preliminary)
+
+#### 6.6 Pemohon Kasasi Effect (NOVEL)
+- **Key finding**: Who files the appeal fundamentally shapes the sentencing distribution
+- JPU kasasi (prosecutor appeal, 60%): mean vonis 4.3yr, mean ratio 70.9% — prosecutors appeal when they want harsher sentences
+- Terdakwa kasasi (defendant appeal, 40%): mean vonis 3.6yr, mean ratio 59.6% — defendants appeal when they want lighter sentences
+- Implication: all MA kasasi sentencing analysis MUST stratify by pemohon_kasasi
+- This is a confounding variable that previous Indonesian legal studies have not addressed
 
 ### 7. Limitations
 - **Selection bias**: only MA kasasi/PK (appealed) cases, NOT first-instance PN verdicts
@@ -118,14 +126,51 @@
 6. Discount ratio distribution
 7. Temporal distribution with caveats
 
-## Key Numbers to Report (current n=102 PDF-parsed)
+## Key Numbers to Report (Session 7 final, n=327 with vonis>0, 557 total)
 | Metric | Value |
 |--------|-------|
-| Verdicts (PDF-parsed) | 102 |
-| Mean sentence | 4.2 years |
+| Verdicts (total scraped) | 557 |
+| With case metadata | 488 (87.6%) |
+| Parsed | 518 |
+| Verdicts (with vonis>0) | 327 |
+| Acquittals detected | 17 (5.0%) |
+| Mean sentence | **4.63 years** |
 | Median sentence | 4.0 years |
-| Mean discount ratio | 54.9% |
-| Median kerugian | Rp 2.07B |
+| Std deviation | 3.28 years |
+| Range | 3 months — 18 years |
+| Mean tuntutan | 6.58 years |
+| Mean discount ratio | **84.1%** |
+| Median discount ratio | 70.0% |
+| Vonis > tuntutan | 40 (13.2%) |
+| Median kerugian | Rp 1.41B |
 | Max kerugian | Rp 300T (PT Timah) |
-| Geographic coverage | 25+ provinces |
-| Temporal range | 2011-2026 |
+| Geographic coverage | 40+ daerah |
+| Temporal range | 2011-2026 (14 years) |
+| Pemohon kasasi: JPU | 181 (55%) — mean 4.78yr, ratio 77.8% |
+| Pemohon kasasi: Terdakwa | 113 (35%) — mean 4.75yr, ratio 98.2% |
+| Welch's t-test (vonis) | t=0.07, p=0.95, d=0.01 (NOT significant) |
+| Spearman ρ (kerugian~vonis) | 0.56, p<10⁻²² |
+| Pearson r | 0.58, p<10⁻²⁴ |
+| Linear model R² | 0.33 |
+| Golden set (n=20) | 100% vonis accuracy |
+
+**Session 8 additions**: Related Work with 17 real citations, multivariate regression (Section 6.7),
+acquittal analysis (Section 6.6), References section. Key regression finding: only log10(kerugian)
+is significant (b=1.33, p<0.001); pemohon (p=0.77), JP (p=0.23), year (p=0.65) all non-significant.
+
+### Multivariate Regression (n=254, Session 8)
+| Model | R² | adj R² | BIC | Key finding |
+|-------|-----|--------|------|-------------|
+| M1: log10(kerugian) | 0.334 | 0.332 | 1237 | **Best by BIC** |
+| M4: + pemohon + JP + year | 0.339 | 0.328 | 1252 | Additional vars not significant |
+| F-test M1 vs M4 | | | | F=0.54, p=0.65 |
+| 10-fold CV (M4) | | | | Mean R²=0.25, MAE=2.09yr |
+
+### Kerugian-Vonis Brackets (n=254)
+| Kerugian | n | Mean Vonis | Median Vonis |
+|----------|---|------------|--------------|
+| <100M | 21 | 2.8 yr | 2.0 yr |
+| 100M-1B | 92 | 3.5 yr | 3.0 yr |
+| 1B-10B | 76 | 4.6 yr | 5.0 yr |
+| 10B-100B | 46 | 6.9 yr | 7.0 yr |
+| >100B | 19 | 10.4 yr | 10.0 yr |

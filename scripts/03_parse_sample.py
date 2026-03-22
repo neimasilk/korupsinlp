@@ -72,6 +72,8 @@ def main():
                 "nama_hakim": result["nama_hakim"],
                 "nama_jaksa": result["nama_jaksa"],
                 "pemohon_kasasi": result.get("pemohon_kasasi"),
+                "faktor_memberatkan": result.get("faktor_memberatkan"),
+                "faktor_meringankan": result.get("faktor_meringankan"),
                 "parsed_at": result["parsed_at"],
                 "parse_source": result["parse_source"],
                 "parse_errors": result["parse_errors"],
