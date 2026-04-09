@@ -772,3 +772,45 @@ def _extract_factor_list(text: str, factor_type: str) -> list[str]:
             return cleaned
 
     return []
+
+
+def extract_pertimbangan_text(text: str) -> str | None:
+    """Extract judicial reasoning section from verdict text.
+
+    Looks for text between 'Menimbang' (or 'PERTIMBANGAN HUKUM') and 'MENGADILI'.
+    Returns None if section is too short (<200 chars) or not found.
+    """
+    if not text:
+        return None
+
+    text_lower = text.lower()
+
+    # Find start: 'pertimbangan hukum' or first 'menimbang'
+    start = -1
+    for marker in ['pertimbangan hukum', 'menimbang']:
+        idx = text_lower.find(marker)
+        if idx >= 0:
+            start = idx
+            break
+    if start < 0:
+        return None
+
+    # Find end: 'M E N G A D I L I' or 'MENGADILI'
+    end = -1
+    for pattern in [r'M\s*E\s*N\s*G\s*A\s*D\s*I\s*L\s*I', r'MENGADILI']:
+        m = re.search(pattern, text[start:])
+        if m:
+            end = start + m.start()
+            break
+    if end < 0:
+        return None
+
+    section = text[start:end].strip()
+
+    # Minimum length filter
+    if len(section) < 200:
+        return None
+
+    # Normalize whitespace
+    section = re.sub(r'\s+', ' ', section).strip()
+    return section
