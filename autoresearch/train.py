@@ -25,7 +25,7 @@ from autoresearch.prepare import (
 # ==== HYPERPARAMETERS (agent can change all of these) ====
 
 # TF-IDF settings
-MAX_FEATURES = 5000
+MAX_FEATURES = 200
 NGRAM_RANGE = (1, 2)
 MIN_DF = 2
 MAX_DF = 0.9
