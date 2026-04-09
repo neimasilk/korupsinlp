@@ -36,7 +36,7 @@ USE_IDF = True
 ALPHA = 1.0  # Ridge regularization
 
 # Feature combination: 'text_only', 'text_tuntutan', 'text_all'
-FEATURE_MODE = 'text_tuntutan'
+FEATURE_MODE = 'text_all'
 
 
 # ==== TEXT PREPROCESSING (agent can change this) ====
