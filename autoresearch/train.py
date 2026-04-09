@@ -158,6 +158,34 @@ def main():
 
     elapsed = time.time() - t_start
 
+    # Cross-validation for robustness check
+    from sklearn.model_selection import KFold
+    kf = KFold(n_splits=10, shuffle=True, random_state=42)
+    # Combine train+val for CV (leave test untouched)
+    cv_df = pd.concat([train_df, val_df]).reset_index(drop=True)
+    cv_texts = preprocess_text(cv_df['pertimbangan_text'])
+    cv_y = cv_df['vonis_years'].values
+    cv_r2s = []
+    cv_baseline_r2s = []
+    for train_idx, val_idx in kf.split(cv_df):
+        cv_train_texts = cv_texts.iloc[train_idx]
+        cv_val_texts = cv_texts.iloc[val_idx]
+        cv_train_df = cv_df.iloc[train_idx]
+        cv_val_df = cv_df.iloc[val_idx]
+        X_tr, X_va, _ = extract_features(cv_train_texts, cv_val_texts, cv_train_df, cv_val_df)
+        m = build_model()
+        m.fit(X_tr, cv_y[train_idx])
+        pred = m.predict(X_va)
+        cv_metrics = evaluate(cv_y[val_idx], pred)
+        cv_r2s.append(cv_metrics['val_r2'])
+        bl_pred = baseline_predict(cv_val_df)
+        bl_metrics = evaluate(cv_y[val_idx], bl_pred)
+        cv_baseline_r2s.append(bl_metrics['val_r2'])
+
+    cv_r2_mean = np.mean(cv_r2s)
+    cv_r2_std = np.std(cv_r2s)
+    cv_bl_mean = np.mean(cv_baseline_r2s)
+
     # Print results in fixed format for machine parsing
     print("---")
     print(f"val_r2:              {metrics['val_r2']:.6f}")
@@ -167,6 +195,10 @@ def main():
     print(f"val_spearman:        {metrics['val_spearman']:.6f}")
     print(f"baseline_r2:         {baseline_metrics['val_r2']:.6f}")
     print(f"baseline_mae:        {baseline_metrics['val_mae']:.6f}")
+    print(f"cv_r2_mean:          {cv_r2_mean:.6f}")
+    print(f"cv_r2_std:           {cv_r2_std:.6f}")
+    print(f"cv_baseline_mean:    {cv_bl_mean:.6f}")
+    print(f"cv_improvement:      {cv_r2_mean - cv_bl_mean:.6f}")
     print(f"elapsed_seconds:     {elapsed:.1f}")
     print(f"n_train:             {len(train_df)}")
     print(f"n_val:               {len(val_df)}")
