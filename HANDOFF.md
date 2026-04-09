@@ -81,7 +81,9 @@ python -m autoresearch.cv_analysis        # Full CV analysis
 
 ### Priority 1: Scale Corpus (MOST IMPORTANT)
 288 analysis-ready verdicts is too small for NLP. Need 1000+.
-- Resume scraping: `python -m scripts.02_scrape_sample --count 500 --start-page 15`
+- **MA pages exhausted**: page 15 had 43 URLs, page 16+ empty. MA korupsi listing maxes out at ~600 verdicts.
+- **Must switch to PN Tipikor courts** for more data. Edit `src/config.py`: set `COURT_SLUGS = PN_COURT_SLUGS` to scrape first-instance verdicts from Bandung, Jakarta Pusat, Surabaya, Makassar, Medan, Semarang.
+- PN verdicts have fuller text (pertimbangan more detailed) and more cases per court.
 - After scraping: `python -m scripts.03_parse_sample` then `python -m scripts.09_extract_pertimbangan`
 - Re-run `python -m autoresearch.cv_analysis` on larger corpus
 
