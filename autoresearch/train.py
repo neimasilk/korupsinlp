@@ -33,7 +33,7 @@ SUBLINEAR_TF = True
 USE_IDF = True
 
 # Model settings
-ALPHA = 0.1  # Ridge regularization — less reg with fewer features
+ALPHA = 0.05  # Ridge regularization
 
 # Feature combination: 'text_only', 'text_tuntutan', 'text_all'
 FEATURE_MODE = 'text_all'
