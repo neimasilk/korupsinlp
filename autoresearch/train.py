@@ -26,7 +26,7 @@ from autoresearch.prepare import (
 
 # TF-IDF settings
 MAX_FEATURES = 100
-NGRAM_RANGE = (1, 2)
+NGRAM_RANGE = (1, 1)
 MIN_DF = 2
 MAX_DF = 0.9
 SUBLINEAR_TF = True
