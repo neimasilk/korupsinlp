@@ -1,101 +1,105 @@
-# Paper 2: Beyond Structured Features — Judge Effects and the Limits of Sentencing Prediction
+# Paper 2: Beyond Structured Features — Text Features and the Limits of Sentencing Prediction
 
 ## Working Title
-**"What Explains the Other 40%? Judge-Level Variation and the Limits of Structured Sentencing Prediction in Indonesian Corruption Cases"**
+**"What Explains the Other 40%? Text Features, Judge Effects, and the Limits of Computational Sentencing Analysis in Indonesian Corruption Cases"**
 
 ## Target Venue
 - Primary: ICWSM, CSS Workshop, or Journal of Empirical Legal Studies
-- If text features work: ACL/EMNLP Findings
+- Computational legal studies venue
 
 ## Core Narrative
 
-Paper 1 showed that tuntutan + kerugian explain 62% of sentencing variance (R²=0.62). This paper asks: **what explains the remaining 38%?**
+Paper 1 showed tuntutan explains ~60% of sentencing variance (R²=0.60). This paper systematically tests whether *anything* can explain the remaining 40%.
 
-We systematically test three hypotheses:
-1. **Additional structured features** (pasal charged, number of charges, amar category, Pasal 55 conspiracy) — **RESULT: nothing adds beyond tuntutan+kerugian (R² 0.615 -> 0.618)**
-2. **Judge-level variation** (ICC ≈ 0.10, mixed-effects model) — **10% of total variance is between-judge**
-3. **Text-based features** (TF-IDF, IndoBERT embeddings) — **TBD, this is the key experiment**
+**Key finding**: Nothing reliably does — not structured features, not judge identity, not TF-IDF text features. The 40% is likely *irreducible* with available data, driven by case-specific facts not captured in public verdicts.
 
-The paper's contribution is empirically quantifying the "opacity of judicial discretion" — showing exactly where structured analysis fails and text analysis is needed.
+## Autoresearch Results (30 experiments, 9 April 2026)
 
-## Key Preliminary Results (Session 9)
+### Text features do NOT improve prediction
+**30 systematic experiments** via the autoresearch framework, testing:
+- TF-IDF settings: max_features (50-5000), ngrams (1-2), min_df, max_df, sublinear_tf, binary
+- Models: Ridge, Lasso, ElasticNet, HuberRegressor, RandomForest, GradientBoosting
+- Features: text_only, text+tuntutan, text+tuntutan+kerugian, keyword counts, SVD compression
+- Regularization: alpha sweep 0.01 to 50.0
+- Preprocessing: stopwords, text truncation
 
-### Structured features are exhausted
-| Feature | Univariate effect | After tuntutan+kerugian control |
-|---------|------------------|-------------------------------|
-| Pasal 55 (conspiracy) | +1.77yr (p<0.01) | p=0.44 (NS) |
-| Number of charges | r=0.13 (p=0.046) | p=0.56 (NS) |
-| Amar category (Kabul) | No difference | p=0.47 (NS) |
-| Pasal 2 vs 3 | Not viable (72% cite both) | — |
-| **Combined (all 3 new)** | — | **R² 0.615 -> 0.618** |
+**Best single-split result**: val_r2=0.626 (100 TF-IDF unigrams + tuntutan + kerugian, Ridge alpha=0.05)
+**But cross-validation reveals overfit**: 5×10-fold CV mean R²=0.460, significantly WORSE than baseline (0.532, p<0.0001)
 
-### Judge-level variation (TESTED)
-- 149 unique judges (presiding), 15 with 3+ cases in regression sample
-- **Crude ICC = 0.097** (~10% from one-way ANOVA) — but this is confounded by case assignment
-- **Mixed-effects ICC = 0.036** (~3.6% after controlling for tuntutan + kerugian) — MUCH smaller
-- Judge random effects range: -0.28yr (Yohanes Priyana) to +0.40yr (Dwiarso Budi Santiarto)
-- This is only ±5 months difference between most extreme judges
-- **Conclusion**: Judges are remarkably consistent. The apparent "judge effect" was case-assignment confounding.
-- Mixed model pseudo-R²: 0.637 vs OLS 0.617 = +2.0pp improvement (modest)
+| Model | CV Mean R² (5×10-fold) | vs M9 Baseline |
+|-------|----------------------|----------------|
+| M9 baseline (fixed) | 0.532 | — |
+| Ridge tuntutan only | 0.522 | -0.010 |
+| Best TF-IDF + all (α=10) | 0.513 | -0.019 |
+| Best TF-IDF + all (α=0.05) | 0.460 | -0.072 |
+| TF-IDF text only | -0.042 | -0.574 |
 
-### Variance decomposition (ACTUAL)
-| Source | % of total variance | Method |
-|--------|-------------------|--------|
-| Tuntutan | ~50% | Partial R² (M9 vs null) |
-| Kerugian (independent of tuntutan) | ~12% | Delta R² (M_combined vs M9) |
-| Judge identity | ~2% | Delta pseudo-R² (mixed vs OLS) |
-| Other structured features (pasal, amar) | <0.5% | Delta R² (NS, p>0.44) |
-| **Unexplained (case-specific)** | **~36%** | Residual |
+**No alpha value makes text features break even with baseline.**
 
-## Proposed Methods
+### Descriptive text analysis (what words associate with sentence severity)
+Despite not helping prediction, word analysis reveals sensible patterns:
 
-### Phase 1: Mixed-Effects Model [feasible now]
-- `vonis ~ tuntutan + log_kerugian + (1|judge)` using statsmodels MixedLM
-- Challenge: 3-judge panels — need to decide: use ketua majelis (presiding) only, or crossed random effects?
-- Expected: R² improvement of 5-10% over OLS
+**Words significantly correlated with HEAVIER sentences** (Spearman, p<0.05):
+- "miliar" (r=+0.23): large state loss cases
+- "negara" (r=+0.19): state-level corruption
+- "keuangan" (r=+0.15): financial crimes
+- "dakwaan" (r=+0.16): more specific charges
+- "uang" (r=+0.16): money-related language
 
-### Phase 2: Text Features [requires new code]
-- Extract full PDF text for 320 cases with PDF + vonis
-- Feature extraction:
-  a) TF-IDF on "pertimbangan hukum" section
-  b) IndoBERT [cls] embeddings (mean pooling)
-  c) Specific keyword features (kerja sama, merugikan, jabatan, etc.)
-- Model: structured features + text features → vonis
-- Compare: structured-only (R²=0.62) vs text-only vs combined
-- If combined R² > 0.70: text captures judicial reasoning beyond structured fields
-- If combined R² ≈ 0.62: text doesn't add — discretion truly opaque
+**Words associated with LIGHTER sentences** (Spearman, p<0.05):
+- "kasasi" (r=-0.15): appeal-related language (procedural, not substantive)
 
-### Phase 3: Quantile Regression [builds on Paper 1]
-- Paper 1 showed residuals are right-skewed (Shapiro p<0.001)
-- Quantile regression at tau = 0.25, 0.50, 0.75 with all features
-- Does judge effect vary across quantiles? (harsher at extremes?)
+**Prevalence gap** (heavy vs light quartile):
+- "miliar" appears in 33% of heavy cases but only 15% of light — but this is a proxy for kerugian magnitude, which is already in the structured model
 
-## Research Questions
+### Previous findings (structured features and judge effects)
+| Source | % of total variance |
+|--------|-------------------|
+| Tuntutan | ~50% |
+| Kerugian (independent) | ~12% |
+| Judge identity | ~2% (ICC=0.036 after controls) |
+| Other structured (pasal, amar) | <0.5% |
+| Text features (TF-IDF) | **0% (negative in CV)** |
+| **Unexplained** | **~36%** |
 
-- **RQ1**: Do additional structured case features (pasal, charges, amar) predict sentencing beyond prosecution demand and state loss? [Answer: NO]
-- **RQ2**: How much sentencing variation is attributable to judge identity vs case characteristics?
-- **RQ3**: Can text features (pertimbangan hukum) capture the unexplained judicial discretion component?
-- **RQ4**: Does the sentencing function vary across the sentence distribution (quantile effects)?
+## Interpretation
 
-## Required Data/Tools
+Three explanations for why text doesn't help:
 
-| Need | Status | Effort |
-|------|--------|--------|
-| Current corpus (557 verdicts) | Ready | — |
-| Mixed-effects model | statsmodels MixedLM | 2-3 hours |
-| PDF text loading | pdfminer already works | 1 hour |
-| TF-IDF features | scikit-learn | 2-3 hours |
-| IndoBERT embeddings | Needs torch + transformers | 4-6 hours |
-| Quantile regression | statsmodels already works | 1-2 hours |
+1. **Corpus too small** (n=288 with text): NLP needs more data. TF-IDF on 100 features with 200 training samples hits fundamental statistical limits. Scaling to 1000+ verdicts could change this.
+
+2. **Pertimbangan is formulaic**: Judicial reasoning may follow templates that don't discriminate between light/heavy sentences. The same phrases ("perbuatan terdakwa tidak mendukung program pemberantasan korupsi") appear in nearly all cases regardless of severity.
+
+3. **Genuine opacity**: The 40% truly reflects case-specific factors (defendant cooperation, specific evidence, political context) that leave no textual trace in public verdicts. This IS the paper's finding — judicial discretion is measurably opaque.
+
+## Paper Structure
+
+1. **Introduction**: Paper 1 found R²=0.60. What explains the rest?
+2. **Related Work**: Computational sentencing analysis, text features in legal NLP
+3. **Method**: Autoresearch framework, 30 experiments, cross-validation protocol
+4. **Results - Structured**: Additional features (pasal, amar, judges) add <3%
+5. **Results - Text**: TF-IDF features fail in CV despite appearing to help on single split
+6. **Results - Descriptive**: Word associations (sensible but not predictive beyond structure)
+7. **Discussion**: Why text fails — sample size vs formulaic language vs genuine opacity
+8. **Implications**: For legal NLP, for anti-corruption policy, for corpus scaling
+9. **Conclusion**: 40% of sentencing variance is irreducible with current data
+
+## Key Contribution
+
+**Honest negative result**: Systematically demonstrating that text features from Indonesian corruption verdicts do not improve sentencing prediction is a contribution to computational legal studies. Most papers only report when features work. This paper shows when they don't, why, and what it means.
+
+## Required Next Steps
+
+| Step | Effort | Priority |
+|------|--------|----------|
+| Write Paper 2 draft (narrative around findings) | 2-3 days | HIGH |
+| Scale corpus to 1000+ verdicts | 1-2 weeks | HIGH |
+| Re-run autoresearch on larger corpus | Overnight | HIGH |
+| Try IndoBERT embeddings (if larger corpus helps TF-IDF) | 1 day | MEDIUM |
+| Quantile regression | 2-3 hours | LOW |
 
 ## Scope Control
 
-**IN scope**: mixed-effects, TF-IDF, quantile regression
-**MAYBE**: IndoBERT (if TF-IDF shows promise)
-**OUT of scope**: causal inference, PN expansion, new scraping, network analysis
-
-## Key Risk
-
-- **IndoBERT on legal text may not work well** — legal Indonesian is very different from general Indonesian. Pre-trained models may not capture legal jargon. Mitigation: test TF-IDF first (no model dependency).
-- **Judge random effects may be confounded** — if certain judges always handle mega-cases, the "judge effect" is actually a "case selection effect." Mitigation: control for kerugian in the random effects model.
-- **n=320 may be too small for text features** — especially with IndoBERT (768-dim embeddings). Mitigation: use PCA or simple bag-of-words first.
+**IN scope**: autoresearch results, CV analysis, descriptive word analysis, scaling rationale
+**MAYBE**: IndoBERT (only if larger corpus shows TF-IDF promise)
+**OUT of scope**: causal inference, new data sources, network analysis

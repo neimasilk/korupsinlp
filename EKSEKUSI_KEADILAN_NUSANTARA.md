@@ -3,7 +3,23 @@
 
 **Status**: Aktif — diperbarui seiring perkembangan riset
 **Konstitusi**: Lihat `MANIFESTO_KEADILAN_NUSANTARA.md` untuk visi dan prinsip
-**Terakhir diperbarui**: 18 Maret 2026
+**Terakhir diperbarui**: 9 April 2026
+
+### Status Per Fase (9 April 2026)
+- **Fase 0:** SELESAI ✅ — GO decision (65.9% P0 success rate)
+- **Fase 1A (Corpus):** SELESAI ✅ — 557 putusan, 518 parsed, 349 pertimbangan text
+- **Fase 1B (Sentencing):** SELESAI ✅ — R²=0.60 (tuntutan linear), 9 model regresi
+- **Fase 1C (Paper 1):** NEAR-COMPLETE 🟡 — draft submission-ready
+- **Fase 2 (Text Mining):** TESTED ❌ — TF-IDF tidak memperbaiki prediksi (30 eksperimen, CV p<0.0001)
+- **Fase 3:** BLOCKED — menunggu scaling corpus
+
+### Autoresearch Hasil (9 April 2026)
+30 eksperimen otomatis menguji text features dari pertimbangan hakim:
+- **Temuan negatif yang jujur**: TF-IDF text features TIDAK memperbaiki prediksi vonis
+- Tampak memperbaiki di satu split (val_r2=0.626 vs baseline 0.567)
+- Tapi 5×10-fold CV menunjukkan overfit (CV mean R²=0.460 < baseline 0.532)
+- **Implikasi**: Corpus 288 terlalu kecil ATAU bahasa pertimbangan terlalu formulaik
+- **Langkah selanjutnya**: Scale corpus ke 1000+ putusan, uji ulang
 
 ---
 
