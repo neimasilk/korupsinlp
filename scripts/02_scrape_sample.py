@@ -83,9 +83,12 @@ def main():
 
             # Step 4: Store in DB
             with transaction() as conn:
+                # Derive court level from slug
+                court_level = "pn" if court_slug.startswith("pn-") else "ma"
                 db_data = {
                     "url": url,
                     "court": court_name,
+                    "court_level": court_level,
                     "case_number": metadata.get("case_number"),
                     "classification": metadata.get("classification"),
                     "sub_classification": metadata.get("sub_classification"),

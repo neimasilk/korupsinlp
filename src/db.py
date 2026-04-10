@@ -69,6 +69,9 @@ def init_db(db_path: Path = DB_PATH):
                 faktor_memberatkan TEXT,  -- JSON list of aggravating factors
                 faktor_meringankan TEXT,  -- JSON list of mitigating factors
 
+                -- Court level
+                court_level TEXT,  -- 'ma', 'pn', or 'pt' — distinguishes appeal vs first-instance
+
                 -- Parse metadata
                 parsed_at TEXT,
                 parse_source TEXT,  -- 'html' or 'pdf'

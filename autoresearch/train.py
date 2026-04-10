@@ -29,10 +29,10 @@ from autoresearch.prepare import (
 
 # ==== HYPERPARAMETERS ====
 
-ALPHA = 1.0  # Ridge regularization — conservative to avoid overfit
+ALPHA = 50.0  # Ridge regularization — optimal from alpha sweep
 
 # Feature combination: 'structured_only', 'structured_tuntutan', 'structured_all'
-FEATURE_MODE = 'structured_all'
+FEATURE_MODE = 'structured_tuntutan'
 
 
 # ==== STRUCTURED TEXT FEATURES ====
