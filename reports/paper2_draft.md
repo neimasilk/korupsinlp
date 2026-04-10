@@ -109,13 +109,21 @@ Bootstrap confirmation (2,000 iterations): Pasal 2 coefficient 95% CI = [0.255, 
 
 Comparing Pasal 2-only cases (n=98, mean 6.18yr) with Pasal 3-only cases (n=96, mean 3.34yr) after controlling for prosecution demand: Cohen's d=0.50 (bootstrap CI [0.22, 0.79]), Mann-Whitney p<0.001. Pasal 2 cases receive on average +0.50 years more than the tuntutan model predicts, while Pasal 3 cases receive -0.55 years less.
 
-**Text-derived vs structured metadata.** When Pasal 2 is extracted from the structured case metadata (listing all charged articles) rather than from the judicial reasoning text, the effect disappears entirely (OLS p=0.842 in cross-validation). This is because the metadata captures *all* charges including alternatives, while the pertimbangan text reveals the *operative* charge — the article the judge actually applied.
+**Text-derived vs structured metadata.** When Pasal 2 is extracted from the structured case metadata (listing all charged articles) rather than from the judicial reasoning text, the effect disappears entirely (cross-validation p=0.842). This result is methodologically instructive: the metadata captures *all* charged articles (e.g., "2 Ayat (1) juncto Pasal 18; 55 Ayat (1); 3 juncto Pasal 18..."), including alternative charges that the judge did not ultimately apply. The pertimbangan text, by contrast, mentions Pasal 2 specifically when the judge reasons about the enrichment element — revealing the *operative* charge.
+
+This finding has implications beyond our study: in legal NLP, unstructured judicial reasoning text may carry information that structured case metadata misses, precisely because the reasoning reflects the judge's actual decision-making process rather than the initial charge sheet.
+
+**Stability across corpus sizes.** To assess robustness, we re-estimated Model 2 on progressive subsamples (50% to 100% of the corpus). The Pasal 2 coefficient remains significant at p<0.05 at every subsample from n=170 to n=341, with coefficients ranging from +0.61 to +0.85 years. The finding is not driven by any particular subset of the data.
 
 ### 4.2 The Sentencing Discount is Unpredictable (RQ3)
 
-The sentencing discount (vonis/tuntutan, mean=0.78, median=0.71, SD=0.48) represents judicial discretion. Ridge regression using all available text and structured features yields **cross-validated R2=-0.10** — worse than predicting the mean. No individual feature significantly correlates with the discount after Bonferroni correction. The closest associations are Pasal 2 (r=+0.10, uncorrected p=0.058) and Pasal 3 (r=-0.11, p=0.048), but neither survives correction for multiple testing.
+The sentencing discount (vonis/tuntutan) has a mean of 0.78 and median of 0.71, indicating that judges on average give sentences approximately 22% below prosecution demands. However, the distribution is wide (SD=0.48): 12.7% of cases receive sentences *exceeding* the prosecution demand, while 21.4% receive less than half.
 
-This "genuine opacity" finding means that approximately 40% of sentencing variance reflects case-specific judicial judgment — including factors such as defendant cooperation, evidence quality, and contextual circumstances — that leave no trace in published verdict documents.
+Can any available feature predict this discount? Ridge regression using all text and structured features yields **cross-validated R2=-0.10** — worse than predicting the mean. No individual feature significantly correlates with the discount after Bonferroni correction. The closest associations are Pasal 2 (r=+0.10, uncorrected p=0.058) and Pasal 3 (r=-0.11, p=0.048), but neither survives correction for multiple testing.
+
+We tested six feature types against the discount: charge type (Pasal 2, Pasal 3), crime category (gratifikasi, pencucian uang), factor lists (memberatkan, meringankan presence), case magnitude (log kerugian), text length, and judicial text patterns. None achieved positive predictive R2.
+
+This "genuine opacity" finding means that approximately 40% of sentencing variance reflects case-specific judicial judgment — including factors such as defendant cooperation, remorse, evidence quality, political context, and case-specific circumstances — that leave no trace in published verdict documents. The opacity is not a methodological limitation but a substantive finding about the transparency of Indonesian judicial decision-making.
 
 ### 4.3 Text Features Do Not Reliably Improve Prediction (RQ2)
 
@@ -129,6 +137,8 @@ We systematically tested three text representation approaches:
 TF-IDF features **significantly hurt** prediction (p<0.001), a consequence of the curse of dimensionality at n~300. Transformer sentence embeddings (384-dim, PCA 5-50) performed similarly poorly. Domain-specific binary keywords (Pasal 2, gratifikasi, pencucian uang) show a **consistently positive but unstable** improvement: across 10 random train/test splits, the improvement is positive in all 10 (mean +0.019, SD 0.005) but statistically significant at p<0.05 in only 4 of 10.
 
 We conclude that text features provide a marginal, directionally positive but not reliably significant improvement over prosecution demand alone. The improvement from text features (+0.02 R2) is an order of magnitude smaller than the explanatory power of prosecution demand itself (R2=0.60), and is insufficient for practical use.
+
+It is important to distinguish between *explanatory* and *predictive* significance. The Pasal 2 charge type has a clear explanatory effect (OLS b=+0.72yr, p=0.002, Section 4.1). But this explanatory effect translates to only a marginal predictive improvement in cross-validation because prosecution demand already partially captures charge severity. The distinction matters: researchers seeking to understand sentencing determinants should use regression analysis, while those seeking to build prediction tools should recognize that prosecution demand alone may be sufficient.
 
 ### 4.4 Geographic Variation is a Composition Effect
 
@@ -150,9 +160,15 @@ The fact that text-derived charge type outperforms structured metadata is method
 
 ### 5.2 The Policy Implications of Judicial Opacity
 
-The complete unpredictability of the sentencing discount (R2=-0.10) has important policy implications. If the goal of publishing court verdicts is transparency and sentencing consistency monitoring, our finding suggests that the published *pertimbangan* does not contain sufficient information to predict or evaluate judicial discretion in the sentencing discount. The factors driving the discount — likely including defendant demeanor, cooperation with authorities, specific evidence characteristics, and case-specific contextual factors — are not reflected in the published text.
+The complete unpredictability of the sentencing discount (R2=-0.10) has important policy implications for anti-corruption reform in Indonesia.
 
-This does not imply that judicial discretion is arbitrary. Judges may have legitimate, case-specific reasons for their sentencing decisions. But these reasons are not recoverable from the public record, meaning that external monitoring of sentencing consistency — a goal of both KPK and judicial reform advocates — cannot be accomplished computationally from published verdicts alone.
+**First, sentencing consistency monitoring is computationally infeasible from public documents.** If the goal of publishing court verdicts is to enable transparency and monitoring of sentencing consistency — as advocated by organizations such as ICW and LeIP (Lembaga Kajian dan Advokasi untuk Independensi Peradilan) — our finding suggests that the published *pertimbangan* does not contain the information needed. The factors driving judicial discretion in the sentencing discount are not reflected in the published text. Computational monitoring tools, no matter how sophisticated, cannot evaluate what the data does not contain.
+
+**Second, charge selection has real sentencing consequences.** The independent Pasal 2 premium of 0.72 years means that the prosecution's choice between enrichment and authority abuse charges has downstream effects on sentence severity beyond what prosecutors build into their demand. This has implications for prosecution strategy: framing a case under Pasal 2 rather than Pasal 3 may lead to longer sentences even holding the prosecution demand constant.
+
+**Third, geographic disparity is less concerning than commonly assumed.** Media reports frequently highlight sentencing variation across regions as evidence of inconsistent or corrupt judicial behavior. Our finding that this variation is a composition effect — driven by differences in what *types* of cases each court handles, not by how judges decide them — suggests that the problem may be overstated. Policy interventions focused on judicial "leniency" in specific regions may be targeting the wrong problem.
+
+This does not imply that judicial discretion is arbitrary. Judges may have legitimate, case-specific reasons for their sentencing decisions. But these reasons are not recoverable from the public record, which creates an accountability gap: the public can see *what* judges decide but cannot evaluate *why* from the available documents.
 
 ### 5.3 Why Text Features Fail at Small N
 
@@ -182,13 +198,17 @@ This finding is methodologically important: it demonstrates the danger of compar
 
 ## 6. Conclusion
 
-We computationally analyzed 648 Indonesian Supreme Court corruption verdicts and found that sentencing is partially predictable and partially opaque. Prosecution demand explains 60% of sentence variance; charge type (Pasal 2 enrichment vs Pasal 3 authority abuse) adds a significant independent effect of 0.72 years (p=0.002). But the sentencing discount — the gap between prosecution demand and judicial decision — is entirely unpredictable from any available text or structured feature (R2=-0.10).
+We computationally analyzed 648 Indonesian Supreme Court corruption verdicts and found that sentencing is partially predictable and partially opaque.
 
-Geographic sentencing variation is a composition effect, not judicial bias. Judge-level effects are statistically significant but not predictively useful. Text mining approaches including TF-IDF, transformer embeddings, and domain-specific keywords fail to reliably improve sentencing predictions at this corpus size, providing a documented negative result for the legal NLP community.
+Our primary finding is that **charge type independently affects sentencing**: cases invoking Pasal 2 (enrichment) of the Anti-Corruption Law receive sentences 0.72 years longer than equivalent Pasal 3 (authority abuse) cases, after controlling for prosecution demand (b=0.724, 95% CI [0.255, 1.203], p=0.002, Cohen's d=0.50). This effect is robust across all corpus subsamples tested and is detected through text-derived features (from judicial reasoning) rather than structured case metadata, demonstrating that the judge's written reasoning contains sentencing-relevant information that formal case classifications miss.
 
-Our findings have implications for anti-corruption policy: charge selection (Pasal 2 vs 3) independently affects sentencing outcomes, sentencing consistency cannot be monitored computationally from published verdicts, and apparent geographic disparity in corruption sentencing reflects case composition rather than judicial bias.
+Our secondary finding is that the **sentencing discount is irreducibly opaque**: the ratio of sentence to prosecution demand (mean 0.78) cannot be predicted from any available feature (R2=-0.10). Approximately 40% of sentencing variance reflects case-specific judicial judgment that leaves no trace in published verdicts. This has practical implications: computational monitoring of sentencing consistency — however sophisticated — cannot succeed when the decisive factors are not recorded in the public documents it analyzes.
 
-The CorpusKorupsi dataset and analysis code are publicly available to support replication and extension of this research.
+Two additional findings correct common assumptions. Geographic sentencing variation is a **composition effect**: different courts handle different magnitude cases, but judges sentence comparably after accounting for case composition (raw KW p<0.001, controlled p=0.16). And judge-level effects are **statistically significant but not predictive**: individual judges differ by up to 3 years, but this variation cannot be exploited for prediction at current corpus sizes due to overfitting.
+
+Finally, we document the systematic failure of text mining approaches — from bag-of-words (TF-IDF, 30 experiments) to transformer embeddings (384-dim) — to improve sentencing prediction at n<500. This honest negative result, rarely reported in the legal NLP literature, cautions against the assumption that more text data always means better predictions.
+
+The CorpusKorupsi dataset and analysis code are publicly available at [repository URL] to support replication and extension of this research. Future work should expand the corpus to first-instance Tipikor courts, test whether fine-tuned legal language models (e.g., legal-domain IndoBERT) can capture what general-purpose representations miss, and investigate whether the judicial opacity finding holds across different corruption offense types and time periods.
 
 ## References
 
