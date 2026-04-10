@@ -81,16 +81,22 @@ python -m scripts.09_extract_pertimbangan
   - `e088c52` minimal model beats baseline (pasal_2 + gratifikasi)
   - `1d2c8ef` parser fix for PN merged text
 
-## Data State (10 April 2026)
+## Data State (10 April 2026, FINAL)
 | Metric | Count |
 |--------|-------|
-| Total verdicts | 561 (559 MA + 2 PN) |
-| Parsed | 518 |
-| Analysis-ready (vonis+tuntutan) | 302 |
-| With pertimbangan text (≥200ch) | 349 |
-| Analysis-ready WITH text | 288 |
-| PDFs | 429 |
-| Raw HTML | 559 |
+| Total verdicts | 572 (563 MA + 9 PN) |
+| Parsed | 563 |
+| Analysis-ready (vonis+tuntutan) | 335 |
+| With pertimbangan text (≥200ch) | 354 |
+| Analysis-ready WITH text | 305 |
+| PDFs | 433 |
+| Raw HTML | 572 |
+
+### Additional Session 11 Results
+- Sentence embeddings (MiniLM-L12) FAIL: PCA(50) = -0.097 (worse than TF-IDF)
+- Clustering (H4 test): no corruption-type clusters (p=0.54, d=0.14)
+- Classification (vonis > tuntutan): AUC=0.784 — can predict extreme cases
+- Updated corpus: minimal model CV improvement +0.018 (p=0.127, was +0.030/p=0.055)
 
 ## What Needs To Be Done (Session 12)
 
