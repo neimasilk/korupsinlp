@@ -77,7 +77,11 @@ We use CorpusKorupsi (Author, 2026), comprising 648 Supreme Court corruption ver
 | daerah | Court region of origin | 349 | 94% |
 | discount | vonis / tuntutan ratio | 371 | 100% |
 
-### 3.3 Descriptive Statistics
+### 3.3 Extraction Quality
+
+Field extraction uses regex-based parsers validated against a 20-case golden set (see Author, 2026 for details). Vonis extraction achieves 100% accuracy on the golden set across diverse case types including acquittals, modified sentences (*memperbaiki*), and rejected appeals (*kasasi ditolak*). The text-derived Pasal 2 indicator is a simple regex pattern match ("pasal 2" appearing in the pertimbangan text) and does not require sophisticated NLP parsing.
+
+### 3.4 Descriptive Statistics
 
 Sentences range from 0.2 to 18.0 years (mean 4.69, median 4.00, SD 3.19). Prosecution demands range from 0.2 to 20.0 years (mean 6.64, median 6.00, SD 4.01). The sentencing discount (vonis/tuntutan) averages 0.85 with wide variance (SD 1.19): in 12.7% of cases, judges gave *more* than prosecution demanded, while in 21.4%, judges gave less than half.
 
