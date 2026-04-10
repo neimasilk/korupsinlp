@@ -98,24 +98,47 @@ binary features systematically outperform bag-of-words approaches. Provides a fr
 value beyond prosecution demand alone, suggesting judges consider legal classification
 independently of the prosecution's framing.
 
-## Open Questions (Need Corpus Scaling to Answer)
+## Additional Findings (Session 11)
 
-1. Does the minimal model hold at n=1000+? (PN court data needed)
-2. Does TF-IDF become viable with more data? At what n?
-3. Do PN first-instance verdicts have richer pertimbangan text?
-4. Would IndoBERT embeddings help where TF-IDF fails?
+### Sentence Embeddings Also Fail
+- paraphrase-multilingual-MiniLM-L12-v2 (384-dim) + PCA
+- PCA(5): -0.017, PCA(50): -0.097 (significantly worse)
+- **Two binary keywords outperform 384-dimensional transformer embeddings**
+
+### Why pasal_2 Works — Legal Interpretation
+- Pasal 2 = "memperkaya diri" (enrichment) — more serious charge
+- Pasal 3 = "menyalahgunakan kewenangan" (authority abuse) — less serious
+- After controlling for tuntutan: d=0.45, p=0.001 (medium-large effect)
+- P2 cases get +0.48yr more, P3 cases get -0.49yr less than predicted
+- **Text-derived pasal_2 captures the operative charge; metadata captures all listed charges**
+
+### Complementary Findings (for Discussion section)
+- **Sentencing discount is unpredictable** (R²=-0.08): judicial discretion leaves no trace
+- **Judge effects significant** (F=1.75, p=0.046): ~2.5yr range between judges
+- **Geographic disparity** (preliminary): Palu -2yr vs Serang +1yr after controls
+- **H3 temporal**: no erosion (discount stable, r=+0.02)
+- **H4 clustering**: no corruption-type dualisme (d=0.14)
+- **40 cases vonis > tuntutan** (13.9%): classification AUC=0.784
+
+## Open Questions
+
+1. Does minimal model hold at n=500+? Effect weakened from +0.030 to +0.012 as corpus grew
+2. PN courts lack tuntutan in HTML — can only scale via MA year-filtered scraping
+3. Judge effects may confound text features — need hierarchical model
+4. Geographic effects need larger per-court samples (most <15)
 
 ## Required Next Steps
 
 | Step | Effort | Priority |
 |------|--------|----------|
-| Write Paper 2 draft | 3-5 days | HIGH |
-| Scale corpus to PN courts (1000+ verdicts) | 2-3 weeks | HIGH |
-| Re-run all 3 approaches on larger corpus | 1 day | HIGH |
-| Try IndoBERT sentence embeddings | 1-2 days | MEDIUM |
+| Write Paper 2 draft | 3-5 days | HIGH — narrative is clear |
+| Scale MA corpus to 500+ analysis-ready | 1-2 weeks | HIGH |
+| Re-run all approaches on larger corpus | 1 day | HIGH |
+| Hierarchical model (random judge intercepts) | 1 day | MEDIUM |
 
 ## Scope Control
 
-**IN scope**: TF-IDF vs structured comparison, autoresearch framework, feature selection
-**MAYBE**: IndoBERT (only after scaling), comparison with other legal NLP papers
-**OUT of scope**: causal claims, judge-level analysis, temporal analysis
+**IN scope**: TF-IDF vs structured vs embeddings comparison, feature selection,
+Pasal 2/3 legal interpretation, genuine opacity finding, autoresearch framework
+**MAYBE**: Judge effects, geographic disparity (if space allows)
+**OUT of scope**: causal claims, temporal analysis, network analysis
