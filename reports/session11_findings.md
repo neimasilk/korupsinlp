@@ -193,7 +193,29 @@ judge is matters more than what the verdict text says.
 reflect panel composition, not individual judge. Needs hierarchical
 model with random judge intercepts for proper estimation.
 
-## 12. Corpus Scaling Strategy Update
+## 12. Court Predictability — "Formulaic" vs "Opaque" Courts
+
+Per-court RMSE from M9 model reveals which courts have predictable
+vs unpredictable sentencing patterns:
+
+**Most predictable (formulaic, RMSE <1.5yr):**
+- Bengkulu: 0.73yr (very consistent sentencing)
+- Ambon: 0.99yr
+- Jambi: 1.32yr
+- Pangkalpinang: 1.43yr (but systematically lenient: -1.29yr bias)
+
+**Most opaque (RMSE >2.5yr):**
+- Tanjungkarang: 3.21yr (only "OPAQUE" court — wildly inconsistent)
+- Palembang: 2.98yr
+- Semarang: 2.80yr
+- Mataram: 2.68yr
+
+**Interpretation:** Some courts apply sentencing formulaically (similar
+cases → similar sentences). Others show high variance, suggesting either
+more judicial discretion, inconsistent practices, or unmeasured case
+factors. Tanjungkarang's RMSE is 4× Bengkulu's.
+
+## 13. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
