@@ -84,19 +84,23 @@ python -m scripts.09_extract_pertimbangan
 ## Data State (10 April 2026, FINAL)
 | Metric | Count |
 |--------|-------|
-| Total verdicts | 572 (563 MA + 9 PN) |
-| Parsed | 563 |
-| Analysis-ready (vonis+tuntutan) | 335 |
-| With pertimbangan text (≥200ch) | 354 |
-| Analysis-ready WITH text | 305 |
-| PDFs | 433 |
-| Raw HTML | 572 |
+| Total verdicts | 576 (565 MA + 9 PN + 2 unknown) |
+| Parsed | 576 |
+| Analysis-ready (vonis+tuntutan) | 338 |
+| With pertimbangan text (≥200ch) | 358 |
+| Analysis-ready WITH text | ~308 |
+| PDFs | ~435 |
+| Raw HTML | 576 |
 
 ### Additional Session 11 Results
 - Sentence embeddings (MiniLM-L12) FAIL: PCA(50) = -0.097 (worse than TF-IDF)
 - Clustering (H4 test): no corruption-type clusters (p=0.54, d=0.14)
+- H3 temporal: NOT SUPPORTED (discount ratio stable, r=+0.02, p=0.75)
+- Pasal 2 vs 3: SIGNIFICANT (d=0.45, p=0.001 after controlling tuntutan)
 - Classification (vonis > tuntutan): AUC=0.784 — can predict extreme cases
-- Updated corpus: minimal model CV improvement +0.018 (p=0.127, was +0.030/p=0.055)
+- Minimal model: consistently +0.016 to +0.030 across corpus sizes
+- PN discovery: 2/9 PN verdicts have PDFs → PN usable when PDF available
+- MA site extremely unreliable — only page 1 of global directory works intermittently
 
 ## What Needs To Be Done (Session 12)
 
