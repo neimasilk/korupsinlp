@@ -109,7 +109,7 @@ def make_all_structured(tr, va):
 
 
 def make_minimal(tr, va):
-    """Tuntutan + pasal_2 + gratifikasi (3 features)."""
+    """Tuntutan + pasal_2 + gratifikasi + pencucian_uang (4 features)."""
     features_list = []
     for df in [tr, va]:
         t = text_lower(df)
@@ -117,6 +117,7 @@ def make_minimal(tr, va):
             df["tuntutan_years"].values,
             t.str.contains(r"pasal\s+2\b", regex=True).astype(int).values,
             t.str.contains("gratifikasi").astype(int).values,
+            t.str.contains(r"pencucian\s+uang", regex=True).astype(int).values,
         ])
         features_list.append(feats)
     return features_list[0], features_list[1]
@@ -147,7 +148,7 @@ def main():
         ("TF-IDF 100 + tuntutan + kerugian (a=0.05)", lambda t, v: make_tfidf(t, v, 100), 0.05),
         ("TF-IDF 100 + tuntutan + kerugian (a=10)", lambda t, v: make_tfidf(t, v, 100), 10),
         ("All 16 structured + tuntutan (a=50)", make_all_structured, 50),
-        ("Minimal: tuntutan + pasal_2 + grat (a=50)", make_minimal, 50),
+        ("Minimal: tuntutan+p2+grat+pencucian (a=20)", make_minimal, 20),
     ]
 
     results = {}
@@ -344,7 +345,7 @@ def main():
     print("=" * 70)
     print(f"  Corpus: {len(corpus)} verdicts with text")
     print(f"  CV pool: {n}")
-    print(f"  Minimal model (4 features): CV delta = {results['Minimal: tuntutan + pasal_2 + grat (a=50)']['delta']:+.4f}")
+    print(f"  Minimal model (4 features): CV delta = {results['Minimal: tuntutan+p2+grat+pencucian (a=20)']['delta']:+.4f}")
     print(f"  Pasal 2 vs 3: d={d_ctrl:.3f}, p={p_ctrl:.4f}")
     print(f"  Discount R2: {np.mean(disc_r2s):.4f}")
     print(f"  Judge ANOVA: F={f_stat:.2f}, p={p_anova:.4f}")
