@@ -168,7 +168,32 @@ of geographic disparity that controls for case magnitude.
 This is exactly the "Islands of Impunity" analysis from Fase 3A —
 now possible with current data as a preliminary exploration.
 
-## 11. Corpus Scaling Strategy Update
+## 11. Judge Effects — Significant (p=0.046)
+
+ANOVA on residuals by hakim ketua: F=1.75, p=0.046 — judges
+differ systematically in sentencing severity after controlling for
+case characteristics.
+
+**Most lenient judges (mean residual):**
+- Desnayeti M.: -1.62yr (n=5)
+- Jupriyadi: -1.16yr (n=14, reliable)
+
+**Harshest judges:**
+- Dwiarso Budi Santiarto: +0.87yr (n=33 combined)
+- Surya Jaya: +0.55yr (n=42, most reliable)
+
+**Neutral:** Artidjo Alkostar: -0.05yr (n=14) — famous anti-corruption
+judge sentences exactly as model predicts.
+
+**Range:** ~2.5 years between most lenient and harshest judge.
+This is larger than the text feature effect (+0.03 R²) — who your
+judge is matters more than what the verdict text says.
+
+**Caveat:** MA kasasi panels are semi-random assignment. Effect could
+reflect panel composition, not individual judge. Needs hierarchical
+model with random judge intercepts for proper estimation.
+
+## 12. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
