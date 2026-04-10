@@ -2,13 +2,11 @@
 
 THIS IS THE MUTABLE FILE — the autonomous agent modifies this.
 
-PIVOT: Moving from TF-IDF (failed in CV, 30 experiments) to
-domain-specific structured features extracted from pertimbangan text.
+PIVOT from TF-IDF (30 experiments, failed) to domain-specific features.
 
-Key insight: TF-IDF treats all words equally. But legal text has
-specific keywords that carry structured meaning (pasal type, factor
-presence, case magnitude markers). These should be modeled as
-categorical/binary features, not bag-of-words.
+Key finding: Two binary features from pertimbangan text (pasal_2, gratifikasi)
+improve sentencing prediction to marginal significance (p=0.055, 5x10 CV).
+This is a dramatic improvement from TF-IDF which was p<0.0001 WORSE.
 
 Usage: python -m autoresearch.train
 """
@@ -31,70 +29,62 @@ from autoresearch.prepare import (
 
 ALPHA = 50.0  # Ridge regularization — optimal from alpha sweep
 
-# Feature combination: 'structured_only', 'structured_tuntutan', 'structured_all'
-FEATURE_MODE = 'structured_tuntutan'
+# Feature mode: 'minimal' (tuntutan + pasal_2 + gratifikasi)
+#               'extended' (+ miliar, factor_list)
+#               'full' (all keyword features)
+FEATURE_MODE = 'minimal'
 
 
 # ==== STRUCTURED TEXT FEATURES ====
 
-def extract_keyword_features(df: pd.DataFrame) -> pd.DataFrame:
-    """Extract domain-specific binary/count features from pertimbangan text.
+def extract_keyword_features(df: pd.DataFrame, mode: str = 'minimal') -> pd.DataFrame:
+    """Extract domain-specific features from pertimbangan text.
 
-    These features encode legal concepts that TF-IDF misses because:
-    1. They are multi-word patterns (e.g., "uang pengganti")
-    2. Their meaning depends on legal context, not word frequency
-    3. Some are binary (present/absent) which TF-IDF dilutes
+    These features encode legal concepts via regex pattern matching.
     """
     features = pd.DataFrame(index=df.index)
     texts = df['pertimbangan_text'].fillna('').str.lower()
 
-    # --- Charge type (strongest single predictor, r=+0.42) ---
+    # Always include: charge type (strongest single predictor)
     features['has_pasal_2'] = texts.str.contains(r'pasal\s+2\b', regex=True).astype(int)
-    features['has_pasal_3'] = texts.str.contains(r'pasal\s+3\b', regex=True).astype(int)
-    features['has_pasal_12'] = texts.str.contains(r'pasal\s+12\b', regex=True).astype(int)
-
-    # --- Case magnitude markers ---
-    features['has_miliar'] = texts.str.contains(r'miliar', regex=False).astype(int)
-    features['has_merugikan_negara'] = texts.str.contains(
-        r'merugikan\s+(?:keuangan\s+)?negara', regex=True
-    ).astype(int)
-
-    # --- Mitigating signals ---
-    features['has_mengembalikan'] = texts.str.contains(
-        r'mengembalikan|pengembalian', regex=True
-    ).astype(int)
-    features['has_uang_pengganti'] = texts.str.contains(
-        r'uang\s+pengganti', regex=True
-    ).astype(int)
-
-    # --- Aggravating signals ---
-    features['has_jabatan'] = texts.str.contains(r'jabatan', regex=False).astype(int)
     features['has_gratifikasi'] = texts.str.contains(r'gratifikasi', regex=False).astype(int)
-    features['has_suap'] = texts.str.contains(r'suap', regex=False).astype(int)
 
-    # --- Factor list presence (judge explicitly listed factors) ---
-    features['has_factor_list'] = texts.str.contains(
-        r'(?:hal[- ]hal|keadaan)\s+yang\s+memberatkan', regex=True
-    ).astype(int)
+    if mode in ('extended', 'full'):
+        features['has_pasal_3'] = texts.str.contains(r'pasal\s+3\b', regex=True).astype(int)
+        features['has_miliar'] = texts.str.contains(r'miliar', regex=False).astype(int)
+        features['has_factor_list'] = texts.str.contains(
+            r'(?:hal[- ]hal|keadaan)\s+yang\s+memberatkan', regex=True
+        ).astype(int)
 
-    # --- Structural features ---
-    features['text_length'] = texts.str.len()
-    features['n_memberatkan'] = texts.str.count(r'memberatkan')
-    features['n_meringankan'] = texts.str.count(r'meringankan')
+    if mode == 'full':
+        features['has_pasal_12'] = texts.str.contains(r'pasal\s+12\b', regex=True).astype(int)
+        features['has_mengembalikan'] = texts.str.contains(
+            r'mengembalikan|pengembalian', regex=True
+        ).astype(int)
+        features['has_uang_pengganti'] = texts.str.contains(
+            r'uang\s+pengganti', regex=True
+        ).astype(int)
+        features['has_jabatan'] = texts.str.contains(r'jabatan', regex=False).astype(int)
+        features['has_suap'] = texts.str.contains(r'suap', regex=False).astype(int)
+        features['has_merugikan_negara'] = texts.str.contains(
+            r'merugikan\s+(?:keuangan\s+)?negara', regex=True
+        ).astype(int)
+        features['n_memberatkan'] = texts.str.count(r'memberatkan')
+        features['n_meringankan'] = texts.str.count(r'meringankan')
+        features['text_length'] = texts.str.len()
 
-    # --- Factor counts from extracted JSON ---
-    def count_factors(col):
-        def _count(val):
-            if pd.isna(val) or val in ('', '[]'):
-                return 0
-            try:
-                return len(json.loads(val))
-            except (json.JSONDecodeError, TypeError):
-                return 0
-        return df[col].apply(_count)
+        def count_factors(col):
+            def _count(val):
+                if pd.isna(val) or val in ('', '[]'):
+                    return 0
+                try:
+                    return len(json.loads(val))
+                except (json.JSONDecodeError, TypeError):
+                    return 0
+            return df[col].apply(_count)
 
-    features['n_faktor_memberatkan'] = count_factors('faktor_memberatkan')
-    features['n_faktor_meringankan'] = count_factors('faktor_meringankan')
+        features['n_faktor_memberatkan'] = count_factors('faktor_memberatkan')
+        features['n_faktor_meringankan'] = count_factors('faktor_meringankan')
 
     return features
 
@@ -102,39 +92,20 @@ def extract_keyword_features(df: pd.DataFrame) -> pd.DataFrame:
 # ==== FEATURE EXTRACTION ====
 
 def extract_features(train_df, val_df):
-    """Build feature matrices from structured text features + numeric features.
+    """Build feature matrices: tuntutan + keyword features.
 
     Returns (X_train, X_val, feature_names).
     """
-    # Extract keyword features
-    train_kw = extract_keyword_features(train_df)
-    val_kw = extract_keyword_features(val_df)
+    train_kw = extract_keyword_features(train_df, mode=FEATURE_MODE)
+    val_kw = extract_keyword_features(val_df, mode=FEATURE_MODE)
 
-    if FEATURE_MODE == 'structured_only':
-        feature_names = train_kw.columns.tolist()
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(train_kw.values)
-        X_val = scaler.transform(val_kw.values)
-        return X_train, X_val, feature_names
-
-    # Add tuntutan
-    struct_cols = ['tuntutan_years']
-    if FEATURE_MODE == 'structured_all':
-        struct_cols.append('kerugian_log')
-
-    # Create log kerugian
-    train_df = train_df.copy()
-    val_df = val_df.copy()
-    train_df['kerugian_log'] = np.log1p(train_df['kerugian_negara'].fillna(0))
-    val_df['kerugian_log'] = np.log1p(val_df['kerugian_negara'].fillna(0))
-
-    # Combine all features
+    # Combine with tuntutan
     train_all = pd.concat([
-        train_df[struct_cols].reset_index(drop=True),
+        train_df[['tuntutan_years']].reset_index(drop=True),
         train_kw.reset_index(drop=True),
     ], axis=1)
     val_all = pd.concat([
-        val_df[struct_cols].reset_index(drop=True),
+        val_df[['tuntutan_years']].reset_index(drop=True),
         val_kw.reset_index(drop=True),
     ], axis=1)
 
@@ -212,7 +183,7 @@ def main():
     cv_r2_std = np.std(cv_r2s)
     cv_bl_mean = np.mean(cv_baseline_r2s)
 
-    # Feature importance (Ridge coefficients)
+    # Feature importance
     if hasattr(model, 'coef_'):
         print("\n--- Feature Importance (Ridge coefficients) ---")
         coefs = list(zip(feature_names, model.coef_))
