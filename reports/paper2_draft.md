@@ -31,7 +31,7 @@ We further contribute substantive findings about Indonesian corruption sentencin
 ### 1.1 Contributions
 
 1. **Methodological**: First systematic comparison of bag-of-words, domain-specific, and neural text features for sentencing prediction in a small legal corpus, with a reproducible experimental framework (autoresearch)
-2. **Empirical**: Demonstration that two binary keywords outperform 100+ dimensional text representations, with theoretical explanation grounded in the curse of dimensionality and the categorical nature of legal reasoning
+2. **Empirical**: Demonstration that three binary keywords outperform 100+ dimensional text representations, with theoretical explanation grounded in the curse of dimensionality and the categorical nature of legal reasoning
 3. **Substantive**: Evidence that Pasal 2 vs. Pasal 3 charge type constitutes an independent sentencing factor, and that text-derived legal features capture operative charges that structured metadata misses
 4. **Practical**: A guide for legal NLP practitioners working with small corpora: start with domain keywords, not bag-of-words
 
@@ -165,15 +165,16 @@ Starting from the best 2-feature base (pasal_2 + gratifikasi), we test adding ea
 
 ### 6.3 Final Model
 
-The optimal model has just 3 features:
+The optimal model has 4 features:
 
 | Feature | Ridge Coefficient | Interpretation |
 |---------|------------------|----------------|
-| tuntutan_years | +1.64 | Prosecution demand (dominant) |
-| has_pasal_2 | +0.50 | Enrichment charge (heavier) |
-| has_gratifikasi | +0.33 | Bribery crime type (heavier) |
+| tuntutan_years | +2.02 | Prosecution demand (dominant) |
+| has_pasal_2 | +0.55 | Pasal 2 enrichment charge (heavier) |
+| has_gratifikasi | +0.28 | Gratification/bribery (heavier) |
+| has_pencucian_uang | +0.24 | Money laundering cases (heavier) |
 
-5x10-fold repeated CV: R2=0.539, improvement +0.022 over baseline (p=0.050, 29/50 folds positive).
+5x10-fold repeated CV: R2=0.547, improvement +0.030 over baseline (**p=0.002**, 33/50 folds positive).
 
 More importantly, the minimal model is **significantly better than TF-IDF** in paired comparison: mean delta=+0.188 R2, paired t=7.47, p<0.001, Cohen's d=1.07 (large effect), winning 44/50 CV folds. The primary contribution is not that text features improve over the baseline (marginal) but that **choosing the right representation matters enormously**: wrong representation (TF-IDF) destroys prediction, while right representation (domain keywords) preserves and slightly improves it.
 
@@ -186,7 +187,7 @@ To verify that the failure of statistical features is not specific to TF-IDF, we
 | PCA(5) + tuntutan | 6 | 0.488 | -0.017 |
 | PCA(10) + tuntutan | 11 | 0.481 | -0.024 |
 | PCA(50) + tuntutan | 51 | 0.408 | -0.097 |
-| **Minimal (pasal_2 + grat)** | **3** | **0.528** | **+0.026** |
+| **Minimal (pasal_2 + grat + pencucian)** | **4** | **0.547** | **+0.030** |
 
 Transformer embeddings perform worse than TF-IDF at higher dimensions and worse than the minimal model at all dimensions. **Two binary keywords outperform a 384-dimensional pretrained language model.**
 
@@ -251,7 +252,7 @@ Court predictability does vary: RMSE ranges from 0.66 years (Bengkulu, very form
 
 ### 9.1 Why Domain Knowledge Beats Statistics
 
-Our central finding — that two binary keywords outperform 100 TF-IDF features and 384-dimensional embeddings — has a clear theoretical explanation. Legal reasoning operates through discrete categories: a defendant is charged under Pasal 2 or Pasal 3; the case involves gratifikasi or it does not. These are binary distinctions with specific legal meaning. TF-IDF and embeddings represent these as continuous features, introducing noise that drowns out signal in small samples.
+Our central finding — that three binary keywords outperform 100 TF-IDF features and 384-dimensional embeddings — has a clear theoretical explanation. Legal reasoning operates through discrete categories: a defendant is charged under Pasal 2 or Pasal 3; the case involves gratifikasi or it does not. These are binary distinctions with specific legal meaning. TF-IDF and embeddings represent these as continuous features, introducing noise that drowns out signal in small samples.
 
 This is not a failure of NLP — it is a failure of the *wrong* NLP for the *right* setting. At n=10,000, TF-IDF likely captures these same distinctions (the word "pasal" near "2" would receive high weight). At n=300, the signal-to-noise ratio is too low for statistical discovery, but human domain knowledge can specify the exact features that matter.
 
