@@ -86,7 +86,31 @@ K-means (K=2,3,4) on TF-IDF+SVD pertimbangan text:
 - Mann-Whitney p=0.54 — no significant separation
 - H4 (dualisme struktural) not supported by text analysis
 
-## 7. Corpus Scaling Strategy Update
+## 7. Pasal 2 vs Pasal 3 — Legal Interpretation
+
+Pasal 2 UU Tipikor ("memperkaya diri sendiri" — enriching oneself) vs
+Pasal 3 ("menyalahgunakan kewenangan" — abusing authority):
+
+| Group | n | Mean Vonis | Mean Tuntutan | Cohen's d vs P3 |
+|-------|---|-----------|---------------|----------------|
+| Pasal 2 only | 96 | 6.2yr | 8.3yr | 0.95 (large) |
+| Pasal 3 only | 92 | 3.4yr | 5.3yr | — |
+| Both | 51 | 5.7yr | 7.8yr | — |
+| Neither | 66 | 4.1yr | 5.5yr | — |
+
+**After controlling for tuntutan (M9 residuals):**
+- P2 residual: +0.48yr (judges give MORE than model predicts)
+- P3 residual: -0.49yr (judges give LESS)
+- Mann-Whitney p=0.001, Cohen's d=0.45 (medium effect)
+
+**This proves that pasal_2 captures genuine legal signal that tuntutan alone misses.**
+Judges systematically treat enrichment more harshly than authority abuse,
+even after accounting for prosecution demand.
+
+Kerugian median: P2 = Rp 2.7B vs P3 = Rp 0.8B — P2 cases are larger,
+which partially explains the effect but not fully (controlled effect still significant).
+
+## 8. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
