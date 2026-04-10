@@ -64,11 +64,11 @@ python -m scripts.11_paper2_analysis                # All Paper 2 numbers
 ## Data State (10 April 2026)
 | Metric | Count |
 |--------|-------|
-| Total verdicts | 643 |
-| Analysis-ready (vonis+tuntutan) | 370 |
-| With pertimbangan text | 395 |
-| Analysis-ready WITH text | ~343 |
-| PDFs | ~460 |
+| Total verdicts | 665 |
+| Analysis-ready (vonis+tuntutan) | 378 |
+| With pertimbangan text | 405 |
+| Analysis-ready WITH text | ~348 |
+| PDFs | ~470 |
 
 ## What Needs To Be Done (Session 12)
 
