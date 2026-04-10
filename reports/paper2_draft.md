@@ -8,6 +8,8 @@ We computationally analyze 648 Indonesian Supreme Court corruption verdicts to e
 
 Corruption remains Indonesia's most persistent governance challenge. Transparency International's 2024 Corruption Perceptions Index ranks Indonesia 109th of 182 countries (score 34/100), and the country has seen thousands of corruption prosecutions since the establishment of the Corruption Eradication Commission (KPK) in 2003. Yet despite the availability of public court verdicts through the Supreme Court's online directory, no large-scale computational analysis of corruption sentencing patterns has been undertaken.
 
+The availability of public court verdicts creates an opportunity for systematic analysis. The Supreme Court (Mahkamah Agung) publishes cassation decisions at putusan3.mahkamahagung.go.id, including full judicial reasoning text. Yet this data has never been analyzed computationally at scale. Manual reviews by advocacy organizations like Indonesia Corruption Watch (ICW) cover dozens of cases annually; computational methods can analyze hundreds, revealing patterns invisible to case-by-case examination.
+
 In a companion study (Author, 2026), we constructed CorpusKorupsi, a structured dataset of Indonesian Supreme Court corruption verdicts, and established that prosecution demand (tuntutan) explains approximately 60% of sentencing variance (R2=0.60, n=370). This leaves a fundamental question: **what explains the other 40%?**
 
 We address this question through three research questions:
@@ -152,7 +154,9 @@ Raw Kruskal-Wallis on sentence severity by court region is highly significant (H
 
 ### 4.5 Judge Effects: Significant but Not Predictive
 
-One-way ANOVA on residuals by presiding judge (16 judges with 3+ cases): F=1.94, p=0.020. The most lenient judge averages 2.27 years below model predictions; the harshest averages 0.90 years above — a range of approximately 3 years. However, adding judge dummy variables to the prediction model *hurts* performance in cross-validation due to overfitting at n~300. Judge effects are statistically real but cannot be exploited for prediction at current corpus sizes.
+One-way ANOVA on residuals by presiding judge (16 judges with 3+ cases): F=1.94, p=0.020. The most lenient judge averages 2.27 years below model predictions; the harshest averages 0.90 years above — a range of approximately 3 years. This finding is consistent with Anderson et al.'s (1999) observation of significant interjudge disparity in US federal sentencing. In our data, the judge effect range (3 years) exceeds the charge type effect (0.72 years), suggesting that *who* decides the case may matter more than legal classification — though both are dwarfed by prosecution demand (R2=0.60).
+
+However, adding judge dummy variables to the prediction model *hurts* performance in cross-validation (delta=-0.012 to -0.029), because 16 parameters on ~280 observations causes overfitting. This creates a paradox: judge identity has a statistically detectable effect, but cannot be exploited for prediction at current corpus sizes.
 
 ## 5. Discussion
 
@@ -190,7 +194,17 @@ Our finding that geographic sentencing variation disappears after controlling fo
 
 This finding is methodologically important: it demonstrates the danger of comparing raw sentencing averages across jurisdictions without controlling for case composition, a point made by Ulmer (2012) in the broader sentencing literature.
 
-### 5.5 Implications for Future Research
+### 5.5 Practical Implications
+
+Our findings have three actionable implications for Indonesian anti-corruption stakeholders:
+
+For **prosecutors**, the independent Pasal 2 premium means that charge selection is not merely a legal technicality — it has measurable downstream effects on sentence length. Charging under Pasal 2 (enrichment) rather than Pasal 3 (authority abuse) is associated with approximately 0.72 additional years of imprisonment, independent of the prosecution demand itself.
+
+For **judicial reform advocates**, the opacity finding suggests that current transparency mechanisms — publishing full verdict texts — are necessary but insufficient for monitoring sentencing consistency. The factors driving the sentencing discount are not recoverable from published documents, meaning that effective monitoring would require additional data collection (e.g., standardized sentencing worksheets or structured judicial reasoning forms).
+
+For **researchers**, the systematic failure of text mining at n<500 should calibrate expectations for computational legal analysis in data-scarce settings. Investing in corpus expansion (more verdicts) is likely more productive than investing in more sophisticated NLP models.
+
+### 5.6 Future Research Directions
 
 Our study opens several avenues for future investigation. First, the Pasal 2 premium should be tested on first-instance Tipikor court decisions, which represent the full population of corruption verdicts rather than the appealed subset. If the premium persists at the trial level, it would strengthen the case for sentencing guidelines that account for charge type.
 
@@ -200,7 +214,7 @@ Third, the text-derived vs structured metadata finding has implications for lega
 
 Finally, the complete failure of TF-IDF and transformer embeddings suggests that future text mining efforts on small legal corpora should explore domain-adaptive pretraining (Chalkidis et al., 2020) or few-shot learning approaches, rather than applying general-purpose text representations out of the box.
 
-### 5.6 Limitations
+### 5.7 Limitations
 
 **Selection bias.** Our corpus consists of MA cassation decisions — cases that were appealed. Sentencing patterns may differ at the trial court level, and cases that are appealed may systematically differ from those that are not (e.g., more controversial or extreme sentences may be more likely to be appealed).
 
