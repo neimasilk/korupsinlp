@@ -173,7 +173,7 @@ The optimal model has just 3 features:
 | has_pasal_2 | +0.50 | Enrichment charge (heavier) |
 | has_gratifikasi | +0.33 | Bribery crime type (heavier) |
 
-5x10-fold repeated CV: R2=0.528, improvement +0.022 over baseline (p=0.050).
+5x10-fold repeated CV: R2=0.539, improvement +0.022 over baseline (p=0.050, 29/50 folds positive).
 
 More importantly, the minimal model is **significantly better than TF-IDF** in paired comparison: mean delta=+0.188 R2, paired t=7.47, p<0.001, Cohen's d=1.07 (large effect), winning 44/50 CV folds. The primary contribution is not that text features improve over the baseline (marginal) but that **choosing the right representation matters enormously**: wrong representation (TF-IDF) destroys prediction, while right representation (domain keywords) preserves and slightly improves it.
 
