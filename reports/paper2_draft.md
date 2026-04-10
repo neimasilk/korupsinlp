@@ -176,6 +176,8 @@ The optimal model has 4 features:
 
 5x10-fold repeated CV: R2=0.547, improvement +0.030 over baseline (**p=0.002**, 33/50 folds positive).
 
+The result is robust across data partitions: tested on 10 different random train/test splits, the improvement is positive in all 10 (mean delta=+0.019, sd=0.005) and significant at p<0.05 in 7 of 10.
+
 More importantly, the minimal model is **significantly better than TF-IDF** in paired comparison: mean delta=+0.188 R2, paired t=7.47, p<0.001, Cohen's d=1.07 (large effect), winning 44/50 CV folds. The primary contribution is not that text features improve over the baseline (marginal) but that **choosing the right representation matters enormously**: wrong representation (TF-IDF) destroys prediction, while right representation (domain keywords) preserves and slightly improves it.
 
 ### 6.4 Comparison with Transformer Embeddings
