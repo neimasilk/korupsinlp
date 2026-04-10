@@ -85,7 +85,13 @@ The corpus draws from 28 court regions, with Jakarta Pusat (53 cases), Surabaya 
 
 ### 3.3 Statistical Methods
 
-**Primary analysis (RQ1).** We estimate the independent effect of charge type using OLS regression: vonis_years = b0 + b1 * tuntutan_years + b2 * has_pasal_2 + e. We report the coefficient b2 with heteroscedasticity-consistent standard errors, 95% confidence intervals (both parametric and bootstrap with 2,000 iterations), and compare Model 2 (with Pasal 2) against Model 1 (tuntutan only) using an F-test. Effect size is reported as Cohen's d on residuals, comparing Pasal 2-only cases against Pasal 3-only cases.
+**Primary analysis (RQ1).** We estimate the independent effect of charge type using OLS regression:
+
+*vonis_years = b0 + b1 * tuntutan_years + b2 * has_pasal_2 + e*
+
+We report the coefficient b2 with standard errors, 95% parametric confidence intervals, and 95% bootstrap confidence intervals (2,000 iterations with resampling). Model comparison uses an F-test (Model 2 with Pasal 2 vs Model 1 without). Effect size is reported as Cohen's d on residuals from Model 1, comparing Pasal 2-only cases (n=98) against Pasal 3-only cases (n=96), with bootstrap CI.
+
+To assess robustness, we re-estimate Model 2 on progressive subsamples (50% to 100% of the corpus, each with a fixed random seed) and verify that the Pasal 2 coefficient remains significant at every subsample size.
 
 **Text feature experiments (RQ2).** We test three text representation approaches using 5x10-fold repeated cross-validation with paired t-tests: (a) TF-IDF bag-of-words (100 features, Ridge regression), (b) transformer sentence embeddings (paraphrase-multilingual-MiniLM-L12-v2, 384 dimensions with PCA reduction), and (c) domain-specific binary keyword features. Multi-seed robustness is assessed by repeating the analysis across 10 random train/test splits.
 
@@ -184,7 +190,17 @@ Our finding that geographic sentencing variation disappears after controlling fo
 
 This finding is methodologically important: it demonstrates the danger of comparing raw sentencing averages across jurisdictions without controlling for case composition, a point made by Ulmer (2012) in the broader sentencing literature.
 
-### 5.5 Limitations
+### 5.5 Implications for Future Research
+
+Our study opens several avenues for future investigation. First, the Pasal 2 premium should be tested on first-instance Tipikor court decisions, which represent the full population of corruption verdicts rather than the appealed subset. If the premium persists at the trial level, it would strengthen the case for sentencing guidelines that account for charge type.
+
+Second, the judicial opacity finding invites qualitative research: interviewing judges about the factors they consider in the sentencing discount could reveal whether the opacity reflects legitimate case-specific reasoning or inconsistent application of sentencing principles. Mixed-methods approaches combining our computational analysis with judicial interviews could bridge this gap.
+
+Third, the text-derived vs structured metadata finding has implications for legal information systems: if the published reasoning text contains sentencing-relevant information not captured in formal case classifications, then improving metadata extraction from full-text verdicts could enhance legal databases and research infrastructure.
+
+Finally, the complete failure of TF-IDF and transformer embeddings suggests that future text mining efforts on small legal corpora should explore domain-adaptive pretraining (Chalkidis et al., 2020) or few-shot learning approaches, rather than applying general-purpose text representations out of the box.
+
+### 5.6 Limitations
 
 **Selection bias.** Our corpus consists of MA cassation decisions — cases that were appealed. Sentencing patterns may differ at the trial court level, and cases that are appealed may systematically differ from those that are not (e.g., more controversial or extreme sentences may be more likely to be appealed).
 
