@@ -1,106 +1,152 @@
-"""KorupsiNLP autoresearch: text feature experiments.
+"""KorupsiNLP autoresearch: structured text feature experiments.
 
 THIS IS THE MUTABLE FILE — the autonomous agent modifies this.
-Everything is fair game: text preprocessing, feature extraction,
-model choice, hyperparameters, feature combination strategy.
+
+PIVOT: Moving from TF-IDF (failed in CV, 30 experiments) to
+domain-specific structured features extracted from pertimbangan text.
+
+Key insight: TF-IDF treats all words equally. But legal text has
+specific keywords that carry structured meaning (pasal type, factor
+presence, case magnitude markers). These should be modeled as
+categorical/binary features, not bag-of-words.
 
 Usage: python -m autoresearch.train
 """
 
 import time
 import re
+import json
 
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
-from scipy.sparse import hstack, issparse
 
 from autoresearch.prepare import (
     load_corpus, get_splits, evaluate, baseline_predict,
     TIME_BUDGET, BASELINE_R2,
 )
 
-# ==== HYPERPARAMETERS (agent can change all of these) ====
+# ==== HYPERPARAMETERS ====
 
-# TF-IDF settings
-MAX_FEATURES = 100
-NGRAM_RANGE = (1, 1)
-MIN_DF = 2
-MAX_DF = 0.9
-SUBLINEAR_TF = True
-USE_IDF = True
+ALPHA = 1.0  # Ridge regularization — conservative to avoid overfit
 
-# Model settings
-ALPHA = 0.05  # Ridge regularization
-
-# Feature combination: 'text_only', 'text_tuntutan', 'text_all'
-FEATURE_MODE = 'text_all'
+# Feature combination: 'structured_only', 'structured_tuntutan', 'structured_all'
+FEATURE_MODE = 'structured_all'
 
 
-# ==== TEXT PREPROCESSING (agent can change this) ====
+# ==== STRUCTURED TEXT FEATURES ====
 
-def preprocess_text(texts: pd.Series) -> pd.Series:
-    """Clean and normalize pertimbangan text."""
-    def clean(text):
-        if not isinstance(text, str):
-            return ""
-        # Lowercase
-        text = text.lower()
-        # Remove numbers (dates, case numbers, amounts — noise for text features)
-        text = re.sub(r'\d+', ' ', text)
-        # Normalize whitespace
-        text = re.sub(r'\s+', ' ', text).strip()
-        return text
-    return texts.apply(clean)
+def extract_keyword_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Extract domain-specific binary/count features from pertimbangan text.
+
+    These features encode legal concepts that TF-IDF misses because:
+    1. They are multi-word patterns (e.g., "uang pengganti")
+    2. Their meaning depends on legal context, not word frequency
+    3. Some are binary (present/absent) which TF-IDF dilutes
+    """
+    features = pd.DataFrame(index=df.index)
+    texts = df['pertimbangan_text'].fillna('').str.lower()
+
+    # --- Charge type (strongest single predictor, r=+0.42) ---
+    features['has_pasal_2'] = texts.str.contains(r'pasal\s+2\b', regex=True).astype(int)
+    features['has_pasal_3'] = texts.str.contains(r'pasal\s+3\b', regex=True).astype(int)
+    features['has_pasal_12'] = texts.str.contains(r'pasal\s+12\b', regex=True).astype(int)
+
+    # --- Case magnitude markers ---
+    features['has_miliar'] = texts.str.contains(r'miliar', regex=False).astype(int)
+    features['has_merugikan_negara'] = texts.str.contains(
+        r'merugikan\s+(?:keuangan\s+)?negara', regex=True
+    ).astype(int)
+
+    # --- Mitigating signals ---
+    features['has_mengembalikan'] = texts.str.contains(
+        r'mengembalikan|pengembalian', regex=True
+    ).astype(int)
+    features['has_uang_pengganti'] = texts.str.contains(
+        r'uang\s+pengganti', regex=True
+    ).astype(int)
+
+    # --- Aggravating signals ---
+    features['has_jabatan'] = texts.str.contains(r'jabatan', regex=False).astype(int)
+    features['has_gratifikasi'] = texts.str.contains(r'gratifikasi', regex=False).astype(int)
+    features['has_suap'] = texts.str.contains(r'suap', regex=False).astype(int)
+
+    # --- Factor list presence (judge explicitly listed factors) ---
+    features['has_factor_list'] = texts.str.contains(
+        r'(?:hal[- ]hal|keadaan)\s+yang\s+memberatkan', regex=True
+    ).astype(int)
+
+    # --- Structural features ---
+    features['text_length'] = texts.str.len()
+    features['n_memberatkan'] = texts.str.count(r'memberatkan')
+    features['n_meringankan'] = texts.str.count(r'meringankan')
+
+    # --- Factor counts from extracted JSON ---
+    def count_factors(col):
+        def _count(val):
+            if pd.isna(val) or val in ('', '[]'):
+                return 0
+            try:
+                return len(json.loads(val))
+            except (json.JSONDecodeError, TypeError):
+                return 0
+        return df[col].apply(_count)
+
+    features['n_faktor_memberatkan'] = count_factors('faktor_memberatkan')
+    features['n_faktor_meringankan'] = count_factors('faktor_meringankan')
+
+    return features
 
 
-# ==== FEATURE EXTRACTION (agent can change this) ====
+# ==== FEATURE EXTRACTION ====
 
-def extract_features(train_texts, val_texts, train_df, val_df):
-    """Convert text + structured features to model inputs.
+def extract_features(train_df, val_df):
+    """Build feature matrices from structured text features + numeric features.
 
     Returns (X_train, X_val, feature_names).
     """
-    # TF-IDF on pertimbangan text
-    vectorizer = TfidfVectorizer(
-        max_features=MAX_FEATURES,
-        ngram_range=NGRAM_RANGE,
-        min_df=MIN_DF,
-        max_df=MAX_DF,
-        sublinear_tf=SUBLINEAR_TF,
-        use_idf=USE_IDF,
-    )
-    X_train_text = vectorizer.fit_transform(train_texts)
-    X_val_text = vectorizer.transform(val_texts)
-    feature_names = vectorizer.get_feature_names_out().tolist()
+    # Extract keyword features
+    train_kw = extract_keyword_features(train_df)
+    val_kw = extract_keyword_features(val_df)
 
-    if FEATURE_MODE == 'text_only':
-        return X_train_text, X_val_text, feature_names
+    if FEATURE_MODE == 'structured_only':
+        feature_names = train_kw.columns.tolist()
+        scaler = StandardScaler()
+        X_train = scaler.fit_transform(train_kw.values)
+        X_val = scaler.transform(val_kw.values)
+        return X_train, X_val, feature_names
 
-    # Add structured features
+    # Add tuntutan
     struct_cols = ['tuntutan_years']
-    if FEATURE_MODE == 'text_all':
-        if 'kerugian_negara' in train_df.columns:
-            struct_cols.append('kerugian_negara')
+    if FEATURE_MODE == 'structured_all':
+        struct_cols.append('kerugian_log')
 
+    # Create log kerugian
+    train_df = train_df.copy()
+    val_df = val_df.copy()
+    train_df['kerugian_log'] = np.log1p(train_df['kerugian_negara'].fillna(0))
+    val_df['kerugian_log'] = np.log1p(val_df['kerugian_negara'].fillna(0))
+
+    # Combine all features
+    train_all = pd.concat([
+        train_df[struct_cols].reset_index(drop=True),
+        train_kw.reset_index(drop=True),
+    ], axis=1)
+    val_all = pd.concat([
+        val_df[struct_cols].reset_index(drop=True),
+        val_kw.reset_index(drop=True),
+    ], axis=1)
+
+    feature_names = train_all.columns.tolist()
     scaler = StandardScaler()
-    X_train_struct = scaler.fit_transform(
-        train_df[struct_cols].fillna(0).values
-    )
-    X_val_struct = scaler.transform(
-        val_df[struct_cols].fillna(0).values
-    )
-
-    X_train = hstack([X_train_text, X_train_struct])
-    X_val = hstack([X_val_text, X_val_struct])
-    feature_names += struct_cols
+    X_train = scaler.fit_transform(train_all.fillna(0).values)
+    X_val = scaler.transform(val_all.fillna(0).values)
 
     return X_train, X_val, feature_names
 
 
-# ==== MODEL (agent can change this) ====
+# ==== MODEL ====
 
 def build_model():
     """Create and return the model."""
@@ -112,33 +158,17 @@ def build_model():
 def main():
     t_start = time.time()
 
-    # Load data (fixed by prepare.py)
-    # Try with pertimbangan text first; fall back to structured-only mode
     corpus = load_corpus(require_text=True)
     has_text = len(corpus) > 0
 
     if not has_text:
-        print("WARNING: No pertimbangan text available. Running in structured-only mode.")
-        print("         Re-scrape PDFs and run scripts/09_extract_pertimbangan.py first.")
+        print("WARNING: No pertimbangan text available.")
         corpus = load_corpus(require_text=False)
 
     train_df, val_df, test_df = get_splits(corpus)
 
-    # Preprocess text (if available)
-    if has_text:
-        train_texts = preprocess_text(train_df['pertimbangan_text'])
-        val_texts = preprocess_text(val_df['pertimbangan_text'])
-
-        # Extract features
-        X_train, X_val, feature_names = extract_features(
-            train_texts, val_texts, train_df, val_df
-        )
-    else:
-        # Structured-only fallback: just tuntutan
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(train_df[['tuntutan_years']].values)
-        X_val = scaler.transform(val_df[['tuntutan_years']].values)
-        feature_names = ['tuntutan_years']
+    # Extract features
+    X_train, X_val, feature_names = extract_features(train_df, val_df)
     y_train = train_df['vonis_years'].values
     y_val = val_df['vonis_years'].values
 
@@ -152,27 +182,23 @@ def main():
     # Evaluate
     metrics = evaluate(y_val, y_pred)
 
-    # Also compute baseline for comparison
+    # Baseline
     y_baseline = baseline_predict(val_df)
     baseline_metrics = evaluate(y_val, y_baseline)
 
     elapsed = time.time() - t_start
 
-    # Cross-validation for robustness check
+    # Cross-validation
     from sklearn.model_selection import KFold
     kf = KFold(n_splits=10, shuffle=True, random_state=42)
-    # Combine train+val for CV (leave test untouched)
     cv_df = pd.concat([train_df, val_df]).reset_index(drop=True)
-    cv_texts = preprocess_text(cv_df['pertimbangan_text'])
     cv_y = cv_df['vonis_years'].values
     cv_r2s = []
     cv_baseline_r2s = []
     for train_idx, val_idx in kf.split(cv_df):
-        cv_train_texts = cv_texts.iloc[train_idx]
-        cv_val_texts = cv_texts.iloc[val_idx]
         cv_train_df = cv_df.iloc[train_idx]
         cv_val_df = cv_df.iloc[val_idx]
-        X_tr, X_va, _ = extract_features(cv_train_texts, cv_val_texts, cv_train_df, cv_val_df)
+        X_tr, X_va, _ = extract_features(cv_train_df, cv_val_df)
         m = build_model()
         m.fit(X_tr, cv_y[train_idx])
         pred = m.predict(X_va)
@@ -186,8 +212,16 @@ def main():
     cv_r2_std = np.std(cv_r2s)
     cv_bl_mean = np.mean(cv_baseline_r2s)
 
-    # Print results in fixed format for machine parsing
-    print("---")
+    # Feature importance (Ridge coefficients)
+    if hasattr(model, 'coef_'):
+        print("\n--- Feature Importance (Ridge coefficients) ---")
+        coefs = list(zip(feature_names, model.coef_))
+        coefs.sort(key=lambda x: abs(x[1]), reverse=True)
+        for name, coef in coefs[:20]:
+            print(f"  {name:30s}  {coef:+.4f}")
+
+    # Print results
+    print("\n---")
     print(f"val_r2:              {metrics['val_r2']:.6f}")
     print(f"val_r2_improvement:  {metrics['val_r2_improvement']:.6f}")
     print(f"val_mae:             {metrics['val_mae']:.6f}")
