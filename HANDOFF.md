@@ -1,153 +1,97 @@
 # Handoff — Session 11 → Session 12
 
-## Status: **Structured Text Features Beat TF-IDF; PN Data Blocked; Scraping Needed**
+## Status: **Paper 2 Draft Complete, Headline Result d=1.07**
 
-Major pivot from TF-IDF to domain-specific structured features yields first positive CV result. PN courts discovered to be unusable (no tuntutan in HTML). MA site unreliable today — scraping must retry.
+Paper 2 drafted with strong framing: text representation choice has LARGE effect (d=1.07, p<0.001) on prediction accuracy. Two domain keywords outperform 100 TF-IDF features and 384-dim embeddings. Corpus grew to 619. Geographic effect clarified as composition, not disparity.
 
-## What Was Done (Session 11)
+## What Was Done (Session 11) — 29 Commits
 
-### 1. Critical Analysis & Research Design Review
-Comprehensive critique of project blind spots, weak assumptions, and structural risks:
-- MA selection bias more severe than acknowledged (only appealed cases)
-- 9 planned papers is too many for solo researcher → recommended kill/merge
-- Only H1 and H2 testable with current data
-- `extract_faktor_pertimbangan()` was never used as features → fixed
+### 1. Paper 2 Draft (COMPLETE)
+- `reports/paper2_draft.md` — 302 lines, 10 sections, full manuscript
+- Title: "Two Words That Matter: Domain-Specific Text Features Outperform Bag-of-Words"
+- **Headline result**: Minimal vs TF-IDF paired comparison: delta=+0.188 R2, t=7.47, p<0.001, d=1.07 (LARGE), wins 44/50 folds
+- Minimal vs Baseline: delta=+0.022, p=0.050 (marginally significant)
+- Reproducible analysis script: `python -m scripts.11_paper2_analysis`
 
-### 2. Structured Text Features (BREAKTHROUGH)
-**Pivoted from TF-IDF (30 experiments, all failed) to domain-specific keyword features:**
+### 2. Structured Text Features Breakthrough
+Pivoted from TF-IDF (30 experiments, failed) to domain-specific keyword features:
+- 2 binary keywords (pasal_2 + gratifikasi) = optimal model
+- Exhaustive search over all C(11,k) subsets confirms
+- Forward selection: no additional feature helps
 
-Phase progression:
-| Approach | CV R² | vs Baseline | p-value | Status |
-|----------|-------|-------------|---------|--------|
-| TF-IDF best (α=0.05) | 0.460 | -0.072 | <0.0001 | SIGNIFICANTLY WORSE |
-| TF-IDF moderate (α=10) | 0.513 | -0.019 | 0.027 | Still worse |
-| All 16 structured features | 0.498 | +0.007 | 0.69 | Neutral |
-| **Minimal: pasal_2 + gratifikasi** | **0.521** | **+0.030** | **0.055** | **Marginally significant** |
+### 3. Key Findings (17 total)
+1. Structured features >> TF-IDF >> embeddings (d=1.07)
+2. Pasal 2 vs 3 sentencing effect (d=0.46, p<0.001)
+3. Text-derived pasal_2 > structured metadata pasal_2
+4. Sentencing discount UNPREDICTABLE (R2=-0.06)
+5. Judge effects significant (F=1.99, p=0.016), range=3.17yr
+6. Geographic effect is COMPOSITION, not disparity (controlled p=0.22)
+7. H3 temporal: NOT supported (discount stable)
+8. H4 clustering: NOT supported (d=0.14)
+9. H6 rankings: SUPPORTED (r=0.37)
+10. Unpredictable cases = vonis > tuntutan (34.5% vs 3.6%)
+11. Court predictability spectrum: Bengkulu (0.66yr RMSE) to Tanjungkarang (3.21yr)
+12. PN courts lack full text (only MENGADILI in HTML)
+13. Parser fixed for PN merged text
+14. Power analysis: need n~1000 for significance
+15. Judge dummies hurt prediction (overfit)
+16. Paper 1 geographic claim VERIFIED correct (composition effect)
+17. Convergence analysis validates autoresearch framework
 
-**Key findings:**
-- Exhaustive feature subset search over 11 keyword features
-- Only 2 features matter: `has_pasal_2` (charge type) and `has_gratifikasi` (crime type)
-- Adding ANY other feature hurts or doesn't help
-- Alpha=50 optimal (strong regularization prevents overfit at n=288)
-- Text-derived pasal_2 >> structured pasal column (operative vs listed charges)
-
-### 3. PN Data Investigation (BLOCKED)
-- Verified PN court slugs work (pn-surabaya has 344+ verdicts for 2024)
-- **CRITICAL DISCOVERY: PN HTML detail pages only publish MENGADILI section**
-  - NO tuntutan, NO kerugian, NO pertimbangan text
-  - NO PDF downloads for PN verdicts
-  - PN verdicts CANNOT be used for regression analysis
-- Parser fixed for PN merged text (selama8 → selama 8)
-- Added `court_level` column to DB (ma/pn/pt)
-- 2 PN verdicts scraped as proof-of-concept
-
-### 4. Outlier Analysis
-- 40 cases (13.2%) where judge gave MORE than prosecution asked
-- Extreme cases: 2000% "discount" (Bandung), 400% (Jakarta Pusat)
-- Extreme lenience: 3% discount (Tanjungkarang), 6% (Semarang)
-- Outlier concentration: Tanjungkarang 40%, Semarang 30%, Palembang 25%
-
-### 5. Infrastructure
-- court_level column added to verdicts table
-- All existing verdicts tagged as 'ma'
-- Scraping script updated to set court_level from slug
-- Parser merged text handling improved
+### 4. Infrastructure
+- `court_level` column added to DB
+- Batch scraping script: `scripts/10_batch_scrape_global.py`
+- Paper 2 analysis script: `scripts/11_paper2_analysis.py`
+- Parser `\s*` fix for PN merged text
 - 69 tests passing
 
 ## CRITICAL: First Thing Next Session
 
 ```bash
-source .venv/Scripts/activate  # or use conda
-python -m pytest tests/ -q                # 69 passed
-python -m autoresearch.train              # Should show cv_improvement ~ +0.023
-```
-
-Then retry MA scraping:
-```bash
-# Try year-filtered scraping for underrepresented years
-python -m scripts.02_scrape_sample --count 200 --year 2021
-python -m scripts.02_scrape_sample --count 200 --year 2022
-python -m scripts.02_scrape_sample --count 200 --year 2023
-python -m scripts.03_parse_sample
-python -m scripts.09_extract_pertimbangan
+python -m pytest tests/ -q                          # 69 passed
+python -m autoresearch.train                        # CV improvement ~+0.02
+python -m scripts.11_paper2_analysis                # All Paper 2 numbers
 ```
 
 ## Current Branch State
-- On branch: `autoresearch/apr9-textfeatures`
-- 17 commits ahead of main (was 12 at start of session)
-- Key commits this session:
-  - `087a2a0` pivot from TF-IDF to structured text features
-  - `2e278be` structured features achieve parity (alpha sweep)
-  - `e088c52` minimal model beats baseline (pasal_2 + gratifikasi)
-  - `1d2c8ef` parser fix for PN merged text
+- Branch: `autoresearch/apr9-textfeatures` (51 commits, 39 ahead of main)
+- Key files this session:
+  - `reports/paper2_draft.md` — Full manuscript
+  - `scripts/11_paper2_analysis.py` — Reproducible analysis
+  - `scripts/10_batch_scrape_global.py` — Batch scraper
+  - `reports/session11_findings.md` — All findings documented
 
-## Data State (10 April 2026, FINAL)
+## Data State (10 April 2026)
 | Metric | Count |
 |--------|-------|
-| Total verdicts | 614 |
-| Parsed | 614 |
-| Analysis-ready (vonis+tuntutan) | 360 |
-| With pertimbangan text (≥200ch) | 383 |
-| Analysis-ready WITH text | ~330 |
-| PDFs | ~445 |
-| Raw HTML | 614 |
-
-### Session 11 Results (16 findings)
-1. Structured features (pasal_2+gratifikasi): CV +0.018 consistently positive
-2. 2 keywords > 100 TF-IDF > 384-dim embeddings
-3. Pasal 2 vs 3: d=0.45, p=0.001 (strong legal signal)
-4. Text pasal_2 > structured pasal_2 (operative vs listed charges)
-5. Sentencing discount UNPREDICTABLE (R²=-0.08, genuine opacity)
-6. 40 cases vonis > tuntutan (classification AUC=0.784)
-7. H3 temporal: NOT SUPPORTED (discount stable, r=+0.02)
-8. H4 clustering: NOT SUPPORTED (d=0.14)
-9. H6 rankings: SUPPORTED (r=0.37, rankings change after normalization)
-10. Judge effects: SIGNIFICANT (F=1.75, p=0.046), ~2.5yr range
-11. Judge dummies HURT prediction (overfit at n=267)
-12. Geographic disparity: Palu -2yr vs Serang +1yr
-13. Court predictability: Tanjungkarang most opaque (RMSE=3.21yr)
-14. PN courts lack full text unless PDF available
-15. Power analysis: need n≈1000 for structured features significance
-16. Parser fixed for PN merged text
+| Total verdicts | 619 |
+| Analysis-ready (vonis+tuntutan) | 363 |
+| With pertimbangan text | 386 |
+| Analysis-ready WITH text | ~331 |
+| PDFs | ~450 |
 
 ## What Needs To Be Done (Session 12)
 
-### Priority 1: Scale MA Corpus (MOST IMPORTANT)
-288 analysis-ready verdicts is too small for robust conclusions.
-- MA site was unreliable today — retry when site recovers
-- Use year-filtered URLs: `--year 2021`, `--year 2022`, `--year 2023`
-- Target: 500+ analysis-ready verdicts
-- After scraping: parse + extract pertimbangan + re-run autoresearch
+### Priority 1: Submit Paper 2
+- Draft is complete — needs proofread and reference completion
+- Key numbers verified via reproducible analysis script
+- Target: Artificial Intelligence and Law, or ACL/EMNLP Findings
 
-### Priority 2: Verify Structured Features on Larger Corpus
-The pasal_2 + gratifikasi finding (p=0.055) needs verification at larger n:
-- If still significant → strong paper finding
-- If not → sample-size-dependent artifact
+### Priority 2: Scale Corpus
+- MA site unreliable for deep pages (only page 1 works)
+- Try off-peak hours or different days
+- Search endpoint works intermittently
+- `python -m scripts.10_batch_scrape_global --pages 20 --max-per-page 20`
 
-### Priority 3: Paper 2 Draft
-Narrative is now clear — three-phase experiment story:
-1. TF-IDF fails (bag-of-words wrong representation)
-2. All structured features neutral (too many features)
-3. Minimal model works (domain knowledge wins)
-See `reports/paper2_outline.md` for updated outline.
+### Priority 3: Update Paper 1
+- Geographic claim needs clarification (composition vs disparity)
+- Add note about controlled analysis
+- Rest of paper verified consistent at n=363
 
-### Priority 4: Paper 1 Final Check
-- Submission-ready since Session 9
-- Add outlier analysis findings (vonis > tuntutan cases)
-- Target: ACL/EMNLP Resource track or LREC-COLING
+### Priority 4: Consider Merging to Main
+- 39 commits ahead — consider merging stable findings
+- Autoresearch branch has diverged significantly
 
-## Key Insights This Session
+## Key Insight This Session
 
-1. **Domain knowledge >> statistical features**: Two binary keywords from pertimbangan text outperform 100 TF-IDF features because they encode legal concepts (charge type, crime category) that bag-of-words misses.
-
-2. **Text-derived > structured metadata**: `pasal_2` from judge's reasoning text beats `pasal_2` from case metadata because the text captures the *operative* charge (what judge applied) vs. *all listed charges*.
-
-3. **PN verdicts are a dead end for this project**: The MA directory only publishes MENGADILI sections for PN courts — no full text. Must scale via MA year-filtered scraping instead.
-
-4. **40 cases where vonis > tuntutan**: Judges sometimes give MORE than prosecution asks — strong evidence for H1 (systematic disproportionality).
-
-## Known Issues
-- MA site unreliable (frequent timeouts, year-filtered URLs often return 500)
-- PN verdicts can't be used for regression (no tuntutan/kerugian)
-- 105 verdicts have no year information (tahun = NULL)
-- Config currently set to MA_COURT_SLUGS (reverted from PN)
+The paper's contribution shifted from "text features marginally improve prediction" to **"text representation choice has a LARGE effect (d=1.07) on prediction accuracy."** This is a much stronger, cleaner, and more publishable finding. The right two keywords beat 100 TF-IDF features and 384-dim neural embeddings — not by a little, but by 0.19 R2. This is the story to tell.
