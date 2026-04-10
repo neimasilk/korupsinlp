@@ -49,7 +49,13 @@ The Supreme Court (*Mahkamah Agung*, MA) hears corruption cases at the cassation
 
 ### 2.4 Prior Sentencing Studies
 
-Quantitative analysis of Indonesian corruption sentencing has been limited to grey literature. Indonesia Corruption Watch (ICW) publishes annual sentencing reports based on manual case review, noting trends in average sentences and acquittal rates. However, no peer-reviewed study has applied computational methods to analyze sentencing determinants across hundreds of verdicts. Our work fills this gap by providing the first regression-based analysis of corruption sentencing factors using a structured, computationally extracted corpus.
+Quantitative analysis of Indonesian corruption sentencing has been limited to grey literature. Indonesia Corruption Watch (ICW) publishes annual sentencing reports based on manual case review, noting trends in average sentences and acquittal rates. Butt (2011) and Schutte (2012) provide qualitative assessments of Indonesia's anti-corruption institutional framework but do not conduct quantitative sentencing analysis.
+
+In the broader sentencing literature, Ulmer (2012) reviews the state of sentencing research, noting that unexplained variance remains a persistent challenge across jurisdictions. Anderson et al. (1999) measured interjudge sentencing disparity in US federal courts, finding significant judge effects even after the introduction of sentencing guidelines. Englich et al. (2006) demonstrated anchoring effects in sentencing, showing that prosecution demands serve as reference points for judicial decision-making. Our finding that prosecution demand explains 60% of variance is consistent with this anchoring framework.
+
+In computational legal analysis, sentencing prediction has been studied across multiple jurisdictions. Strickson and De La Iglesia (2020) predicted UK Crown Court sentences using structured features with random forests. Lage-Freitas et al. (2022) applied BERT to Brazilian court decisions. Chen et al. (2019) used deep learning for charge prediction on 2.6 million Chinese court documents. Medvedeva et al. (2020) found that simple models performed comparably to BERT for European Court of Human Rights prediction. These studies typically rely on large corpora; our contribution is to examine what happens when the corpus is necessarily small.
+
+No peer-reviewed study has applied computational methods to analyze sentencing determinants across hundreds of Indonesian corruption verdicts. Our work fills this gap.
 
 ## 3. Data and Methods
 
@@ -68,6 +74,12 @@ We use CorpusKorupsi (Author, 2026), comprising 648 Supreme Court corruption ver
 | kerugian_negara | State financial loss (IDR) | 271 | 73% |
 | daerah | Court region of origin | 349 | 94% |
 | discount | vonis / tuntutan ratio | 371 | 100% |
+
+### 3.3 Descriptive Statistics
+
+Sentences range from 0.2 to 18.0 years (mean 4.69, median 4.00, SD 3.19). Prosecution demands range from 0.2 to 20.0 years (mean 6.64, median 6.00, SD 4.01). The sentencing discount (vonis/tuntutan) averages 0.85 with wide variance (SD 1.19): in 12.7% of cases, judges gave *more* than prosecution demanded, while in 21.4%, judges gave less than half.
+
+The corpus draws from 28 court regions, with Jakarta Pusat (53 cases), Surabaya (30), and Bandung (26) most represented. Temporal coverage spans 2011-2026, with 2025 (145 cases, 41%) most represented due to MA publication recency. Pertimbangan text ranges from 541 to 412,163 characters (median 1,190), reflecting the substantial variation in how much detail judges provide in their reasoning.
 
 **Text-derived vs structured charge type.** The database includes a `pasal` metadata column listing all charged articles. We extract `has_pasal_2` from the judicial reasoning text (*pertimbangan*) rather than from this structured column because the pertimbangan reveals the **operative** charge — the article the judge actually applies — while the metadata lists all charges including alternatives that were not proven.
 
@@ -144,11 +156,19 @@ This does not imply that judicial discretion is arbitrary. Judges may have legit
 
 ### 5.3 Why Text Features Fail at Small N
 
-The systematic failure of TF-IDF and transformer embeddings, and the marginal performance of domain keywords, reflects a fundamental tension: at n~300, there are too few observations to estimate the effect of high-dimensional text features reliably. TF-IDF with 100 features yields a feature-to-sample ratio of 0.5 — precisely where overfitting becomes severe. Aggressive regularization (Ridge alpha=10-50) mitigates but does not solve the problem.
+The systematic failure of TF-IDF (30 experiments) and transformer embeddings reflects a fundamental tension between text representation and corpus size. With n~300 training observations and 100 TF-IDF features, the feature-to-sample ratio is 0.5 — precisely the regime where overfitting dominates (Aggarwal & Zhai, 2012). Aggressive regularization (Ridge alpha=10-50) reduces but does not eliminate the problem.
 
-Domain keywords partially succeed because they encode expert knowledge about which specific legal concepts matter (charge type, crime category), reducing the feature space to 3-4 binary indicators. However, even this minimal representation provides only a marginal improvement, confirming that the unexplained variance is genuinely opaque rather than merely a representation problem.
+Transformer sentence embeddings (paraphrase-multilingual-MiniLM-L12-v2, 384 dimensions) fare no better. Even after PCA reduction to 5-50 dimensions, they fail to improve over the baseline — consistent with the finding that pretrained representations may not capture domain-specific legal semantics without fine-tuning on in-domain data (Chalkidis et al., 2020; see also Wilie et al., 2020 on IndoBERT limitations).
 
-### 5.4 Limitations
+Domain keywords partially succeed because they encode expert knowledge about which specific legal concepts matter (charge type, crime category), reducing the feature space to 3-4 binary indicators. However, even this minimal representation provides only a marginal improvement (+0.02 R2), confirming that the unexplained variance is genuinely opaque rather than merely a representation problem. This aligns with Dressel and Farid's (2018) finding that simple expert-defined features can match complex ML approaches in criminal justice prediction.
+
+### 5.4 The Composition Effect in Geographic Variation
+
+Our finding that geographic sentencing variation disappears after controlling for prosecution demand (raw p<0.001, controlled p=0.16) challenges a common assumption in Indonesian anti-corruption discourse. Media reports frequently highlight that certain regions produce "lighter" corruption sentences, implying judicial leniency. Our analysis suggests instead that the variation reflects *what kinds of cases* each court handles: Jakarta Pusat, home to the KPK-associated Tipikor court, handles national mega-corruption cases with substantially higher prosecution demands and correspondingly higher sentences. Once this composition effect is accounted for, judges across regions appear to sentence comparably.
+
+This finding is methodologically important: it demonstrates the danger of comparing raw sentencing averages across jurisdictions without controlling for case composition, a point made by Ulmer (2012) in the broader sentencing literature.
+
+### 5.5 Limitations
 
 **Selection bias.** Our corpus consists of MA cassation decisions — cases that were appealed. Sentencing patterns may differ at the trial court level, and cases that are appealed may systematically differ from those that are not (e.g., more controversial or extreme sentences may be more likely to be appealed).
 
@@ -179,6 +199,8 @@ Anderson, J. M., Kling, J. R., & Stith, K. (1999). Measuring interjudge sentenci
 Author (2026). CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Verdicts and Sentencing Patterns. [Companion paper]
 
 Butt, S. (2011). Anti-corruption reform in Indonesia: An obituary? *Bulletin of Indonesian Economic Studies*, 47(3), 381-394.
+
+Chalkidis, I., Fergadiotis, M., Malakasiotis, P., Aletras, N., & Androutsopoulos, I. (2020). LEGAL-BERT: The muppets straight out of law school. *Findings of EMNLP*, 2898-2904.
 
 Chen, H., Cai, D., Dai, W., Dai, Z., & Ding, Y. (2019). Charge-based prison term prediction with deep gating network. *Proceedings of EMNLP-IJCNLP*, 6362-6367.
 
