@@ -84,13 +84,13 @@ python -m scripts.09_extract_pertimbangan
 ## Data State (10 April 2026, FINAL)
 | Metric | Count |
 |--------|-------|
-| Total verdicts | 598 |
-| Parsed | 598 |
-| Analysis-ready (vonis+tuntutan) | 349 |
-| With pertimbangan text (≥200ch) | 372 |
-| Analysis-ready WITH text | ~319 |
-| PDFs | ~440 |
-| Raw HTML | 598 |
+| Total verdicts | 614 |
+| Parsed | 614 |
+| Analysis-ready (vonis+tuntutan) | 360 |
+| With pertimbangan text (≥200ch) | 383 |
+| Analysis-ready WITH text | ~330 |
+| PDFs | ~445 |
+| Raw HTML | 614 |
 
 ### Session 11 Results (16 findings)
 1. Structured features (pasal_2+gratifikasi): CV +0.018 consistently positive
