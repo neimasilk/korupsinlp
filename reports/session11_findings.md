@@ -139,7 +139,36 @@ case-specific judicial judgment that leaves no trace in public documents.
 
 This is the "genuine opacity" finding — publishable and important for policy.
 
-## 10. Corpus Scaling Strategy Update
+## 10. Geographic Disparity — "Islands of Impunity" (Preliminary)
+
+After controlling for tuntutan, pasal_2, and gratifikasi, geographic
+residuals reveal systematic court-level biases:
+
+**Courts that give HARSHER than predicted:**
+| Court | n | Mean Residual | Anomaly Rate |
+|-------|---|--------------|-------------|
+| Serang | 5 | +1.15yr | 20% |
+| Samarinda | 10 | +0.91yr | 0% |
+| Jakarta Pusat | 48 | +0.90yr | 12% |
+| Kupang | 14 | +0.65yr | 7% |
+
+**Courts that give LIGHTER than predicted:**
+| Court | n | Mean Residual | Anomaly Rate |
+|-------|---|--------------|-------------|
+| Palu | 5 | -1.99yr | 20% |
+| Banda Aceh | 13 | -1.12yr | 0% |
+| Pangkalpinang | 6 | -1.09yr | 0% |
+| Tanjungkarang | 5 | -1.07yr | 20% |
+| Padang | 9 | -0.87yr | 0% |
+
+**Caveat:** Small n per court (most <15). These are preliminary signals
+requiring verification with larger corpus. But the pattern is suggestive
+of geographic disparity that controls for case magnitude.
+
+This is exactly the "Islands of Impunity" analysis from Fase 3A —
+now possible with current data as a preliminary exploration.
+
+## 11. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
