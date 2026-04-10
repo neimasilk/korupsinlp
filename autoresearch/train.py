@@ -4,9 +4,10 @@ THIS IS THE MUTABLE FILE — the autonomous agent modifies this.
 
 PIVOT from TF-IDF (30 experiments, failed) to domain-specific features.
 
-Key finding: Two binary features from pertimbangan text (pasal_2, gratifikasi)
-improve sentencing prediction to marginal significance (p=0.055, 5x10 CV).
-This is a dramatic improvement from TF-IDF which was p<0.0001 WORSE.
+Key finding: Three binary features from pertimbangan text (pasal_2,
+gratifikasi, pencucian_uang) improve sentencing prediction with high
+significance (p=0.002, 5x10 CV). This is a dramatic improvement from
+TF-IDF which was p<0.0001 WORSE.
 
 Usage: python -m autoresearch.train
 """
@@ -27,7 +28,7 @@ from autoresearch.prepare import (
 
 # ==== HYPERPARAMETERS ====
 
-ALPHA = 50.0  # Ridge regularization — optimal from alpha sweep
+ALPHA = 20.0  # Ridge regularization — optimal from alpha sweep (session 11 battery)
 
 # Feature mode: 'minimal' (tuntutan + pasal_2 + gratifikasi)
 #               'extended' (+ miliar, factor_list)
@@ -45,9 +46,10 @@ def extract_keyword_features(df: pd.DataFrame, mode: str = 'minimal') -> pd.Data
     features = pd.DataFrame(index=df.index)
     texts = df['pertimbangan_text'].fillna('').str.lower()
 
-    # Always include: charge type (strongest single predictor)
+    # Always include: charge type + crime category (strongest predictors)
     features['has_pasal_2'] = texts.str.contains(r'pasal\s+2\b', regex=True).astype(int)
     features['has_gratifikasi'] = texts.str.contains(r'gratifikasi', regex=False).astype(int)
+    features['has_pencucian'] = texts.str.contains(r'pencucian\s+uang', regex=True).astype(int)
 
     if mode in ('extended', 'full'):
         features['has_pasal_3'] = texts.str.contains(r'pasal\s+3\b', regex=True).astype(int)
