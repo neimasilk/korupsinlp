@@ -243,7 +243,23 @@ Adding 15 parameters to n=267 causes overfit. Judge effects are
 real but too small relative to noise for predictive use at this
 sample size. The minimal model (3 features) remains optimal.
 
-## 15. Corpus Scaling Strategy Update
+## 15. Power Analysis — Need n≈1000 for Significance
+
+Estimated effect size: +0.015 R² improvement, d_std=0.12.
+Current t=0.88 at n=265 (need t>1.96 for p<0.05).
+
+| Corpus size | Estimated t | Estimated p |
+|-------------|------------|-------------|
+| 265 (current) | 0.88 | 0.38 |
+| 530 (2x) | 1.34 | 0.19 |
+| 795 (3x) | 1.71 | 0.09 |
+| 1325 (5x) | 2.32 | 0.02 * |
+
+**Conclusion**: Need ~1000+ verdicts with text to achieve significance.
+The structured features effect is real but small. Paper should frame
+as "consistent positive direction" not "proven improvement."
+
+## 16. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
