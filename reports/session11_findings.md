@@ -231,7 +231,19 @@ Key examples of ranking shifts:
 are misleading. Normalization by severity or magnitude produces substantially
 different rankings. H6 is supported.
 
-## 14. Corpus Scaling Strategy Update
+## 14. Judge Identity Does NOT Help Prediction
+
+Despite ANOVA showing significant judge effects (p=0.046),
+adding judge dummy variables to the model HURTS in CV:
+- Minimal (no judge): +0.012
+- + 15 judge dummies (alpha=50): -0.012
+- + 15 judge dummies (alpha=100): -0.029
+
+Adding 15 parameters to n=267 causes overfit. Judge effects are
+real but too small relative to noise for predictive use at this
+sample size. The minimal model (3 features) remains optimal.
+
+## 15. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
