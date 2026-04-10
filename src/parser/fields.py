@@ -20,12 +20,16 @@ def _strip_watermark(text: str) -> str:
 
 
 def _find_penjara(text_lower: str) -> float | None:
-    """Find prison sentence duration in a text fragment."""
-    # Tahun [dan bulan]
+    """Find prison sentence duration in a text fragment.
+
+    Handles both spaced ("penjara selama 8 tahun") and merged
+    ("penjara selama8 (delapan) Tahun") text from PN catatan_amar.
+    """
+    # Tahun [dan bulan] — \s* allows merged text
     m = re.search(
-        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
-        r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+        r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
         text_lower,
     )
     if m:
@@ -35,7 +39,7 @@ def _find_penjara(text_lower: str) -> float | None:
 
     # Bulan only
     m = re.search(
-        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
         text_lower,
     )
@@ -62,15 +66,17 @@ def _extract_mengadili_sentence(text_lower: str, start: int, end: int | None = N
     Only extracts from "menjatuhkan pidana...penjara" pattern to avoid
     picking up subsidiary penalties or quoted sentences.
     """
-    section = text_lower[start:end] if end else text_lower[start:start + 5000]
+    # Use 10000 char window (PN catatan_amar can have long merged text)
+    section = text_lower[start:end] if end else text_lower[start:start + 10000]
 
     # Priority: "menjatuhkan pidana...penjara selama X tahun"
+    # \s* allows merged text from PN catatan_amar
     m = re.search(
-        r'menjatuhkan\s+pidana\s+(?:kepada\s+terdakwa\s+)?'
+        r'menjatuhkan\s*pidana\s*(?:kepada\s*terdakwa\s*)?'
         r'(?:oleh\s+karena\s+itu\s+)?(?:dengan\s+)?'
-        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
-        r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+        r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
         section,
     )
     if m:
@@ -80,9 +86,9 @@ def _extract_mengadili_sentence(text_lower: str, start: int, end: int | None = N
 
     # Bulan only in sentencing context
     m = re.search(
-        r'menjatuhkan\s+pidana\s+(?:kepada\s+terdakwa\s+)?'
+        r'menjatuhkan\s*pidana\s*(?:kepada\s*terdakwa\s*)?'
         r'(?:oleh\s+karena\s+itu\s+)?(?:dengan\s+)?'
-        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
         section,
     )

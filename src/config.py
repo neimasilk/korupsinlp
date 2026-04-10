@@ -41,7 +41,7 @@ PN_COURT_SLUGS = {
 
 # Active court slugs — change this to switch data source
 # Default: MA for backward compatibility. Switch to PN_COURT_SLUGS for richer data.
-COURT_SLUGS = PN_COURT_SLUGS
+COURT_SLUGS = MA_COURT_SLUGS
 
 SAMPLE_SIZE = 100  # Total verdicts to scrape for feasibility
 
