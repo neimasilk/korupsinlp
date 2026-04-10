@@ -110,7 +110,21 @@ even after accounting for prosecution demand.
 Kerugian median: P2 = Rp 2.7B vs P3 = Rp 0.8B — P2 cases are larger,
 which partially explains the effect but not fully (controlled effect still significant).
 
-## 8. Corpus Scaling Strategy Update
+## 8. Temporal Analysis — H3 Not Supported
+
+Vonis trending up (r=+0.75 yearly, p=0.013): 2.4yr (2014) → 5.2yr (2025).
+But discount ratio (vonis/tuntutan) is STABLE (r=+0.02, p=0.75).
+
+**Conclusion:** No temporal erosion in sentencing severity relative to
+prosecution demand. The increase in absolute vonis reflects larger cases
+being prosecuted, not harsher judges.
+
+2021 anomaly: mean discount=143% (many vonis > tuntutan cases).
+2026 low: 57% discount but only n=15 — too early to interpret.
+
+H3 (Erosi Temporal): **NOT SUPPORTED** by current data.
+
+## 9. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
