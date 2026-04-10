@@ -259,20 +259,25 @@ Current t=0.88 at n=265 (need t>1.96 for p<0.05).
 The structured features effect is real but small. Paper should frame
 as "consistent positive direction" not "proven improvement."
 
-## 16. Paper 1 Consistency Check — Geographic Finding CHANGED
+## 16. Paper 1 Consistency — Geographic Effect is COMPOSITION, Not Disparity
 
-With corpus growth (302 -> 345 analysis-ready):
-- Tuntutan R2: 0.60 (unchanged, exact match)
-- Mean vonis: 4.70yr (was 4.63yr, within 2%)
-- Discount: 0.85 (was 0.84, negligible change)
-- **Geographic Kruskal-Wallis: p<0.001 (was p=0.52!)**
+With corpus growth (302 -> 345), raw geographic Kruskal-Wallis became
+significant (p<0.001, was p=0.52). But after controlling for tuntutan:
 
-The geographic null finding from Paper 1 NO LONGER HOLDS.
-More cases per region provided enough power to detect a real effect.
-Effect present in MA-only data (not driven by PN addition).
+| Test | Statistic | p-value |
+|------|-----------|---------|
+| Raw vonis KW | H=63.1 | <0.001 |
+| **Residual KW** | H=25.6 | **0.221** |
+| **Residual ANOVA** | F=1.31 | **0.168** |
 
-**Action needed**: Update Paper 1 before submission to correct the
-geographic finding from "not significant" to "significant."
+The geographic effect DISAPPEARS after controlling for prosecution demand.
+Different regions handle different magnitude cases (Jakarta Pusat handles
+mega-corruption), but **judges in all regions sentence similarly after
+accounting for case magnitude.**
+
+**Paper 1's original claim is CORRECT**: geography doesn't independently
+affect sentencing. The raw KW test is misleading without tuntutan control.
+Paper 1 should clarify the distinction between raw and controlled tests.
 
 ## 17. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
