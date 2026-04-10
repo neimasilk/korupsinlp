@@ -215,7 +215,23 @@ cases → similar sentences). Others show high variance, suggesting either
 more judicial discretion, inconsistent practices, or unmeasured case
 factors. Tanjungkarang's RMSE is 4× Bengkulu's.
 
-## 13. Corpus Scaling Strategy Update
+## 13. H6 Supported — Rankings Change After Normalization
+
+Ranking correlation (Spearman) between different metrics:
+- Cases vs Severity: r=0.37 (p=0.09) — WEAK (ranking changes!)
+- Cases vs Kerugian: r=0.45 (p=0.03) — moderate
+- Severity vs Kerugian: r=0.86 (p<0.001) — strong
+
+Key examples of ranking shifts:
+- Palembang: #12 by cases → #1 by severity (7.2yr mean vonis)
+- Serang: #21 by cases → #2 by kerugian (Rp 2,516B from 5 cases)
+- Palu: #18 by cases → #22 by severity (1.8yr — most lenient)
+
+**Conclusion**: Common "most corrupt province" rankings based on case count
+are misleading. Normalization by severity or magnitude produces substantially
+different rankings. H6 is supported.
+
+## 14. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
