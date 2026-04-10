@@ -63,7 +63,30 @@
 - NO PDF downloads available
 - **PN verdicts cannot be used for regression analysis**
 
-## 4. Corpus Scaling Strategy Update
+## 5. Sentence Embeddings (Transformer) — Failed
+
+Tested paraphrase-multilingual-MiniLM-L12-v2 (384-dim) with PCA reduction:
+| Method | CV R² | vs Baseline |
+|--------|-------|-------------|
+| PCA(5) | 0.488 | -0.017 |
+| PCA(10) | 0.481 | -0.024 |
+| PCA(20) | 0.456 | -0.049 |
+| PCA(50) | 0.408 | -0.097 |
+| **Minimal (pasal_2+grat)** | **0.521** | **+0.030** |
+
+Two binary keywords outperform 384-dimensional transformer embeddings.
+More dimensions = more overfit at n=244. This strongly supports the paper's
+thesis that domain knowledge >> statistical representation for small legal corpora.
+
+## 6. Clustering Analysis — H4 Partially Falsified
+
+K-means (K=2,3,4) on TF-IDF+SVD pertimbangan text:
+- Clusters driven by text LENGTH, not corruption type
+- Cohen's d=0.14 (negligible) for vonis between K=2 clusters
+- Mann-Whitney p=0.54 — no significant separation
+- H4 (dualisme struktural) not supported by text analysis
+
+## 7. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
