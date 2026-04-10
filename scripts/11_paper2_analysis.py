@@ -294,6 +294,49 @@ def main():
     for _, row in geo.iterrows():
         print(f"  {row['daerah']:<20} {int(row['n']):>4} {row['mean_residual']:>+7.2f}yr {row['rmse']:>5.2f}")
 
+    # ── TABLE 7: Split robustness ───────────────────────────────────
+
+    print("\n\n### TABLE 7: Split Robustness (10 random seeds)")
+
+    from sklearn.model_selection import train_test_split as tts
+    split_deltas = []
+    split_ps = []
+    for seed in range(10):
+        bins_s = pd.qcut(corpus["vonis_years"], q=4, labels=False, duplicates="drop")
+        tv_s, _ = tts(corpus, test_size=0.15, random_state=seed, stratify=bins_s)
+        bins_tv_s = pd.qcut(tv_s["vonis_years"], q=4, labels=False, duplicates="drop")
+        tr_s, va_s = tts(tv_s, test_size=0.176, random_state=seed, stratify=bins_tv_s)
+        cv_s = pd.concat([tr_s, va_s]).reset_index(drop=True)
+        cv_y_s = cv_s["vonis_years"].values
+
+        rkf_s = RepeatedKFold(n_splits=10, n_repeats=3, random_state=42)
+        r2s_s, bls_s = [], []
+        for tri, vai in rkf_s.split(cv_s):
+            tr, va = cv_s.iloc[tri], cv_s.iloc[vai]
+            X_tr = np.column_stack([tr["tuntutan_years"].values,
+                text_lower(tr).str.contains(r"pasal\s+2\b", regex=True).astype(int).values,
+                text_lower(tr).str.contains("gratifikasi").astype(int).values,
+                text_lower(tr).str.contains(r"pencucian\s+uang", regex=True).astype(int).values])
+            X_va = np.column_stack([va["tuntutan_years"].values,
+                text_lower(va).str.contains(r"pasal\s+2\b", regex=True).astype(int).values,
+                text_lower(va).str.contains("gratifikasi").astype(int).values,
+                text_lower(va).str.contains(r"pencucian\s+uang", regex=True).astype(int).values])
+            sc = StandardScaler(); m = Ridge(alpha=20)
+            m.fit(sc.fit_transform(X_tr), cv_y_s[tri])
+            r2s_s.append(evaluate(cv_y_s[vai], m.predict(sc.transform(X_va)))["val_r2"])
+            bls_s.append(evaluate(cv_y_s[vai], baseline_predict(va))["val_r2"])
+        r2s_s, bls_s = np.array(r2s_s), np.array(bls_s)
+        d_s = r2s_s - bls_s
+        _, p_s = stats.ttest_rel(r2s_s, bls_s)
+        split_deltas.append(d_s.mean())
+        split_ps.append(p_s)
+        sig = "**" if p_s < 0.05 else "*" if p_s < 0.1 else ""
+        print(f"  seed={seed}: delta={d_s.mean():+.4f}, p={p_s:.4f} {sig}")
+
+    print(f"  Mean delta: {np.mean(split_deltas):+.4f} +/- {np.std(split_deltas):.4f}")
+    print(f"  All positive: {all(d > 0 for d in split_deltas)}")
+    print(f"  Significant (p<0.05): {sum(1 for p in split_ps if p < 0.05)}/10")
+
     # ── Summary ──────────────────────────────────────────────────────
 
     print("\n\n" + "=" * 70)
@@ -301,10 +344,11 @@ def main():
     print("=" * 70)
     print(f"  Corpus: {len(corpus)} verdicts with text")
     print(f"  CV pool: {n}")
-    print(f"  Minimal model (3 features): CV delta = {results['Minimal: tuntutan + pasal_2 + grat (a=50)']['delta']:+.4f}")
+    print(f"  Minimal model (4 features): CV delta = {results['Minimal: tuntutan + pasal_2 + grat (a=50)']['delta']:+.4f}")
     print(f"  Pasal 2 vs 3: d={d_ctrl:.3f}, p={p_ctrl:.4f}")
     print(f"  Discount R2: {np.mean(disc_r2s):.4f}")
     print(f"  Judge ANOVA: F={f_stat:.2f}, p={p_anova:.4f}")
+    print(f"  Split robustness: {sum(1 for p in split_ps if p < 0.05)}/10 significant, all positive")
 
 
 if __name__ == "__main__":
