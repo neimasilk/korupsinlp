@@ -237,14 +237,13 @@ One-way ANOVA on M9 residuals by presiding judge (hakim ketua, judges with 3+ ca
 
 Despite statistical significance, adding judge dummy variables to the prediction model *hurts* performance in CV (delta=-0.012 to -0.029), because 16 dummy variables on 281 samples causes overfitting.
 
-### 8.3 Geographic Disparity
+### 8.3 Geographic Effects: Composition, Not Disparity
 
-Per-court mean residuals reveal systematic geographic bias:
-- Most lenient: Palu (-1.41yr), Mataram (-1.33yr), Pangkalpinang (-1.29yr)
-- Most harsh: Serang (+1.29yr), Samarinda (+0.82yr), Jakarta Pusat (+0.81yr)
-- Total range: 2.70 years between most lenient and harshest court
+Raw Kruskal-Wallis on vonis by court region is highly significant (H=63.1, p<0.001), suggesting geographic disparity. However, after controlling for prosecution demand (testing residuals from the tuntutan model), the effect disappears entirely (KW H=25.6, p=0.22; ANOVA F=1.31, p=0.17).
 
-Court predictability also varies: RMSE ranges from 0.66 years (Bengkulu, very formulaic) to 3.21 years (Tanjungkarang, highly inconsistent).
+This reveals a **composition effect**: different courts handle different magnitude cases (Jakarta Pusat handles national mega-corruption), but judges in all regions sentence similarly after accounting for case magnitude. Per-court mean residuals range from -1.41yr (Palu) to +1.29yr (Serang), but this variation is not statistically significant after correction.
+
+Court predictability does vary: RMSE ranges from 0.66 years (Bengkulu, very formulaic) to 3.21 years (Tanjungkarang, highly inconsistent), though small per-court samples (n=5-50) limit interpretation.
 
 ## 9. Discussion
 
