@@ -259,7 +259,22 @@ Current t=0.88 at n=265 (need t>1.96 for p<0.05).
 The structured features effect is real but small. Paper should frame
 as "consistent positive direction" not "proven improvement."
 
-## 16. Corpus Scaling Strategy Update
+## 16. Paper 1 Consistency Check — Geographic Finding CHANGED
+
+With corpus growth (302 -> 345 analysis-ready):
+- Tuntutan R2: 0.60 (unchanged, exact match)
+- Mean vonis: 4.70yr (was 4.63yr, within 2%)
+- Discount: 0.85 (was 0.84, negligible change)
+- **Geographic Kruskal-Wallis: p<0.001 (was p=0.52!)**
+
+The geographic null finding from Paper 1 NO LONGER HOLDS.
+More cases per region provided enough power to detect a real effect.
+Effect present in MA-only data (not driven by PN addition).
+
+**Action needed**: Update Paper 1 before submission to correct the
+geographic finding from "not significant" to "significant."
+
+## 17. Corpus Scaling Strategy Update
 - MA year-filtered scraping is the path forward
 - Global korupsi directory has 499 pages (~40K verdicts)
 - Current coverage sparse for 2013-2023
