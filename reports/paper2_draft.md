@@ -83,7 +83,7 @@ The corpus draws from 28 court regions, with Jakarta Pusat (53 cases), Surabaya 
 
 **Text-derived vs structured charge type.** The database includes a `pasal` metadata column listing all charged articles. We extract `has_pasal_2` from the judicial reasoning text (*pertimbangan*) rather than from this structured column because the pertimbangan reveals the **operative** charge — the article the judge actually applies — while the metadata lists all charges including alternatives that were not proven.
 
-### 3.3 Statistical Methods
+### 3.4 Statistical Methods
 
 **Primary analysis (RQ1).** We estimate the independent effect of charge type using OLS regression:
 
