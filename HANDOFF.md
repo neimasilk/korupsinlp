@@ -84,23 +84,31 @@ python -m scripts.09_extract_pertimbangan
 ## Data State (10 April 2026, FINAL)
 | Metric | Count |
 |--------|-------|
-| Total verdicts | 576 (565 MA + 9 PN + 2 unknown) |
-| Parsed | 576 |
-| Analysis-ready (vonis+tuntutan) | 338 |
-| With pertimbangan text (≥200ch) | 358 |
-| Analysis-ready WITH text | ~308 |
-| PDFs | ~435 |
-| Raw HTML | 576 |
+| Total verdicts | 598 |
+| Parsed | 598 |
+| Analysis-ready (vonis+tuntutan) | 349 |
+| With pertimbangan text (≥200ch) | 372 |
+| Analysis-ready WITH text | ~319 |
+| PDFs | ~440 |
+| Raw HTML | 598 |
 
-### Additional Session 11 Results
-- Sentence embeddings (MiniLM-L12) FAIL: PCA(50) = -0.097 (worse than TF-IDF)
-- Clustering (H4 test): no corruption-type clusters (p=0.54, d=0.14)
-- H3 temporal: NOT SUPPORTED (discount ratio stable, r=+0.02, p=0.75)
-- Pasal 2 vs 3: SIGNIFICANT (d=0.45, p=0.001 after controlling tuntutan)
-- Classification (vonis > tuntutan): AUC=0.784 — can predict extreme cases
-- Minimal model: consistently +0.016 to +0.030 across corpus sizes
-- PN discovery: 2/9 PN verdicts have PDFs → PN usable when PDF available
-- MA site extremely unreliable — only page 1 of global directory works intermittently
+### Session 11 Results (16 findings)
+1. Structured features (pasal_2+gratifikasi): CV +0.018 consistently positive
+2. 2 keywords > 100 TF-IDF > 384-dim embeddings
+3. Pasal 2 vs 3: d=0.45, p=0.001 (strong legal signal)
+4. Text pasal_2 > structured pasal_2 (operative vs listed charges)
+5. Sentencing discount UNPREDICTABLE (R²=-0.08, genuine opacity)
+6. 40 cases vonis > tuntutan (classification AUC=0.784)
+7. H3 temporal: NOT SUPPORTED (discount stable, r=+0.02)
+8. H4 clustering: NOT SUPPORTED (d=0.14)
+9. H6 rankings: SUPPORTED (r=0.37, rankings change after normalization)
+10. Judge effects: SIGNIFICANT (F=1.75, p=0.046), ~2.5yr range
+11. Judge dummies HURT prediction (overfit at n=267)
+12. Geographic disparity: Palu -2yr vs Serang +1yr
+13. Court predictability: Tanjungkarang most opaque (RMSE=3.21yr)
+14. PN courts lack full text unless PDF available
+15. Power analysis: need n≈1000 for structured features significance
+16. Parser fixed for PN merged text
 
 ## What Needs To Be Done (Session 12)
 
