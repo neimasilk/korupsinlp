@@ -13,7 +13,7 @@ Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Ana
 
 ## Highlights (3-5 bullet points)
 - Pasal 2 (enrichment) cases receive 0.73 years longer sentences than Pasal 3 (authority abuse) cases after controlling for prosecution demand (p=0.002)
-- The sentencing discount (sentence/demand ratio) is entirely unpredictable from any available feature, revealing genuine judicial opacity
+- The sentencing discount (sentence/demand ratio) is unpredictable from any available feature in public documents (R2=-0.01)
 - Text mining approaches (TF-IDF, transformer embeddings) systematically fail to improve sentencing prediction at n<500
 - Geographic sentencing variation is a composition effect, not judicial bias
 - First large-scale computational analysis of Indonesian corruption verdicts (n=671)
@@ -31,7 +31,7 @@ Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Ana
 
 ## Word Count
 - Abstract: ~165 words
-- Main text: ~4900 words
+- Main text: ~5100 words
 - References: 18 items
 - Supplementary: 8 tables
 
