@@ -72,6 +72,9 @@ def init_db(db_path: Path = DB_PATH):
                 -- Court level
                 court_level TEXT,  -- 'ma', 'pn', or 'pt' — distinguishes appeal vs first-instance
 
+                -- Judicial reasoning text
+                pertimbangan_text TEXT,
+
                 -- Parse metadata
                 parsed_at TEXT,
                 parse_source TEXT,  -- 'html' or 'pdf'
@@ -91,6 +94,22 @@ def init_db(db_path: Path = DB_PATH):
             CREATE INDEX IF NOT EXISTS idx_verdicts_tahun ON verdicts(tahun);
             CREATE INDEX IF NOT EXISTS idx_verdicts_daerah ON verdicts(daerah);
         """)
+
+
+def migrate_db(db_path: Path = DB_PATH):
+    """Add columns that may be missing from older schema versions."""
+    conn = get_connection(db_path)
+    try:
+        existing = {row[1] for row in conn.execute("PRAGMA table_info(verdicts)").fetchall()}
+        migrations = [
+            ("pertimbangan_text", "TEXT"),
+        ]
+        for col, typ in migrations:
+            if col not in existing:
+                conn.execute(f"ALTER TABLE verdicts ADD COLUMN {col} {typ}")
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def insert_verdict(conn: sqlite3.Connection, data: dict) -> int:
