@@ -1,8 +1,15 @@
 # Handoff — Session 12 → Session 13
 
-## Status: **Paper 2 Updated with Full PDF Extraction, Corpus 693**
+## Status: **Paper 2 Peer-Review Ready, All Thesis Killers Fixed**
 
-Major data quality improvement: complete re-extraction of pertimbangan text from PDFs (median 10,877 chars vs 1,190 from partial HTML). Paper 2 fully updated with new analysis. Core finding (Pasal 2 premium) is robust and actually stronger (d=0.58 vs 0.49). Text feature negative result is now decisive (0/10 seeds significant).
+Paper 2 underwent comprehensive critical review and all identified issues fixed:
+- Causal language → associational language throughout
+- "Irreducibly opaque" → "opaque from public documents"  
+- Temporal robustness tested: P2 effect stable pre/post-2024 (interaction p=0.94)
+- OLS diagnostics added (HC3 robust SE, VIF, normality tests)
+- Endogeneity, selection bias, Indonesian lit gap all addressed in expanded Limitations
+- NLP detail trimmed, criminology framing strengthened
+- Full PDF pertimbangan extraction (median 10,877 chars), corpus 693, n=367 analysis-ready
 
 ## Session 12 Summary (10 commits)
 
@@ -68,11 +75,12 @@ python -m scripts.11_paper2_analysis          # All Paper 2 numbers
 
 ## What Needs To Be Done (Session 13)
 
-### Priority 1: Final Human Review + Submit Paper 2
+### Priority 1: Submit Paper 2
+- Post preprint to SSRN (establishes priority)
 - Convert Markdown → Word/LaTeX
 - Fill in university affiliation, ORCID, email
-- Human read-through one more time
-- Submit to CLSC via Springer Editorial Manager
+- Submit to CLSC via Springer Editorial Manager (FREE, subscription model)
+- CLSC: Scopus Q2, SJR 0.364, CiteScore 2.19, no APC
 
 ### Priority 2: Continue Corpus Scaling
 - MA site pages 2+ unreliable — try off-peak hours
