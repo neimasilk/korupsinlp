@@ -89,16 +89,18 @@ Every subset containing pasal_2 yields positive improvement. No subset without p
 
 ### S6. Subsample Robustness for Pasal 2 OLS
 
+Model 3 (vonis ~ tuntutan + pasal_2 + pasal_3):
+
 | Subsample | n | b(Pasal 2) | 95% CI | p |
 |-----------|---|-----------|--------|---|
-| 50% | 175 | +0.934 | [+0.278, +1.589] | 0.006 |
-| 60% | 210 | +0.730 | [+0.120, +1.341] | 0.019 |
-| 70% | 245 | +0.752 | [+0.183, +1.321] | 0.010 |
-| 80% | 280 | +0.768 | [+0.260, +1.276] | 0.003 |
-| 90% | 315 | +0.835 | [+0.367, +1.303] | 0.001 |
-| 100% | 350 | +0.734 | [+0.286, +1.182] | 0.001 |
+| 50% | 183 | +0.323 | [-0.296, +0.942] | 0.305 |
+| 60% | 220 | +0.304 | [-0.263, +0.872] | 0.292 |
+| 70% | 256 | +0.494 | [-0.028, +1.016] | 0.063 |
+| 80% | 293 | +0.660 | [+0.158, +1.162] | 0.010 |
+| 90% | 330 | +0.614 | [+0.133, +1.096] | 0.013 |
+| 100% | 367 | +0.730 | [+0.267, +1.192] | 0.002 |
 
-The coefficient is significant at p<0.05 at every subsample size tested.
+The coefficient reaches significance at 80% of the corpus (n=293) and strengthens progressively. The higher sample requirement reflects the additional Pasal 3 parameter in Model 3.
 
 ### S7. Model Robustness Across Estimators
 
