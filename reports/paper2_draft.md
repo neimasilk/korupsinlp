@@ -55,9 +55,9 @@ Quantitative analysis of Indonesian corruption sentencing has been limited to gr
 
 In the broader sentencing literature, Ulmer (2012) reviews the state of sentencing research, noting that unexplained variance remains a persistent challenge across jurisdictions. Anderson et al. (1999) measured interjudge sentencing disparity in US federal courts, finding significant judge effects even after the introduction of sentencing guidelines. Englich et al. (2006) demonstrated anchoring effects in sentencing, showing that prosecution demands serve as reference points for judicial decision-making. Our finding that prosecution demand explains 60% of variance is consistent with this anchoring framework.
 
-In computational legal analysis, sentencing prediction has been studied across multiple jurisdictions. Strickson and De La Iglesia (2020) predicted UK Crown Court sentences using structured features with random forests. Lage-Freitas et al. (2022) applied BERT to Brazilian court decisions. Chen et al. (2019) used deep learning for charge prediction on 2.6 million Chinese court documents. Medvedeva et al. (2020) found that simple models performed comparably to BERT for European Court of Human Rights prediction. These studies typically rely on large corpora; our contribution is to examine what happens when the corpus is necessarily small.
+In computational legal analysis, sentencing prediction has been studied across multiple jurisdictions. Aletras et al. (2016) pioneered NLP-based prediction of European Court of Human Rights decisions, while Medvedeva et al. (2020) found that simple models performed comparably to BERT on the same task. Strickson and De La Iglesia (2020) predicted UK Crown Court sentences using structured features with random forests. Lage-Freitas et al. (2022) applied BERT to Brazilian court decisions. Chen et al. (2019) used deep learning for charge prediction on 2.6 million Chinese court documents. These studies typically rely on large corpora; our contribution is to examine what happens when the corpus is necessarily small.
 
-No peer-reviewed study has applied computational methods to analyze sentencing determinants across hundreds of Indonesian corruption verdicts. Our work fills this gap.
+Emerging computational work on Indonesian legal text includes named entity recognition (Nuranti & Yulianti, 2020; Yulianti et al., 2024) and verdict classification using IndoBERT (Hasanah et al., 2023), but no peer-reviewed study has applied computational methods to analyze sentencing determinants across hundreds of Indonesian corruption verdicts. Our work fills this gap.
 
 ## 3. Data and Methods
 
@@ -95,7 +95,7 @@ The corpus draws from 28 court regions, with Jakarta Pusat (53 cases), Surabaya 
 
 *vonis_years = b0 + b1 * tuntutan_years + b2 * has_pasal_2 + e*
 
-We report the coefficient b2 with standard errors, 95% parametric confidence intervals, and 95% bootstrap confidence intervals (2,000 iterations with resampling). Model comparison uses an F-test (Model 2 with Pasal 2 vs Model 1 without). Effect size is reported as Cohen's d on residuals from Model 1, comparing Pasal 2-only cases (n=98) against Pasal 3-only cases (n=96), with bootstrap CI.
+We report the coefficient b2 with standard errors, 95% parametric confidence intervals, and 95% bootstrap confidence intervals (2,000 iterations with resampling). Model comparison uses an F-test (Model 2 with Pasal 2 vs Model 1 without). Effect size is reported as Cohen's d on residuals from Model 1, comparing Pasal 2-only cases (n=99) against Pasal 3-only cases (n=96), with bootstrap CI.
 
 To assess robustness, we re-estimate Model 2 on progressive subsamples (50% to 100% of the corpus, each with a fixed random seed) and verify that the Pasal 2 coefficient remains significant at every subsample size.
 
@@ -133,7 +133,7 @@ The sentencing discount (vonis/tuntutan) has a mean of 0.78 and median of 0.72, 
 
 Can any available feature predict this discount? Ridge regression using structured features (charge type, crime category, state loss magnitude, aggravating/mitigating factor presence) yields **cross-validated R2=-0.06** — worse than predicting the mean. No individual feature significantly correlates with the discount after Bonferroni correction. The closest associations are Pasal 2 (r=+0.10, uncorrected p=0.056) and Pasal 3 (r=-0.11, p=0.047), but neither survives correction for multiple testing.
 
-We tested six feature types against the discount: charge type (Pasal 2, Pasal 3), crime category (gratifikasi, pencucian uang), factor lists (memberatkan, meringankan presence), case magnitude (log kerugian), text length, and judicial text patterns. None achieved positive predictive R2.
+We tested structured features against the discount: charge type (Pasal 2, Pasal 3), crime category (gratifikasi), factor lists (memberatkan, meringankan presence), and case magnitude (log kerugian). None achieved positive predictive R2.
 
 This "genuine opacity" finding means that approximately 40% of sentencing variance reflects case-specific judicial judgment — including factors such as defendant cooperation, remorse, evidence quality, political context, and case-specific circumstances — that leave no trace in published verdict documents. The opacity is not a methodological limitation but a substantive finding about the transparency of Indonesian judicial decision-making.
 
@@ -186,11 +186,11 @@ This does not imply that judicial discretion is arbitrary. Judges may have legit
 
 ### 5.3 Why Text Features Fail at Small N
 
-The systematic failure of TF-IDF (30 experiments) and transformer embeddings reflects a fundamental tension between text representation and corpus size. With n~300 training observations and 100 TF-IDF features, the feature-to-sample ratio is 0.5 — precisely the regime where overfitting dominates (Aggarwal & Zhai, 2012). Aggressive regularization (Ridge alpha=10-50) reduces but does not eliminate the problem.
+The systematic failure of TF-IDF (30 experiments) and transformer embeddings reflects a fundamental tension between text representation and corpus size. With n~300 training observations and 100 TF-IDF features, the feature-to-sample ratio is 0.5 — precisely the regime where overfitting dominates. Aggressive regularization (Ridge alpha=10-50) reduces but does not eliminate the problem.
 
 Transformer sentence embeddings (paraphrase-multilingual-MiniLM-L12-v2, 384 dimensions) fare no better. Even after PCA reduction to 5-50 dimensions, they fail to improve over the baseline — consistent with the finding that pretrained representations may not capture domain-specific legal semantics without fine-tuning on in-domain data (Chalkidis et al., 2020; see also Wilie et al., 2020 on IndoBERT limitations).
 
-Domain keywords partially succeed because they encode expert knowledge about which specific legal concepts matter (charge type, crime category), reducing the feature space to 3-4 binary indicators. However, even this minimal representation provides only a marginal improvement (+0.02 R2), confirming that the unexplained variance is genuinely opaque rather than merely a representation problem. This aligns with Dressel and Farid's (2018) finding that simple expert-defined features can match complex ML approaches in criminal justice prediction.
+Domain keywords partially succeed because they encode expert knowledge about which specific legal concepts matter (charge type, crime category), reducing the feature space to 3-4 binary indicators — an approach consistent with Rudin's (2019) argument for interpretable models in high-stakes domains. However, even this minimal representation provides only a marginal improvement (+0.02 R2), confirming that the unexplained variance is genuinely opaque rather than merely a representation problem. This aligns with Dressel and Farid's (2018) finding that simple expert-defined features can match complex ML approaches in criminal justice prediction.
 
 ### 5.4 The Composition Effect in Geographic Variation
 
@@ -226,7 +226,7 @@ Finally, the complete failure of TF-IDF and transformer embeddings suggests that
 
 **Solo author.** The author is a computer science researcher, not a legal scholar. Legal interpretations of Pasal 2 vs Pasal 3 distinctions should be verified by qualified legal experts.
 
-**Temporal skew.** 58% of verdicts are from 2024-2026, reflecting recent publication patterns on the MA website. Historical sentencing patterns may differ.
+**Temporal skew.** 62% of verdicts are from 2024-2026, reflecting recent publication patterns on the MA website. Historical sentencing patterns may differ.
 
 **Unmeasured confounders.** Case characteristics not captured in our extraction (defendant's position, specific modus operandi, plea and cooperation status) may explain some of the "opaque" variance.
 
