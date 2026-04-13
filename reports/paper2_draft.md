@@ -244,6 +244,16 @@ Finally, we document the systematic failure of text mining approaches — from b
 
 The CorpusKorupsi dataset and analysis code are publicly available at [repository URL] to support replication and extension of this research. Future work should expand the corpus to first-instance Tipikor courts, test whether fine-tuned legal language models (e.g., legal-domain IndoBERT) can capture what general-purpose representations miss, and investigate whether the judicial opacity finding holds across different corruption offense types and time periods.
 
+## Declarations
+
+**Funding.** This research received no external funding.
+
+**Conflicts of interest.** The author declares no conflicts of interest.
+
+**Ethics approval.** This study analyzes publicly available court documents published by the Indonesian Supreme Court. No human subjects were involved and no ethics approval was required.
+
+**Data availability.** The CorpusKorupsi structured dataset (extracted fields; raw verdict text excluded for copyright reasons), extraction pipeline source code, and analysis scripts are available at [repository URL].
+
 ## References
 
 Aletras, N., Tsarapatsanis, D., Preoiuc-Pietro, D., & Lampos, V. (2016). Predicting judicial decisions of the European Court of Human Rights: A Natural Language Processing perspective. *PeerJ Computer Science*, 2, e93.
