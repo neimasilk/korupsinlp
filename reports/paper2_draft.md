@@ -256,38 +256,38 @@ The CorpusKorupsi dataset and analysis code are publicly available at [repositor
 
 ## References
 
-Aletras, N., Tsarapatsanis, D., Preoiuc-Pietro, D., & Lampos, V. (2016). Predicting judicial decisions of the European Court of Human Rights: A Natural Language Processing perspective. *PeerJ Computer Science*, 2, e93.
+Aletras, N., Tsarapatsanis, D., Preoiuc-Pietro, D., & Lampos, V. (2016). Predicting judicial decisions of the European Court of Human Rights: A Natural Language Processing perspective. *PeerJ Computer Science*, 2, e93. https://doi.org/10.7717/peerj-cs.93
 
-Anderson, J. M., Kling, J. R., & Stith, K. (1999). Measuring interjudge sentencing disparity: Before and after the federal sentencing guidelines. *Journal of Law and Economics*, 42(S1), 271-307.
+Anderson, J. M., Kling, J. R., & Stith, K. (1999). Measuring interjudge sentencing disparity: Before and after the federal sentencing guidelines. *Journal of Law and Economics*, 42(S1), 271-307. https://doi.org/10.1086/467425
 
 Author (2026). CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Verdicts and Sentencing Patterns. [Companion paper]
 
-Butt, S. (2011). Anti-corruption reform in Indonesia: An obituary? *Bulletin of Indonesian Economic Studies*, 47(3), 381-394.
+Butt, S. (2011). Anti-corruption reform in Indonesia: An obituary? *Bulletin of Indonesian Economic Studies*, 47(3), 381-394. https://doi.org/10.1080/00074918.2011.619051
 
-Chalkidis, I., Fergadiotis, M., Malakasiotis, P., Aletras, N., & Androutsopoulos, I. (2020). LEGAL-BERT: The muppets straight out of law school. *Findings of EMNLP*, 2898-2904.
+Chalkidis, I., Fergadiotis, M., Malakasiotis, P., Aletras, N., & Androutsopoulos, I. (2020). LEGAL-BERT: The muppets straight out of law school. *Findings of EMNLP*, 2898-2904. https://doi.org/10.18653/v1/2020.findings-emnlp.261
 
-Chen, H., Cai, D., Dai, W., Dai, Z., & Ding, Y. (2019). Charge-based prison term prediction with deep gating network. *Proceedings of EMNLP-IJCNLP*, 6362-6367.
+Chen, H., Cai, D., Dai, W., Dai, Z., & Ding, Y. (2019). Charge-based prison term prediction with deep gating network. *Proceedings of EMNLP-IJCNLP*, 6362-6367. https://doi.org/10.18653/v1/D19-1667
 
-Dressel, J., & Farid, H. (2018). The accuracy, fairness, and limits of predicting recidivism. *Science Advances*, 4(1), eaao5580.
+Dressel, J., & Farid, H. (2018). The accuracy, fairness, and limits of predicting recidivism. *Science Advances*, 4(1), eaao5580. https://doi.org/10.1126/sciadv.aao5580
 
-Englich, B., Mussweiler, T., & Strack, F. (2006). Playing dice with criminal sentences: The influence of irrelevant anchors on experts' judicial decision making. *Personality and Social Psychology Bulletin*, 32(2), 188-200.
+Englich, B., Mussweiler, T., & Strack, F. (2006). Playing dice with criminal sentences: The influence of irrelevant anchors on experts' judicial decision making. *Personality and Social Psychology Bulletin*, 32(2), 188-200. https://doi.org/10.1177/0146167205282152
 
 Hasanah, U., et al. (2023). Classification of Indonesian tax court verdicts using IndoBERT. *Proceedings of ICITDA*.
 
-Lage-Freitas, A., Allain-Oldoni, H., Chasin, O., & de Cerqueira, L. (2022). Predicting Brazilian court decisions. *PeerJ Computer Science*, 8, e904.
+Lage-Freitas, A., Allain-Oldoni, H., Chasin, O., & de Cerqueira, L. (2022). Predicting Brazilian court decisions. *PeerJ Computer Science*, 8, e904. https://doi.org/10.7717/peerj-cs.904
 
-Medvedeva, M., Vols, M., & Wieling, M. (2020). Using machine learning to predict decisions of the European Court of Human Rights. *Artificial Intelligence and Law*, 28(2), 237-266.
+Medvedeva, M., Vols, M., & Wieling, M. (2020). Using machine learning to predict decisions of the European Court of Human Rights. *Artificial Intelligence and Law*, 28(2), 237-266. https://doi.org/10.1007/s10506-019-09255-y
 
 Nuranti, E. Q., & Yulianti, E. (2020). Named entity recognition for Indonesian legal documents. *Proceedings of CIKM Workshop*.
 
-Rudin, C. (2019). Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead. *Nature Machine Intelligence*, 1(5), 206-215.
+Rudin, C. (2019). Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead. *Nature Machine Intelligence*, 1(5), 206-215. https://doi.org/10.1038/s42256-019-0048-x
 
-Schutte, S. A. (2012). Against the odds: Anti-corruption reform in Indonesia. *Public Administration and Development*, 32(1), 38-48.
+Schutte, S. A. (2012). Against the odds: Anti-corruption reform in Indonesia. *Public Administration and Development*, 32(1), 38-48. https://doi.org/10.1002/pad.1621
 
 Strickson, B., & De La Iglesia, B. (2020). Legal judgement prediction for UK Crown Court criminal cases. *Proceedings of ICAART*, 458-465.
 
-Ulmer, J. T. (2012). Recent developments and new directions in sentencing research. *Justice Quarterly*, 29(1), 1-40.
+Ulmer, J. T. (2012). Recent developments and new directions in sentencing research. *Justice Quarterly*, 29(1), 1-40. https://doi.org/10.1080/07418825.2011.583932
 
-Wilie, B., et al. (2020). IndoNLU: Benchmark and resources for evaluating Indonesian natural language understanding. *Proceedings of AACL-IJCNLP*, 843-857.
+Wilie, B., et al. (2020). IndoNLU: Benchmark and resources for evaluating Indonesian natural language understanding. *Proceedings of AACL-IJCNLP*, 843-857. https://doi.org/10.18653/v1/2020.aacl-main.85
 
 Yulianti, E., et al. (2024). IndoLER: A comprehensive Indonesian legal entity recognition dataset. *Proceedings of LREC-COLING*, 10234-10243.
