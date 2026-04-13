@@ -1,54 +1,65 @@
 # Handoff — Session 12 → Session 13
 
-## Status: **Paper 2 Peer-Review Ready, All Thesis Killers Fixed**
+## Status: **Paper 2 Submission-Ready (PDF/DOCX generated), Corpus 693**
 
-Paper 2 underwent comprehensive critical review and all identified issues fixed:
-- Causal language → associational language throughout
-- "Irreducibly opaque" → "opaque from public documents"  
-- Temporal robustness tested: P2 effect stable pre/post-2024 (interaction p=0.94)
-- OLS diagnostics added (HC3 robust SE, VIF, normality tests)
-- Endogeneity, selection bias, Indonesian lit gap all addressed in expanded Limitations
-- NLP detail trimmed, criminology framing strengthened
-- Full PDF pertimbangan extraction (median 10,877 chars), corpus 693, n=367 analysis-ready
+Paper 2 has been through: numerical sync → full PDF pertimbangan re-extraction → analysis update → critical review → all thesis killers fixed → PDF/DOCX generated. Ready for human review and submission.
 
-## Session 12 Summary (10 commits)
+## Session 12 Summary (13 commits)
 
 ### Phase 1: Verification + Proofread
-- 69 tests pass, analysis verified
-- 20+ stale statistics corrected across paper + materials
-- 5 uncited references integrated, section numbering fixed
-- Declarations section + DOIs added for CLSC compliance
+- 69 tests pass, analysis script verified
+- 20+ stale statistics corrected (OLS table, discount R2, TF-IDF delta, subsample)
+- Fixed section numbering (duplicate 3.4), integrated 5 uncited references
+- Added Declarations section (funding, COI, ethics, data availability)
+- Added DOIs to 14/18 references
 
-### Phase 2: CLSC Requirements Verified
-- Abstract 165w (150-250 required), body ~4600w (10,000 limit)
-- APA references with DOIs, double-blind ready
-- All Springer requirements met
-
-### Phase 3: Corpus Growth + Pertimbangan Re-extraction
-- 3 new verdicts scraped from MA page 1 (pages 2+ timeout)
-- 22 unparsed verdicts parsed (DB: 693 total, 367 analysis-ready)
-- **Full pertimbangan re-extraction from 433 PDFs** (430 succeeded)
-- Text quality dramatically improved: median 10,877 chars (was 1,190)
+### Phase 2: Full PDF Pertimbangan Re-extraction
+- Re-extracted pertimbangan text from ALL 433 PDFs (430 succeeded, 99.3%)
+- Text quality: median 10,877 chars (was 1,190 from partial HTML — 10x improvement)
 - All 367 analysis-ready cases now have pertimbangan text (was 350/364)
+- 3 new verdicts scraped (MA page 1), 22 unparsed verdicts parsed
+- DB total: 693 verdicts, 367 analysis-ready
 
-### Phase 4: Analysis Update (Key Finding)
-The full PDF text changed the Pasal 2/3 classification because judges discuss both alternative charges before applying one. **Model 3 (controlling for both) is now primary:**
+### Phase 3: Analysis Update with Full Text
+Fuller text changed P2/P3 classification (47% cases mention both articles). Model 3 (controlling for both) is now primary:
 
-| Metric | Old (partial text, n=350) | New (full PDF, n=367) |
-|--------|--------------------------|----------------------|
+| Metric | Session 11 (partial text, n=350) | Session 12 (full PDF, n=367) |
+|--------|----------------------------------|------------------------------|
 | Model 3 P2 coef | b=0.690, p=0.003 | **b=0.730, p=0.002** |
-| Cohen's d | 0.492 | **0.584** (stronger!) |
-| Keywords | 5/10 significant | **0/10** (clearer negative) |
+| Cohen's d | 0.492 | **0.584** (stronger) |
+| Keywords significant | 5/10 | **0/10** (decisive negative) |
 | Discount R2 | -0.056 | **-0.012** |
-| Subsample robust | All n≥175 | n≥293 (80%) |
+| HC3 robust p | not reported | **0.001** |
 
-The headline number is unchanged: **~0.73 years Pasal 2 premium**. Effect size actually increased. Text feature failure is now definitive.
+### Phase 4: Critical Review + Thesis Killer Fixes
+Ran comprehensive critical review identifying 10+ potential rejection risks. All fixed:
+
+| Issue | Severity | Fix Applied |
+|-------|----------|-------------|
+| Causal language ("affects") | FATAL | → "is associated with" throughout |
+| Discount 0.85 vs 0.78 inconsistency | FATAL | Explained (unfiltered vs outlier-excluded) |
+| p-value conflation (p<0.001 vs p=0.002) | SERIOUS | Fixed to regression p=0.002 |
+| "Irreducibly opaque" overclaim | SERIOUS | → "opaque from public documents" |
+| "First" claim without Indonesian lit | SERIOUS | → "First large-scale computational" |
+| No OLS diagnostics | SERIOUS | Added HC3 SE, VIF, Shapiro-Wilk, Breusch-Pagan |
+| Endogeneity not discussed | SERIOUS | Added with 3 mitigating arguments |
+| Selection bias too thin | SERIOUS | Expanded to full paragraph with bias direction |
+| Temporal skew untested | SERIOUS | Tested: pre-2024 p=0.022, post-2024 p=0.030, interaction p=0.94 |
+| Indonesian lit gap | SERIOUS | Acknowledged in limitations |
+| NLP-heavy framing | SERIOUS | Trimmed 5.3, moved detail to supplementary |
+| "Honest negative result" 3x | MINOR | Reduced to 1x |
+| Duplicated "from public documents" | BUG | Fixed in final PDF proofread |
+
+### Phase 5: CLSC Verification + Output Generation
+- CLSC confirmed: Scopus Q2, CiteScore 2.19, SJR 0.364, **FREE** (subscription model, no APC)
+- Abstract 165w (150-250 req), body ~5100w (10,000 limit), 18 refs APA w/ DOIs
+- Generated: `paper2_draft.pdf` (16 pages), `paper2_draft.docx`, `paper2_supplementary.docx`, `paper2_cover_letter.docx`
 
 ## CRITICAL: First Thing Next Session
 
 ```bash
 python -m pytest tests/ -q                    # 69 passed
-python -m scripts.11_paper2_analysis          # All Paper 2 numbers
+python -m scripts.11_paper2_analysis          # Verify all numbers
 ```
 
 ## Data State (13 April 2026)
@@ -57,42 +68,48 @@ python -m scripts.11_paper2_analysis          # All Paper 2 numbers
 | Total verdicts (DB) | 693 |
 | Parsed | 693 |
 | Analysis-ready (vonis+tuntutan) | 367 |
-| With pertimbangan text | 430 |
+| With pertimbangan text (≥200 chars) | 430 |
 | Analysis-ready WITH text | 367 (100%) |
 
 ## Branch State
-- Branch: `autoresearch/apr9-textfeatures`
+- Branch: `autoresearch/apr9-textfeatures` (13 new commits this session)
 - NOT merged to main (deliberate — experimental branch)
 
-## Key Files Modified
-| File | Change |
+## Key Files
+| File | Status |
 |------|--------|
-| `reports/paper2_draft.md` | All numbers synced with n=367 analysis |
-| `reports/paper2_supplementary.md` | S6 subsample table updated |
-| `reports/paper2_cover_letter.md` | Numbers synced |
-| `reports/paper2_submission_metadata.md` | Numbers synced |
+| `reports/paper2_draft.md` | Source — all numbers verified against analysis |
+| `reports/paper2_draft.pdf` | 16-page PDF via pandoc+pdflatex |
+| `reports/paper2_draft.docx` | Word version for CLSC submission |
+| `reports/paper2_supplementary.md/.docx` | 8 supplementary tables |
+| `reports/paper2_cover_letter.md/.docx` | CLSC cover letter |
+| `reports/paper2_submission_metadata.md` | Keywords, highlights, declarations |
+| `scripts/11_paper2_analysis.py` | Reproducible analysis (source of truth) |
 | `src/db.py` | Added migrate_db(), pertimbangan_text in schema |
 
 ## What Needs To Be Done (Session 13)
 
-### Priority 1: Submit Paper 2
-- Post preprint to SSRN (establishes priority)
-- Convert Markdown → Word/LaTeX
-- Fill in university affiliation, ORCID, email
-- Submit to CLSC via Springer Editorial Manager (FREE, subscription model)
-- CLSC: Scopus Q2, SJR 0.364, CiteScore 2.19, no APC
+### Priority 1: Human Review + Submit
+1. Open `reports/paper2_draft.pdf` — human read-through
+2. Fill in: university name, ORCID, email (cover letter + metadata)
+3. Upload preprint to SSRN (establishes priority timestamp)
+4. Submit to CLSC via Springer Editorial Manager (FREE)
 
-### Priority 2: Continue Corpus Scaling
-- MA site pages 2+ unreliable — try off-peak hours
-- Consider scraping individual verdict URLs discovered in HTML files
-- Target: 800+ verdicts → ~400 analysis-ready
+### Priority 2: Corpus Scaling
+- MA site pages 2+ unreliable — try off-peak hours (malam WIB)
+- Target: 800+ verdicts for stronger subsample robustness
+- After scraping: `python -m scripts.03_parse_sample` → `09_extract_pertimbangan` → `11_paper2_analysis`
 
-### Priority 3: Paper 1 Update (Lower Priority)
-- Paper 1 uses n=557 corpus, findings still valid
-- Consider updating to n=693 for consistency before submission
+### Priority 3: Paper 1 Update
+- Paper 1 uses n=557 corpus, geographic finding still valid
+- Consider updating to n=693 before submission
 
-## Key Insight This Session
+## Key Insights This Session
 
-**Fuller text data improved data quality at the cost of classifier noise.** Re-extracting pertimbangan from PDFs (10x more text) revealed that judges discuss both Pasal 2 and Pasal 3 as alternative charges. The simple `has_pasal_2` regex picked up mentions in both contexts. Controlling for both indicators (Model 3) restores the clean result: b=0.730, p=0.002 — nearly identical to the original. The lesson: when working with text-derived features, longer text can introduce noise unless the feature specification accounts for the fuller context.
+1. **Numbers drift silently.** Paper had 20+ stale stats from earlier corpus — systematic cross-check against analysis script is essential before any submission.
 
-**The text feature negative result became definitive.** With complete pertimbangan text, domain keywords went from 5/10 seeds significant to 0/10. This transforms the finding from "marginal, unstable improvement" to "no improvement whatsoever" — a cleaner, more publishable negative result.
+2. **Fuller text improves data but adds noise.** PDF extraction (10x more text) means judges discuss both alternative charges, making the simple `has_pasal_2` regex noisier. Model 3 (controlling for both) restores the clean result.
+
+3. **Critical self-review prevents desk reject.** Causal language from observational data, numerical inconsistencies, and missing diagnostics would have triggered immediate rejection at a quantitative criminology journal. Fixing these pre-submission is far cheaper than a reject-resubmit cycle.
+
+4. **The text feature negative result became definitive.** Keywords went from 5/10 seeds significant (marginal) to 0/10 (no improvement) — a cleaner, more publishable result.
