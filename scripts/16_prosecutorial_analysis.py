@@ -159,6 +159,54 @@ def main():
     print(f"    Ratio mega/petty:        {pred_100b/pred_10m:.1f}x")
     print(f"    If proportional, should be: {100e9/10e6:.0f}x")
 
+    # ------------------------------------------------------------------
+    #  2b. DATA INTEGRITY + ELASTICITY ROBUSTNESS (added for revision)
+    #  The raw elasticity rests on a few high-leverage tail points:
+    #    - a single Rp 100 value (implausible; parse error)
+    #    - the case-loss of one mega-case (PT Timah, ~Rp 300T) repeated
+    #      across its co-defendants (non-independent observations)
+    #  Cleaning these STRENGTHENS the finding (they were deflating it).
+    # ------------------------------------------------------------------
+    print(f"\n  --- Data integrity check on kerugian ---")
+    kk = has_k2["kerugian_negara"].values
+    n_parse_err = int((kk < 1e6).sum())
+    mx = kk.max()
+    n_maxdup = int((kk == mx).sum())
+    print(f"    Implausible kerugian < Rp 1 juta (parse errors): {n_parse_err}")
+    print(f"    Cases at max value Rp {mx:,.0f} "
+          f"(one mega-case's co-defendants): {n_maxdup}")
+
+    def _elasticity(mask):
+        lk = np.log(has_k2["kerugian_negara"].values[mask])
+        lt = np.log(has_k2["tuntutan_years"].values[mask])
+        b, a = np.polyfit(lk, lt, 1)
+        pred = a + b * lk
+        r2 = 1 - ((lt - pred) ** 2).sum() / ((lt - lt.mean()) ** 2).sum()
+        return b, int(mask.sum()), r2
+
+    keep_dedupe = np.ones(len(kk), bool)
+    for i in np.where(kk == mx)[0][1:]:
+        keep_dedupe[i] = False
+    lo, hi = np.percentile(kk, 1), np.percentile(kk, 99)
+    specs = [
+        ("full (uncleaned, paper v1)",   np.ones(len(kk), bool)),
+        ("drop parse errors (<Rp 1jt)",  kk >= 1e6),
+        ("+ dedupe mega-case co-defs",   (kk >= 1e6) & keep_dedupe),
+        ("winsorized 1-99 pct",          (kk >= lo) & (kk <= hi)),
+    ]
+    print(f"\n  Elasticity robustness (log-log, tuntutan ~ kerugian):")
+    print(f"  {'Specification':<32s} {'n':>4s} {'elast.':>7s} {'R2':>6s}")
+    print(f"  {'-'*52}")
+    for label, mask in specs:
+        b, nn, r2 = _elasticity(mask)
+        print(f"  {label:<32s} {nn:>4d} {b:>7.3f} {r2:>6.3f}")
+    b_clean, n_clean, r2_clean = _elasticity(kk >= 1e6)
+    print(f"\n  PRIMARY (cleaned) elasticity = {b_clean:.3f} "
+          f"(n={n_clean}, R2={r2_clean:.3f})")
+    print(f"  Benchmark: US fraud loss-table (USSG 2B1.1) implies elasticity")
+    print(f"  ~0.25-0.30. Indonesia's prosecutorial elasticity is ~half that of")
+    print(f"  the most explicitly loss-graduated system -- and is unstructured.")
+
     # ==================================================================
     #  3. WHO APPEALS AND WHY IT MATTERS
     # ==================================================================
@@ -351,11 +399,14 @@ def main():
     ax.set_xscale("log")
     ax.set_yscale("log")
 
-    # Fit line
+    # Fit line (cleaned sample: drop parse errors < Rp 1 juta)
+    _cl = has_k2["kerugian_negara"].values >= 1e6
+    _bfit, _afit = np.polyfit(np.log(has_k2["kerugian_negara"].values[_cl]),
+                              np.log(has_k2["tuntutan_years"].values[_cl]), 1)
     x_range = np.logspace(6, 14, 100)
-    y_pred = np.exp(m_ll.params["const"] + m_ll.params["log_k"] * np.log(x_range))
+    y_pred = np.exp(_afit + _bfit * np.log(x_range))
     ax.plot(x_range, y_pred, "r-", linewidth=2,
-            label=f"Fit: elasticity={m_ll.params['log_k']:.3f}")
+            label=f"Fit: elasticity={_bfit:.3f}")
 
     ax.set_xlabel("State Financial Loss (Kerugian Negara, IDR)")
     ax.set_ylabel("Prosecution Demand (Tuntutan, years)")

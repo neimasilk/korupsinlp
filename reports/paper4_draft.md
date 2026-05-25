@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Does the punishment fit the crime in corruption cases? We estimate the elasticity of prosecution demands (*tuntutan*) with respect to state financial loss (*kerugian negara*) using 291 Indonesian Supreme Court corruption verdicts. The elasticity is 0.109 (bootstrap 95% CI [0.078, 0.148]): a 100-fold increase in state loss produces only a 1.7-fold increase in the prosecution demand. A Rp 10 million case draws a demand of 3.2 years; a Rp 100 billion case — ten thousand times the harm — draws 8.8 years. Prosecution demands are also less predictable than sentences (R-squared=0.315 vs 0.600), meaning prosecutors exercise wider discretion than judges. Demands have risen over time (from roughly 5 years in 2014 to 7.5 years in 2025) while the sentencing discount has held steady at about 22%. Geographic variation disappears after controlling for case magnitude. The near-zero elasticity means the marginal expected punishment for escalating corruption is negligible — the system implicitly discounts large-scale theft.
+Does the punishment fit the crime in corruption cases? We estimate the elasticity of prosecution demands (*tuntutan*) with respect to state financial loss (*kerugian negara*) using 290 Indonesian Supreme Court corruption verdicts. The elasticity is 0.126 (bootstrap 95% CI [0.102, 0.156]): a 100-fold increase in state loss produces only a 1.8-fold increase in the prosecution demand. A Rp 10 million case draws a demand of 2.9 years; a Rp 100 billion case — ten thousand times the harm — draws only 9.2 years. Because punishment operates on a bounded scale while loss spans orders of magnitude, *some* compression is mathematically inevitable; the right benchmark is therefore comparative. Indonesia's elasticity is roughly half that implied by the explicitly loss-graduated US Federal Sentencing Guidelines (about 0.25–0.30) and is reached with no guidelines at all — loss explains under 30% of demand variation (R²=0.285). Prosecution demands are also less predictable than sentences (R²=0.315 vs 0.600), meaning prosecutors exercise wider discretion than judges. Demands have risen over time (from roughly 5 years in 2014 to 7.5 years in 2025) while the sentencing discount has held steady at about 22%. Geographic variation disappears after controlling for case magnitude. The compressed elasticity means the marginal expected punishment for escalating corruption is negligible — the system grants an implicit volume discount on large-scale theft. Because judges anchor faithfully to these demands, the proportionality failure originates upstream, in prosecutorial discretion, not in judicial sentencing.
 
 ## 1. Introduction
 
@@ -10,9 +10,9 @@ Punishment should fit the crime. In corruption cases, "the crime" has a clear me
 
 Sentencing research overwhelmingly studies judges, treating prosecution demands as a given (Author, 2026b; Medvedeva et al., 2020; Strickson & De La Iglesia, 2020). This is a blind spot. Prosecution demands set the anchor from which judges work: in Indonesian corruption cases, prosecution demand alone explains 60% of sentencing variance (Author, 2026b). If the anchor itself is not proportional to the crime, judicial proportionality is impossible regardless of how carefully judges deliberate.
 
-We test proportionality directly. Using 291 Indonesian Supreme Court corruption verdicts with documented state losses spanning six orders of magnitude, we estimate the elasticity of prosecution demand with respect to kerugian negara. Indonesia is a useful setting because prosecutors operate without sentencing guidelines and the statutory range (1-20 years) is wide enough to accommodate proportional demands.
+We test proportionality directly. Using 290 Indonesian Supreme Court corruption verdicts with documented state losses spanning seven orders of magnitude, we estimate the elasticity of prosecution demand with respect to kerugian negara. Indonesia is a useful setting because prosecutors operate without sentencing guidelines and the statutory range (1-20 years) is wide enough to accommodate the graduation observed in comparable systems.
 
-The elasticity is 0.109. A Rp 100 billion case — ten thousand times the harm of a Rp 10 million case — draws a prosecution demand only 2.7 times longer. The gap between what proportionality requires and what prosecutors actually demand is enormous. The consequences run in several directions: small-scale corruption is punished too harshly per rupiah stolen, mega-corruption is punished too leniently, and the marginal cost of escalating corruption is close to zero. The problem sits upstream of the judge, in prosecutorial discretion — which means judicial reform alone cannot fix it.
+The elasticity is 0.126. A Rp 100 billion case — ten thousand times the harm of a Rp 10 million case — draws a prosecution demand only 3.2 times longer. Some compression is unavoidable because punishment is bounded while loss is not; but as we show through comparison with the explicitly loss-graduated US sentencing system, Indonesia's compression is roughly twice as severe and entirely unstructured. The consequences run in several directions: small-scale corruption is punished harshly per rupiah stolen, mega-corruption receives an implicit volume discount, and the marginal cost of escalating corruption is close to zero. The problem sits upstream of the judge, in prosecutorial discretion — which means judicial reform alone cannot fix it.
 
 ### Research Questions
 
@@ -26,7 +26,9 @@ The elasticity is 0.109. A Rp 100 billion case — ten thousand times the harm o
 
 The proportionality principle — that punishment severity should reflect crime severity — is a foundational concept in sentencing theory (von Hirsch, 1992; Ashworth, 2015). In corruption cases, state financial loss provides an unusually clear measure of harm: unlike violent crimes where severity is multi-dimensional, the economic damage from corruption is quantifiable in monetary terms. If any offense type should exhibit proportional punishment, it is corruption.
 
-Perfect proportionality would imply an elasticity of 1.0: a tenfold increase in state loss yields a tenfold increase in punishment demand. In practice, some compression is expected due to statutory caps, diminishing marginal severity perception, and practical considerations. However, an elasticity near zero would indicate that prosecutors essentially ignore the magnitude of harm when calibrating their demands — a failure of proportionality that has systemic consequences.
+What benchmark should we hold prosecutorial demands to? A naive standard would be an elasticity of 1.0 — a tenfold increase in loss yielding a tenfold increase in demand. But this is the wrong benchmark, and we reject it explicitly. Punishment operates on a bounded scale (the statutory range is 1–20 years; in practice almost all demands fall between 2 and 12 years), while corruption losses in our data span more than seven orders of magnitude. No bounded punishment scale can be log-proportional (elasticity 1.0) across such a range; substantial compression is a mathematical necessity, not a policy failure. An elasticity well below 1.0 is therefore expected in *any* sentencing system.
+
+The meaningful question is comparative: how steeply do systems that *deliberately* tie punishment to loss actually graduate it, and where does Indonesia fall relative to that? The paradigm case is the US Federal Sentencing Guidelines §2B1.1, whose 16-tier "loss table" explicitly maps state/victim loss to offense-level increases (United States Sentencing Commission, 2024). Even this explicitly loss-graduated regime implies an elasticity on the order of 0.25–0.30: across the table, an approximately 3,800-fold increase in loss (from roughly USD 6,500 to USD 25 million) raises the offense level by about 20 levels, which corresponds to roughly a tenfold increase in sentence length. Notably, the US system is itself under active reform: in December 2025 the Sentencing Commission proposed collapsing the 16-tier table to 8 tiers precisely because of concerns that it over-weights loss and produces inconsistent, sometimes disproportionate outcomes (United States Sentencing Commission, 2025). The US thus represents a high-water mark of loss-based graduation — and even it is being pulled back. Against this benchmark, an Indonesian elasticity near 0.13 — roughly half the US figure, achieved with no guidelines whatsoever — indicates compression at an extreme of the observed cross-national range, reached not by design but as an emergent property of unstructured discretion.
 
 ### 2.2 Deterrence and Marginal Cost
 
@@ -48,7 +50,7 @@ Prosecutors exercise enormous discretion in determining sentencing demands, yet 
 
 ### 3.1 Corpus
 
-We use CorpusKorupsi (Author, 2026a), a structured dataset of Indonesian Supreme Court corruption verdicts. From 693 scraped verdicts, 291 have both valid prosecution demands (tuntutan > 0) and documented state financial losses (kerugian negara > 0). State financial losses range from Rp 100 to Rp 300 trillion (median Rp 1.27 billion), spanning over twelve orders of magnitude.
+We use CorpusKorupsi (Author, 2026a), a structured dataset of Indonesian Supreme Court corruption verdicts. From 693 scraped verdicts, 291 have both valid prosecution demands (tuntutan > 0) and documented state financial losses (kerugian negara > 0). Two data-quality issues affect the tails of the loss distribution and therefore the leverage of a log-log regression. First, a single case carries an implausible loss of Rp 100, almost certainly a parsing error (the next-smallest value is Rp 15 million); we drop it, yielding n=290 for the primary estimate. Second, one mega-case (the PT Timah tin-mining case, with an officially cited state loss of approximately Rp 300 trillion) appears three times because its case-level loss is attributed identically to three co-defendants — non-independent observations that we de-duplicate in a robustness check (Section 4.1). After removing the parsing error, losses range from Rp 15 million to Rp 300 trillion (median Rp 1.27 billion), spanning over seven orders of magnitude. As Section 4.1 shows, both corrections were slightly *deflating* the estimated elasticity; cleaning strengthens, rather than weakens, the central finding.
 
 ### 3.2 Variables
 
@@ -75,21 +77,30 @@ We use CorpusKorupsi (Author, 2026a), a structured dataset of Indonesian Supreme
 
 ### 4.1 Prosecution Demands Are Highly Inelastic to State Loss (RQ1)
 
-The log-log elasticity of prosecution demand with respect to state financial loss is **0.109** (SE=0.019, p<0.001, R-squared=0.244). This falls far short of proportionality (1.0). Prosecution demands barely respond to the magnitude of harm.
+The log-log elasticity of prosecution demand with respect to state financial loss is **0.126** (bootstrap 95% CI [0.102, 0.156], p<0.001, R²=0.285) on the cleaned sample (n=290). The entire confidence interval lies below the elasticity implied by the US loss table (about 0.25–0.30; Section 2.1), so even our upper bound does not reach the compression of the most explicitly loss-graduated system. Prosecution demands respond only weakly to the magnitude of harm.
 
 In practical terms:
 
 | State financial loss | Predicted demand | Ratio to baseline |
 |---------------------|-----------------|-------------------|
-| Rp 10 million | 3.2 years | 1.0x (baseline) |
-| Rp 100 million | 3.8 years | 1.2x |
-| Rp 1 billion | 5.3 years | 1.7x |
-| Rp 10 billion | 6.4 years | 2.0x |
-| Rp 100 billion | 8.8 years | 2.7x |
+| Rp 10 million | 2.9 years | 1.0x (baseline) |
+| Rp 100 million | 3.9 years | 1.3x |
+| Rp 1 billion | 5.2 years | 1.8x |
+| Rp 10 billion | 6.9 years | 2.4x |
+| Rp 100 billion | 9.2 years | 3.2x |
 
-A Rp 100 billion corruption case — involving state loss 10,000 times greater than a Rp 10 million case — receives a prosecution demand only 2.7 times higher. The marginal increase in demand for each additional order of magnitude of loss is approximately 1.7 years.
+A Rp 100 billion corruption case — involving state loss 10,000 times greater than a Rp 10 million case — receives a prosecution demand only 3.2 times higher. Each additional order of magnitude of loss multiplies the demand by only about 1.34 (a 34% increase per tenfold rise in harm).
 
-The low elasticity is not an artifact of statutory constraints. The statutory maximum (20 years) constrains only the very largest cases, and the statutory minimum for Pasal 2 (4 years) actually works *against* our finding: it forces small-case demands upward, inflating the apparent elasticity. When we exclude cases with demands below 4 years (n=244), the elasticity drops further to 0.070 — the compression is even worse without the statutory floor. Controlling for whether the verdict mentions restitution (*pengembalian kerugian*, present in 35% of cases) does not change the elasticity (0.111 vs 0.113 uncontrolled, restitution coefficient p=0.251).
+**Robustness.** The estimate is stable across data-cleaning choices, and the uncleaned tail points were deflating rather than inflating it:
+
+| Specification | n | Elasticity | R² |
+|---|---|---|---|
+| Full (uncleaned) | 291 | 0.109 | 0.244 |
+| Drop parsing error (<Rp 1 juta) — *primary* | 290 | 0.126 | 0.285 |
+| + de-duplicate mega-case co-defendants | 288 | 0.131 | 0.277 |
+| Winsorized at 1st–99th percentile | 285 | 0.131 | 0.276 |
+
+The low elasticity is also not an artifact of statutory constraints. The statutory maximum (20 years) binds only the very largest cases, and the statutory minimum for Pasal 2 (4 years) works *against* our finding: it forces small-case demands upward, inflating the apparent elasticity. Excluding cases with demands below 4 years (n=237) drops the elasticity further to 0.082 — compression is even more severe without the statutory floor. Controlling for whether the verdict mentions restitution (*pengembalian kerugian*, present in 35% of cases) does not change the elasticity (restitution coefficient pabout 0.25).
 
 ### 4.2 Prosecution Demands Are Less Predictable Than Sentences (RQ2)
 
@@ -122,7 +133,7 @@ The same result appears in judicial sentencing (Author, 2026b): what looks like 
 
 ### 5.1 Why Proportionality Fails
 
-An obvious objection is that state financial loss is only one dimension of crime severity. Prosecutors legitimately consider the defendant's position, cooperation, modus operandi, and restitution when calibrating demands. A low elasticity with respect to kerugian alone does not necessarily indicate broken proportionality if other factors compensate. We address this in two ways. First, controlling for the available multi-dimensional indicators — charge type (Pasal 2 vs 3), restitution mentions, and region — does not change the elasticity. Second, even granting that severity is multi-dimensional, an elasticity of 0.109 is extreme: it implies that a case involving ten thousand times more public harm receives less than three times the punishment demand. No plausible weighting of non-monetary severity factors can close a gap this large.
+An obvious objection is that state financial loss is only one dimension of crime severity. Prosecutors legitimately consider the defendant's position, cooperation, modus operandi, and restitution when calibrating demands. A low elasticity with respect to kerugian alone does not necessarily indicate broken proportionality if other factors compensate. We address this in two ways. First, controlling for the available multi-dimensional indicators — charge type (Pasal 2 vs 3), restitution mentions, and region — does not change the elasticity. Second, even granting that severity is multi-dimensional, an elasticity of 0.126 is extreme relative to the comparative benchmark: it implies that a case involving ten thousand times more public harm receives only about three times the punishment demand, roughly half the graduation built into the US loss table. No plausible weighting of non-monetary severity factors can close a gap this large — and such factors would have to be *systematically anticorrelated* with loss to do so.
 
 Three mechanisms may explain the compression:
 
@@ -134,7 +145,7 @@ Three mechanisms may explain the compression:
 
 ### 5.2 Implications for Deterrence
 
-If the expected additional punishment for increasing the scale of corruption from Rp 10 million to Rp 100 billion is only 5.6 years, the marginal cost of additional corruption is approximately Rp 18 billion per year of additional imprisonment. For a rational actor, this makes larger-scale corruption overwhelmingly favorable: the "price" of corruption, measured in prison time per rupiah stolen, decreases by approximately 99.97% as the scale increases from Rp 10 million to Rp 100 billion.
+If the expected additional punishment for increasing the scale of corruption from Rp 10 million to Rp 100 billion is only 6.3 years, the marginal cost of additional corruption is approximately Rp 16 billion per year of additional imprisonment. For a rational actor, this makes larger-scale corruption overwhelmingly favorable: the "price" of corruption, measured in prison time per rupiah stolen, decreases by approximately 99.97% as the scale increases from Rp 10 million to Rp 100 billion.
 
 Within a rational-choice framework, this broken proportionality predicts weak deterrence against escalation: once a public official has crossed into corruption, the marginal punishment for increasing the scale is negligible. We do not claim that all corruption is rationally calculated — institutional culture, opportunity structures, and social norms all play roles (Lambsdorff, 2007). But to the extent that punishment signals matter at all, the current signal is perverse: the system imposes a near-flat tariff regardless of scale.
 
@@ -144,7 +155,7 @@ Our finding that prosecution demands are less predictable than sentences (R-squa
 
 Cross-national comparisons support this interpretation. Our sentence-from-demand R-squared of 0.60 matches the Dutch sentencing benchmark (van Wingerden et al., 2016, R-squared=0.60 with multiple predictors) and exceeds the majority of 28 sentencing regression studies reviewed by Wittenbrink and Niehaus (2022). The approximately 40% unexplained sentencing variance is thus not a distinctively Indonesian phenomenon — it is consistent with judicial discretion levels observed globally.
 
-What IS distinctively Indonesian is the broken proportionality at the prosecutorial stage. The demand-loss elasticity of 0.109 suggests that Indonesian prosecutors have compressed the vast range of corruption severity into a narrow demand band — a compression that then propagates through the anchored judicial system.
+What IS distinctive is the *degree* of compression at the prosecutorial stage. The demand-loss elasticity of 0.126 is roughly half the about 0.25–0.30 implied by the US loss table — the most explicitly loss-graduated regime in comparative practice — yet Indonesia reaches this compression with no sentencing or charging guidelines at all. Where the US graduates punishment by loss through a deliberate, contested, and now-reforming 16-tier schedule (United States Sentencing Commission, 2024, 2025), Indonesian prosecutors compress the vast range of corruption severity into a narrow demand band as an unstructured by-product of discretion. That band then propagates through the faithfully anchored judicial system, so a reform aimed only at judges would leave the binding constraint untouched.
 
 ### 5.4 Policy Implications
 
@@ -160,13 +171,13 @@ What IS distinctively Indonesian is the broken proportionality at the prosecutor
 
 **Kerugian negara measurement.** State financial loss figures are extracted from verdict metadata and may not reflect the actual harm. Loss quantification in corruption cases is contested and sometimes reflects prosecutorial framing rather than objective measurement.
 
-**Confounders.** Variables not captured in our data — defendant cooperation, plea agreements, strength of evidence, defendant status, case complexity — may explain some of the demand variation we attribute to prosecutorial discretion. However, even if these confounders partially explain the low elasticity, the finding that R-squared=0.244 for the loss-demand relationship remains consequential: loss magnitude is a weak predictor of prosecution demand regardless of mechanism.
+**Confounders.** Variables not captured in our data — defendant cooperation, plea agreements, strength of evidence, defendant status, case complexity — may explain some of the demand variation we attribute to prosecutorial discretion. However, even if these confounders partially explain the low elasticity, the finding that R²=0.285 for the loss-demand relationship remains consequential: loss magnitude is a weak predictor of prosecution demand regardless of mechanism.
 
 **Tuntutan level.** Our tuntutan variable may refer to the original district court demand or to the prosecution's position at cassation. Two observations suggest it is the original demand. First, the mean sentencing discount (vonis/tuntutan = 0.78) implies judges consistently reduce demands by ~22% — a pattern consistent with PN-level demands being discounted, not with cassation-level demands that would have been adjusted to approximate the expected outcome. Second, in 75% of cases vonis falls below tuntutan, inconsistent with cassation-level demands that would more closely track the eventual sentence. Nevertheless, we cannot rule out that some tuntutan values reflect cassation-stage adjustments, which would compress the demand range and bias our elasticity estimate downward.
 
 ## 6. Conclusion
 
-We document a striking failure of proportionality in Indonesian corruption prosecution: the elasticity of prosecution demand with respect to state financial loss is only 0.109, meaning that a 10,000-fold increase in corruption scale produces only a 2.7-fold increase in the prosecution demand. This inelasticity is not explained by statutory caps, geographic variation, or charge type.
+We document a striking failure of proportionality in Indonesian corruption prosecution: the elasticity of prosecution demand with respect to state financial loss is only 0.126, meaning that a 10,000-fold increase in corruption scale produces only a 3.2-fold increase in the prosecution demand. Because punishment is bounded, some compression is inevitable; but Indonesia's elasticity is roughly half that of the explicitly loss-graduated US sentencing system and is achieved without any guideline structure. This inelasticity is not explained by statutory caps, geographic variation, or charge type.
 
 The broken proportionality creates a regressive prosecution structure where small-scale corruption is punished disproportionately harshly relative to harm, while mega-corruption receives an implicit "volume discount." This has direct implications for deterrence: the marginal punishment for escalating corruption is negligible, creating a rational-actor incentive to maximize the scale of corrupt acts.
 
@@ -212,7 +223,11 @@ Tversky, A., & Kahneman, D. (1974). Judgment under Uncertainty: Heuristics and B
 
 Ulmer, J. T. (2012). Recent developments and new directions in sentencing research. *Justice Quarterly*, 29(1), 1-40.
 
-van Wingerden, S., van Wilsem, J., & Roosma, F. (2016)."; Sentencing in the Netherlands: Determinants of severity and judicial consistency. *European Journal of Criminology*, 13(4), 489-512.
+United States Sentencing Commission (2024). *Guidelines Manual*, §2B1.1 (Theft, Property Destruction, and Fraud). Washington, DC: USSC.
+
+United States Sentencing Commission (2025). *Proposed Amendments to the Federal Sentencing Guidelines: Economic Crime (§2B1.1 Loss Table)*. Washington, DC: USSC.
+
+van Wingerden, S., van Wilsem, J., & Roosma, F. (2016). Sentencing in the Netherlands: Determinants of severity and judicial consistency. *European Journal of Criminology*, 13(4), 489-512.
 
 von Hirsch, A. (1992). Proportionality in the Philosophy of Punishment. *Crime and Justice*, 16, 55-98. https://doi.org/10.1086/449204
 
