@@ -20,9 +20,9 @@ Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Ana
 
 ## Author Information
 - Mukhlis Amien
-- Affiliation: [University], Malang, East Java, Indonesia
-- ORCID: [to be added]
-- Email: [to be added]
+- Affiliation: Department of Informatics, Universitas Bhinneka Nusantara, Malang, East Java, Indonesia
+- ORCID: 0000-0002-1848-167X
+- Email: amien@ubhinus.ac.id
 
 ## Suggested Reviewers (for editor consideration)
 1. Expert in computational legal analysis / legal NLP
@@ -32,11 +32,11 @@ Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Ana
 ## Word Count
 - Abstract: ~165 words
 - Main text: ~5100 words
-- References: 18 items
+- References: 22 items
 - Supplementary: 8 tables
 
 ## Declarations
-- Funding: [self-funded / institutional]
+- Funding: This research received no external funding
 - Conflicts of interest: None
 - Data availability: Code and structured data at [repository URL]
 - Ethics: Analysis of publicly available court documents; no human subjects

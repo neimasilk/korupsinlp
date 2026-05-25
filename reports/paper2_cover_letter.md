@@ -14,8 +14,12 @@ This study presents the first large-scale computational analysis of Indonesian c
 
 We believe this manuscript fits well within the scope of *Crime, Law and Social Change* for several reasons: it addresses corruption sentencing — a core topic of the journal — using rigorous quantitative methods applied to a novel Southeast Asian dataset. The findings have direct policy implications for anti-corruption reform, judicial transparency, and sentencing consistency monitoring in Indonesia.
 
-The manuscript has not been submitted elsewhere and all authors approve this submission. Code and data are available for reproducibility.
+The manuscript has not been submitted elsewhere. Code and data are available for reproducibility. A preprint version has been posted on SSRN (Abstract ID: 6574140).
+
+In accordance with Springer Nature's policy on AI-assisted tools, I disclose that Claude (Anthropic) was used as a computational research assistant for programming, literature search, and manuscript drafting. All analyses were independently verified through reproducible scripts, and I take full responsibility for all scientific claims and interpretations. Full details are provided in the Declarations section of the manuscript.
 
 Sincerely,
 Mukhlis Amien
-Universitas [X], Malang, Indonesia
+Department of Informatics, Universitas Bhinneka Nusantara, Malang, Indonesia
+Email: amien@ubhinus.ac.id
+ORCID: 0000-0002-1848-167X
