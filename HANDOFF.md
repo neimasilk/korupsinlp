@@ -1,114 +1,65 @@
-# Handoff — Session 14-15 → Session 16
+# Handoff — Session 16 (2026-05-25) → Next
 
-## Status: **Paper 2 SUBMITTED (CLSC), Paper 4 on SSRN + hardened for journal, Papers 3+5 ready**
+## Status: Paper 2 DESK-REJECTED by CLSC. Program reframed around Paper 4 (upstream prosecutorial proportionality failure). Paper 4 reworked & submit-ready.
 
-Monster sessions 14-15: CLSC submitted, SSRN Paper 4 uploaded (ID: 6580258), 6 analysis scripts, 3 paper drafts, critical review with 7 blind spots identified + 3 pivots executed, 11 publication figures, cross-national benchmark documented. Paper 4 thesis-killer review completed — all 3 killers addressed and paper strengthened.
+---
 
-## Paper Pipeline
+## The big reframe this session
 
-| # | Paper | Status | Key Finding | Next Action |
-|---|-------|--------|-------------|-------------|
-| 2 | Charge Type + Opacity | **SUBMITTED** CLSC (CRIS-S-26-00344) + SSRN (6574140) | P2 b=+0.73, R2=0.60 | Wait for review |
-| **4** | **Broken Proportionality** | **SSRN live (6580258), thesis-killer hardened** | **Elasticity=0.109, CI [0.078, 0.148]** | **Submit to EJCPR** |
-| 3 | Bidirectional Anchoring | Draft updated + 4 figures | Quadratic F=11.30, power analysis | Hold until Paper 2 decision |
-| 5 | Corruption Anatomy | Draft + robustness | Village penalty 4.7x, fiktif 33% | Hold until Paper 2 decision |
-| DI | Darkness Index | Pilot fixed | Under-detected: JaTeng, Banten, Lampung | Need real BPS data |
-| 1 | CorpusKorupsi | Needs restructure | Dataset contribution | Extract as data paper |
+- **Paper 2 (CRIS-D-26-00272) was DESK-REJECTED by CLSC on 2026-05-22** on *novelty* grounds ("does not make the kind of novel theoretical or empirical contribution... we are looking for") — NOT methods. It sat ~5 weeks then was rejected = a considered decision. The previous handoff wrongly recorded it as "under review."
+- **External confirmation of an ignored internal warning.** Session 14's own critique already flagged "R²=0.60 is normal globally" and "manifesto↔research gap." That warning was filed, then ignored while 4 more papers were produced from the same 367 MA verdicts.
+- **Root diagnosis — "searching under the streetlight":** the portfolio answers *HOW judges sentence* (convenient data) instead of the manifesto's *WHY corruption persists*. Competing in crowded fields (sentencing → criminologists; audit-corruption → accountants) where others have better data positioning. The real moat is the verdict-text corpus + NLP.
+- **Two pivots killed fast (fail-fast):** (1) Darkness Index — saturated in Indonesian public-sector accounting literature (BPK's own TAKEN journal published it); (2) reposition Paper 3 — regression-to-the-mean explains the compression + cassation confound, both unresolved.
+- **New unifying thesis (touches the manifesto's "why"):** the proportionality failure is **UPSTREAM (prosecutorial), not judicial.** Judges anchor faithfully (R²=0.60, globally normal); the anchor itself (tuntutan) is inelastic to harm. Papers 2 & 3 become supporting evidence for ONE thesis, not 4 salami submissions.
 
-## IMMEDIATE NEXT: Submit Paper 4 to EJCPR
+## Paper 4 — reworked & submit-ready (commit 659af0c)
 
-**Target:** European Journal on Criminal Policy and Research (Springer, Scopus Q2, FREE)
-**Why:** "Criminal policy" = perfect fit for broken proportionality finding. Springer = Editorial Manager (familiar). Free for authors.
-**Submission URL:** Find via https://www.springer.com/journal/10610 → Submit manuscript
-**Files ready:** reports/paper4_draft.pdf (hardened), reports/paper4_draft.docx
+| Item | Before | After |
+|------|--------|-------|
+| Elasticity (tuntutan~kerugian) | 0.109 (uncleaned) | **0.126** cleaned, CI [0.102, 0.156], R²=0.285 |
+| Data | Rp 100 parse error + PT Timah co-defendant triple inflating leverage | dropped/flagged; cleaning STRENGTHENS finding (robustness table in script 16) |
+| Framing | naive "proportionality = elasticity 1.0" straw man | comparative: US Sentencing Guidelines §2B1.1 loss table (~0.25–0.30) + Dec-2025 USSC reform debate. Indonesia ~0.13 = half of even the explicitly loss-graduated system, unstructured |
+| Artifacts | — | abstract/§2.1/§3.1/§4.1/§5/refs rewritten; fig7 relabeled; DOCX+PDF regenerated; SSRN 6580258 live |
 
-### Paper 4 Thesis-Killer Hardening (completed session 15)
+## Venue decision (constraints: Scopus + FREE; Q irrelevant per user). Submit SEQUENTIALLY, never parallel.
 
-| Killer | Attack | Defense Added |
-|--------|--------|---------------|
-| Multi-dimensional severity | "Kerugian isn't the only severity measure" | Controlled for restitution (p=0.25, elasticity unchanged). Added paragraph: even granting multi-dimensionality, 0.109 is too extreme. |
-| Tuntutan level ambiguity | "Maybe it's cassation-level demand" | Evidence it's PN-level: discount=0.78, 75% vonis < tuntutan. If cassation, discount should be ~1.0. |
-| Statutory minimum floor | "Low elasticity = statutory floor, not prosecutors" | TURNED INTO STRENGTH: excluding tuntutan < 4yr, elasticity DROPS to 0.070. Floor actually helps proportionality. |
-| Deterrence assumes rationality | "Corruption isn't rational calculation" | Softened: "within a rational-choice framework" + cited Lambsdorff institutional economics. |
+1. **PRIMARY — Asian Journal of Criminology** (Springer, Scopus **Q1**/SSCI, subscription = free to publish). Regional fit attacks the exact cause of Paper 2's desk-reject (general journals ask "why does this matter globally?"; a regional journal treats Indonesian corruption as core).
+2. **Backup — EJCPR** (European J. on Criminal Policy & Research; Springer, Scopus Q1, hybrid = free). Criminal-policy fit.
+3. **Safety net — IJCJS** (Int'l J. of Criminal Justice Sciences; Diamond OA, fully free, Scopus Q3 + WoS; publishes Indonesian work). Guarantees Scopus placement.
 
-### Paper 4 Robustness (all pass, script 18)
-- Bootstrap 95% CI: [0.078, 0.148] — excludes 0 and 1
-- Formal test H0=1.0: p=2.92e-197
-- HC3 robust: p=6.53e-132
-- All subsamples consistent (temporal, charge type, village, size)
-- Outlier-resistant (Cook's d removal → elasticity increases to 0.137)
-- Quadratic not significant — constant elasticity adequate
+## Portfolio triage
 
-## SSRN Papers
+| Paper | Verdict | Action |
+|-------|---------|--------|
+| 2 (charge type/opacity) | Dead as flagship (desk-rejected, R²=0.60 normal) | Keep on SSRN 6574140; fold charge-type finding as supporting evidence |
+| **4 (broken proportionality)** | **FLAGSHIP, submit-ready** | → Asian Journal of Criminology |
+| 3 (bidirectional anchoring) | HOLD — RTM + cassation confound unresolved | Needs PN trial-level data for clean identification |
+| 5 (corruption anatomy) | Weakest novelty | SSRN/hold |
 
-| Paper | SSRN ID | URL | Status |
-|-------|---------|-----|--------|
-| Paper 2 | 6574140 | papers.ssrn.com/abstract=6574140 | Submitted 14 Apr |
-| Paper 4 | 6580258 | papers.ssrn.com/abstract=6580258 | Submitted 15 Apr |
+## Immediate next actions
 
-## Critical Review Findings (session 14)
+1. **Prepare AJC submission package** — format manuscript to AJC guidelines, cover letter (disclose SSRN 6580258 preprint + Paper 2 companion), structured abstract + keywords + JEL codes, 3–5 reviewer suggestions. (Claude can do this; user submits via own login.)
+2. **Domain input wanted from user** for §5.1: institutional cause of prosecutorial inelasticity — Kejaksaan tuntutan culture? target-conviction incentives? asymmetry vs powerful defendants?
+3. **Medium-term: PN (trial-level) scraping** — re-justified as the identification fix for the cassation confound in Papers 3 & 4, NOT "more sentencing papers."
+4. Find a legal/criminology collaborator (the closed human-AI loop's blind spot is what the desk-reject exposed).
 
-1. **Gap Manifesto↔Research:** Sentencing analysis = end of pipeline. Manifesto asks about whole system.
-2. **Cross-national benchmark:** R2=0.60 is NORMAL globally (matches Netherlands). "Opacity" needs reframing.
-3. **Prosecutorial discretion is the upstream problem** — Paper 4 proves this (R2=0.315 vs 0.600).
-4. **n=367 salami slicing risk** — don't submit Papers 3+5 simultaneously with Paper 2.
-5. **PN-level data needed** — MA texts too prosedural for text mining.
-6. **Need legal collaborator** — all interpretation from informatika perspective.
+## Key lesson (also in project memory)
 
-## Strategic Roadmap
+Internal adversarial review optimized for "will a reviewer find a methodological hole?" but never asked the gatekeeper's question "is this novel/significant enough to matter?" → add a **contribution-significance gate** before journal investment; get an external signal (preprint + a real criminologist) before the editor does.
 
-| Timeframe | Action |
-|-----------|--------|
-| Session 16 | Submit Paper 4 to EJCPR |
-| Week 1-2 | Start PN scraping infrastructure |
-| Week 2-3 | Email 3-5 legal collaborator candidates |
-| Week 3-6 | PN corpus building (target 1000+ verdicts) |
-| Month 2-3 | Wait Paper 2 review → use feedback for Papers 3+5 |
-| Month 3-4 | New papers from PN data |
+## Verification
 
-## All Scripts
-
-| Script | Purpose |
-|--------|---------|
-| scripts/11_paper2_analysis.py | Paper 2 main analysis |
-| scripts/12_robustness_tests.py | Paper 2 robustness (7 tests) |
-| scripts/13_anchoring_analysis.py | Paper 3 anchoring analysis |
-| scripts/14_paper3_extended.py | Paper 3 extended (power, interaction, RTM) |
-| scripts/15_darkness_index_pilot.py | Darkness Index pilot |
-| scripts/16_prosecutorial_analysis.py | Paper 4 main analysis |
-| scripts/17_corruption_anatomy.py | Paper 5 anatomy/typology |
-| scripts/18_paper4_robustness.py | Paper 4 robustness (12 tests) |
-
-## All Figures (reports/figures/)
-
-| Figure | Paper | Content |
-|--------|-------|---------|
-| fig1_scatter_quadratic.png | Paper 3 | Scatter + quadratic fit + crossover |
-| fig2_discount_bands.png | Paper 3 | Discount + upward departure by band |
-| fig3_power_curve.png | Paper 3 | Power analysis curve |
-| fig4_temporal_comparison.png | Paper 3 | Pre-2024 vs 2024+ quadratic |
-| fig5_raw_vs_normalized.png | DI | Raw vs per-capita ranking |
-| fig6_darkness_score.png | DI | Darkness score by province |
-| fig7_kerugian_tuntutan.png | Paper 4 | Kerugian vs tuntutan log-log |
-| fig8_appeal_patterns.png | Paper 4 | Prosecutor vs defendant appeals |
-| fig9_corruption_anatomy.png | Paper 5 | Actor types + modus operandi |
-| fig10_treatment_by_type.png | Paper 5 | Treatment by corruption cluster |
-| fig11_elasticity_bootstrap.png | Paper 4 | Bootstrap distribution of elasticity |
-
-## Verification Commands
 ```bash
-python -m pytest tests/ -q                     # 69 passed
-python -m scripts.11_paper2_analysis           # Paper 2
-python -m scripts.13_anchoring_analysis        # Paper 3
-python -m scripts.14_paper3_extended           # Paper 3 extended
-python -m scripts.16_prosecutorial_analysis    # Paper 4
-python -m scripts.17_corruption_anatomy        # Paper 5
-python -m scripts.18_paper4_robustness         # Paper 4 robustness
+python -m pytest tests/ -q                      # 69 passed (as of session 12)
+python -m scripts.16_prosecutorial_analysis     # elasticity 0.126 cleaned + robustness table + fig7/fig8
 ```
+- Branch: `autoresearch/apr9-textfeatures`
+- DOCX/PDF built with pandoc + xelatex (pandoc at `~/AppData/Local/Pandoc`)
+- python: anaconda (`~/anaconda3/python`); no `.venv` present this session
 
-## HUMAN ACTIONS
-1. **Submit Paper 4 to EJCPR** (session 16 — Playwright assisted)
-2. **Check email** for SSRN confirmations (Paper 2 + Paper 4) and CLSC acknowledgment
-3. **Update SSRN profile** — add affiliation (Universitas Bhinneka Nusantara) + ORCID (0000-0002-1848-167X)
-4. **Review Paper 4 final draft** — particularly the deterrence framing and "multi-dimensional severity" defense
-5. **Consider legal collaborators** — hukum pidana at UI/UGM/UNAIR/UNDIP, researchers at LeIP/ICW
+## SSRN (both live)
+- Paper 2: 6574140 · Paper 4: 6580258
+
+## Recent commits
+- `659af0c` Paper 4 rework: comparative reframe + cleaned elasticity (flagship)
+- `faca620` sessions 13-17: 4 paper drafts, 7 scripts, 11 figures, critical reviews
