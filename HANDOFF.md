@@ -2,12 +2,29 @@
 
 ## Status: PARSER SUDAH DIPERBAIKI & DI-COMMIT (`ebcd238`). Re-ekstraksi 693 putusan BERJALAN saat handoff ditulis (214/693) — **KEMUNGKINAN TERPOTONG oleh shutdown. BACA "RECOVERY" DI BAWAH SEBELUM ANALISIS APA PUN.** Paper 2 = satu-satunya submission (desk-reject CLSC). Paper 4 BELUM PERNAH disubmit (terkonfirmasi via email SSRN — hanya preprint).
 
-## ⚠️ RECOVERY RE-EKSTRAKSI (kerjakan PERTAMA di sesi berikutnya)
+## ✅ RE-EKSTRAKSI SELESAI (693/693, exit 0, sebelum shutdown) — ANGKA BARU PRELIMINER
 
-1. Cek kelengkapan: `python -c "import sqlite3; c=sqlite3.connect(r'data/korupsinlp.db'); print(c.execute(\"select count(*) from verdicts where date(parsed_at) >= '2026-07-07'\").fetchone()[0], '/693')"`
-2. Jika < 693: DB dalam keadaan CAMPURAN (sebagian nilai parser lama, sebagian baru) — **JANGAN analisis**. Jalankan ulang sampai tuntas: `python -m scripts.03_parse_sample` (idempoten, re-parse semua baris, ±20-30 menit).
-3. Backup DB pra-re-ekstraksi ada di `data/korupsinlp_pre_reparse_s17.db` (kalau butuh rollback/diff lama-vs-baru).
-4. Setelah 693/693: `python -m scripts.16_prosecutorial_analysis` dan `python scripts/19_fair_comparison.py` → **bandingkan elasticity baru vs 0.126** (prediksi: naik, karena bug kerugian menukar angka audit dengan uang pengganti yang lebih kecil). Semua angka Paper 4 (abstrak, tabel §4, robustness, §5) harus di-update dari hasil baru.
+Backup DB lama tetap di `data/korupsinlp_pre_reparse_s17.db` (untuk diff lama-vs-baru).
+Hasil `scripts/19_fair_comparison.py` pada DB baru (**PRELIMINER — jangan masuk paper
+sebelum holdout validation**):
+
+| Metrik | Lama (parser buggy) | **Baru (parser fixed)** |
+|---|---|---|
+| n sampel elasticity | 290 | **237** (kerugian palsu dari uang pengganti kini NULL — sampel lebih kecil tapi bersih; coverage kerugian 49.6%→40.0%) |
+| Elasticity tuntutan~kerugian | 0.126 | **0.097** (SE 0.013, R²=0.197) — kompresi LEBIH parah; vs realized AS 0.288 → Indonesia ≈ **sepertiga**, bukan "kurang dari separuh" |
+| Elasticity vonis~kerugian | 0.137 | 0.123 |
+| Anchor vonis~tuntutan R² | 0.597 | **0.647** — anchoring lebih kuat dengan vonis yang benar |
+| R²(tuntutan\|fakta) vs R²(vonis\|fakta) | 0.357 vs 0.355 (setara) | **0.319 vs 0.423 — TIDAK lagi setara!** Vonis kini LEBIH terprediksi dari fakta perkara daripada tuntutan |
+
+**Konsekuensi penulisan**: §4.2/§5.3/abstrak Paper 4 yang saya tulis ulang sesi ini
+("discretion enters once — equally unpredictable") **harus ditulis ulang LAGI** — data
+bersih justru MENDUKUNG klaim asli paper ("prosecutors less predictable than judges"),
+sekarang lewat perbandingan yang fair. Ini contoh bagus untuk §metodologi: bug parser
+mengaburkan temuan; instrumen bersih menajamkannya.
+
+**Field success pasca-fix** (03_parse_sample): P0 avg 67.1%; kerugian 277/693 (40%) —
+turun karena false positive terhapus (kejujuran, bukan regresi); nama_jaksa 0.3% (memang
+rusak, tidak dipakai paper).
 
 > **Fakta keras program sekarang hidup di ledger, bukan di file ini**: `SUBMISSIONS.md`,
 > `GATES.md`, `DECISIONS.md`, `MAP.md`. Baca keempatnya di awal sesi. File ini hanya narasi.
@@ -70,11 +87,15 @@
 
 ## Immediate next actions (urutan)
 
-1. **Recovery re-ekstraksi** (lihat atas) → angka elasticity baru → update Paper 4.
-2. **Validasi holdout 20 kasus SEGAR** (anti-overfit ke golden30): sampling stratified baru
-   (pakai pola scripts di scratchpad/golden_sample.py → sudah hilang, tulis ulang ±20 baris,
-   exclude 30+25 kasus lama), validasi via 2 agent Sonnet (prompt sama seperti sesi ini),
-   hitung akurasi. Target: vonis/kerugian ≥90% → **G2 HIJAU**.
+1. **Validasi holdout 20 kasus SEGAR** (anti-overfit ke golden30): sampling stratified baru
+   (tulis ulang ±20 baris, exclude 30+25 kasus lama), validasi via 2 agent Sonnet (prompt
+   sama seperti sesi ini), hitung akurasi terhadap NILAI DB BARU. Target: vonis/kerugian
+   ≥90% → **G2 HIJAU** → baru angka preliminer di atas boleh masuk Paper 4.
+1b. **Update Paper 4 dengan angka baru** — elasticity 0.097 [CI dari bootstrap script 16],
+   n=237, anchor 0.647, dan §4.2/§5.3/abstrak ditulis ulang LAGI (lihat tabel di atas —
+   arah klaim berubah kembali mendukung versi asli, dengan spec yang fair). Jalankan juga
+   `python -m scripts.16_prosecutorial_analysis` (robustness table + fig7/8 regenerate) dan
+   `python -m scripts.18_paper4_robustness` bila ada.
 3. D15 wiring: `is_tipikor_document` sudah ada di fields.py tapi BELUM dipakai pipeline —
    tambahkan flag/filter saat re-parse atau post-hoc; audit berapa kasus non-tipikor di 693.
 4. G4 editor-simulation vs scope AJC → rebuild DOCX/PDF (pandoc) → user submit perdana ke AJC.
