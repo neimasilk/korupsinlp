@@ -19,40 +19,108 @@ def _strip_watermark(text: str) -> str:
     return _MA_WATERMARK_RE.sub(' ', text)
 
 
-def _find_penjara(text_lower: str) -> float | None:
+# Left-context markers indicating a prison term is a SUBSIDIARY clause
+# (imprisonment in lieu of unpaid uang pengganti), not the primary sentence.
+# Keep narrow & specific — generic words (denda) appear in legitimate amars.
+_SUBSIDIARY_BLOCKERS = (
+    "uang pengganti", "tidak membayar", "tidak dibayar",
+    "kurungan pengganti", "diganti dengan pidana", "diganti pidana",
+    "tidak mencukupi",
+)
+
+
+def _is_subsidiary_context(text_lower: str, pos: int, window: int = 120) -> bool:
+    """True if the penjara match at pos sits in a subsidiary-penalty clause.
+
+    Window is deliberately tight: the trigger phrase ("apabila uang pengganti
+    tidak dibayar ... diganti dengan pidana penjara") sits in the same clause;
+    a wide window bleeds in the PREVIOUS numbered item of an amar list.
+
+    "subsidair/subsidiair/subsider" marks a subsidiary PENALTY — except in
+    "dakwaan subsidiair", which is a CHARGE tier and must not block.
+    """
+    left = text_lower[max(0, pos - window):pos]
+    if any(b in left for b in _SUBSIDIARY_BLOCKERS):
+        return True
+    for m in re.finditer(r'subsid[a-z]*', left):
+        if 'dakwaan' not in left[max(0, m.start() - 12):m.start()]:
+            return True
+    return False
+
+
+def is_tipikor_document(text: str) -> bool:
+    """Domain filter: does this verdict concern corruption at all?
+
+    Guards against non-tipikor Pid.Sus cases (narcotics, etc.) leaking into
+    the corpus via the global scrape (DECISIONS.md D15).
+    """
+    if not text:
+        return False
+    tl = text.lower()
+    markers = ("korupsi", "tipikor", "31 tahun 1999", "20 tahun 2001",
+               "pemberantasan tindak pidana korupsi")
+    return any(m in tl for m in markers)
+
+
+def _find_penjara(text_lower: str, exclude_subsidiary: bool = True) -> float | None:
     """Find prison sentence duration in a text fragment.
 
     Handles both spaced ("penjara selama 8 tahun") and merged
     ("penjara selama8 (delapan) Tahun") text from PN catatan_amar.
+    Skips subsidiary clauses (imprisonment in lieu of unpaid uang pengganti)
+    unless exclude_subsidiary=False.
     """
-    # Tahun [dan bulan] — \s* allows merged text
-    m = re.search(
-        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
+    # Tahun [dan bulan] — \s* allows merged text; "masing-masing" handles
+    # multi-defendant amars ("penjara masing-masing selama 4 tahun")
+    for m in re.finditer(
+        r'(?:pidana\s+)?penjara\s*(?:masing-masing\s*)?(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
         r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
         text_lower,
-    )
-    if m:
+    ):
+        if exclude_subsidiary and _is_subsidiary_context(text_lower, m.start()):
+            continue
         years = int(m.group(1))
         months = int(m.group(2)) if m.group(2) else 0
         return years * 12 + months
 
     # Bulan only
-    m = re.search(
-        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
+    for m in re.finditer(
+        r'(?:pidana\s+)?penjara\s*(?:masing-masing\s*)?(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
         text_lower,
-    )
-    if m:
+    ):
+        if exclude_subsidiary and _is_subsidiary_context(text_lower, m.start()):
+            continue
         return float(m.group(1))
 
     return None
 
 
+def _is_full_acquittal(section: str) -> bool:
+    """True if section contains a FULL acquittal amar.
+
+    "Membebaskan ... dari dakwaan primair" alone is a PARTIAL acquittal
+    (conviction on subsidiair follows); "primair dan subsidiair" or
+    "semua/seluruh dakwaan" (or no qualifier) is a full acquittal.
+    """
+    m = re.search(r'(?:membebaskan|melepaskan)\s+(?:para\s+)?(?:terdakwa|terpidana)', section)
+    if not m:
+        return False
+    after = section[m.start():m.start() + 400]
+    if re.search(r'dakwaan\s+primair', after) and not re.search(
+            r'primair\s+dan\s+(?:dakwaan\s+)?subsid|semua\s+dakwaan|seluruh\s+dakwaan',
+            after):
+        return False
+    return True
+
+
 def _find_all_mengadili(text_lower: str) -> list[int]:
     """Find all MENGADILI section positions in text."""
     positions = []
-    for pat in [r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i', r'mengadili\s*:', r'mengadili\s*\n']:
+    # Variants: spaced header, colon, newline, merged-with-hyphen ("MENGADILI-Menolak")
+    for pat in [r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i', r'mengadili\s*:',
+                r'mengadili\s*\n', r'mengadili\s*[-–—]']:
         for m in re.finditer(pat, text_lower):
             # Don't add duplicates (close positions from different patterns)
             if not any(abs(m.start() - p) < 50 for p in positions):
@@ -69,30 +137,31 @@ def _extract_mengadili_sentence(text_lower: str, start: int, end: int | None = N
     # Use 10000 char window (PN catatan_amar can have long merged text)
     section = text_lower[start:end] if end else text_lower[start:start + 10000]
 
-    # Priority: "menjatuhkan pidana...penjara selama X tahun"
-    # \s* allows merged text from PN catatan_amar
-    m = re.search(
-        r'menjatuhkan\s*pidana\s*(?:kepada\s*terdakwa\s*)?'
-        r'(?:oleh\s+karena\s+itu\s+)?(?:dengan\s+)?'
-        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
+    # Priority: "menjatuhkan/menghukum pidana ... penjara selama X tahun".
+    # Bounded [\s\S] gap tolerates "kepada/terhadap Terdakwa <nama+gelar>";
+    # subsidiary clauses (uang pengganti) are skipped via context check.
+    for m in re.finditer(
+        r'(?:menjatuhkan|menghukum)\s*pidana[\s\S]{0,150}?'
+        r'penjara\s*(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
         r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
         section,
-    )
-    if m:
+    ):
+        if _is_subsidiary_context(section, m.start(1)):
+            continue
         years = int(m.group(1))
         months = int(m.group(2)) if m.group(2) else 0
         return years * 12 + months
 
     # Bulan only in sentencing context
-    m = re.search(
-        r'menjatuhkan\s*pidana\s*(?:kepada\s*terdakwa\s*)?'
-        r'(?:oleh\s+karena\s+itu\s+)?(?:dengan\s+)?'
-        r'(?:pidana\s+)?penjara\s*(?:selama\s*|menjadi\s*)?'
+    for m in re.finditer(
+        r'(?:menjatuhkan|menghukum)\s*pidana[\s\S]{0,150}?'
+        r'penjara\s*(?:selama\s*|menjadi\s*)?'
         r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
         section,
-    )
-    if m:
+    ):
+        if _is_subsidiary_context(section, m.start(1)):
+            continue
         return float(m.group(1))
 
     return None
@@ -106,16 +175,20 @@ def _find_quoted_lower_court_sentence(text_lower: str, mengadili_pos: int) -> fl
     near patterns like "Putusan Pengadilan Negeri/Tinggi X" or "amar putusannya".
     We search backwards from the MENGADILI position.
     """
-    # Search the text before the MENGADILI section for quoted court decisions
-    # Look in the last 30,000 chars before MENGADILI (PN amar is typically quoted
-    # in the case narrative)
-    search_start = max(0, mengadili_pos - 30000)
-    search_text = text_lower[search_start:mengadili_pos]
+    # Search the WHOLE text before the MENGADILI section for quoted court
+    # decisions — in long documents (large dakwaan sections) the quoted amar
+    # can sit 100k+ chars before the MA amar. The closest decision quote with
+    # an extractable sentence wins, so early procedural mentions are harmless.
+    search_text = text_lower[:mengadili_pos]
 
-    # Find all "Putusan Pengadilan" references with subsequent penjara sentences
+    # Quoted decision references, in chain order: the LAST (closest to
+    # MENGADILI) quoted decision is the one whose amar stands when MA rejects.
+    # Includes "putusan mahkamah agung" — in PK documents the standing amar is
+    # the prior kasasi decision, not PN/PT. Requiring "Nomor" nearby filters
+    # out party REQUESTS ("amar sebagai berikut...") that quote no decision.
     court_patterns = [
-        r'putusan\s+pengadilan\s+(?:negeri|tinggi|tindak\s+pidana)',
-        r'amar\s+putusan(?:nya)?\s+(?:sebagai\s+berikut|adalah|berbunyi)',
+        r'putusan\s*(?:pengadilan\s*(?:negeri|tinggi|tipikor|tindak\s*pidana)'
+        r'|mahkamah\s*agung)[\s\S]{0,120}?nomor',
     ]
 
     best_result = None
@@ -123,18 +196,49 @@ def _find_quoted_lower_court_sentence(text_lower: str, mengadili_pos: int) -> fl
 
     for pat in court_patterns:
         for m in re.finditer(pat, search_text):
+            # Skip quotes of what a party REQUESTED (JPU memori kasasi:
+            # "memohon agar ... menjatuhkan pidana ...") — not a decision.
+            # Tight window: the request verb directly precedes "putusan";
+            # wider windows catch verbs from unrelated preceding sentences.
+            req_left = search_text[max(0, m.start() - 60):m.start()]
+            if any(w in req_left for w in ("supaya", "memohon", "menuntut agar",
+                                           "mohon agar", "agar kiranya")):
+                continue
             section = search_text[m.start():m.start() + 2000]
-            pm = re.search(
-                r'(?:menjatuhkan|menghukum)\s+pidana.*?penjara\s+'
-                r'(?:selama\s+|menjadi\s+)?'
+            found = None
+            # FULL acquittal amar first — the 2000-char window can reach past
+            # a bebas amar into quoted tuntutan text with penjara numbers
+            if _is_full_acquittal(section):
+                found = 0
+            # "Memperbaiki ... menjadi ... penjara X" inside the quoted amar:
+            # the corrected value is the standing one
+            fm = None if found is not None else re.search(
+                r'memperbaiki[\s\S]{0,400}?menjadi[\s\S]{0,200}?'
+                r'penjara(?:[\s\S]{0,80}?selama)?\s*'
                 r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
-                r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
-                section,
-            )
-            if pm and m.start() > best_pos:
-                years = int(pm.group(1))
-                months = int(pm.group(2)) if pm.group(2) else 0
-                best_result = years * 12 + months
+                r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+                section)
+            if fm and not _is_subsidiary_context(section, fm.start(1)):
+                found = int(fm.group(1)) * 12 + (int(fm.group(2)) if fm.group(2) else 0)
+            if found is None:
+                for pm in re.finditer(
+                    r'(?:menjatuhkan|menghukum|dijatuhi)\s*pidana[\s\S]{0,300}?penjara'
+                    r'(?:[\s\S]{0,80}?selama|\s*menjadi)?\s*'
+                    r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+                    r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+                    section,
+                ):
+                    if _is_subsidiary_context(section, pm.start(1)):
+                        continue
+                    years = int(pm.group(1))
+                    months = int(pm.group(2)) if pm.group(2) else 0
+                    found = years * 12 + months
+                    break
+            # A quoted FULL acquittal amar counts as sentence 0
+            if found is None and _is_full_acquittal(section):
+                found = 0
+            if found is not None and m.start() > best_pos:
+                best_result = found
                 best_pos = m.start()
 
     return best_result
@@ -163,11 +267,23 @@ def _find_memperbaiki_sentence(text_lower: str, mengadili_pos: int) -> float | N
     When MA says "Memperbaiki Putusan X mengenai pidana...menjadi pidana penjara
     selama Y tahun", the modified sentence follows "menjadi".
     """
-    section = text_lower[mengadili_pos:mengadili_pos + 5000]
+    section = text_lower[mengadili_pos:mengadili_pos + 8000]
     m = re.search(r'memperbaiki\s+putusan', section)
     if not m:
         return None
     memperbaiki_text = section[m.start():]
+    # Priority: the corrected value follows "menjadi" ("...menjadi pidana
+    # penjara selama X tahun") — most specific signal of the NEW sentence
+    mj = re.search(
+        r'menjadi[\s\S]{0,200}?penjara(?:[\s\S]{0,80}?selama)?\s*'
+        r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+        r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+        memperbaiki_text,
+    )
+    if mj and not _is_subsidiary_context(memperbaiki_text, mj.start(1)):
+        years = int(mj.group(1))
+        months = int(mj.group(2)) if mj.group(2) else 0
+        return years * 12 + months
     return _find_penjara(memperbaiki_text)
 
 
@@ -192,7 +308,8 @@ def extract_vonis_bulan(text: str) -> float | None:
     if not text:
         return None
 
-    text_lower = text.lower()
+    # Page-break watermark blocks can interrupt an amar mid-sentence
+    text_lower = _strip_watermark(text).lower()
 
     # Strategy 1: Find all MENGADILI sections, use the correct one
     mengadili_positions = _find_all_mengadili(text_lower)
@@ -216,30 +333,47 @@ def extract_vonis_bulan(text: str) -> float | None:
         if result is not None:
             return result
 
-        # 1d. Previous MENGADILI section (simple kasasi-ditolak)
-        if len(mengadili_positions) >= 2:
+        # 1d. Menolak (kasasi rejected): the standing sentence is the QUOTED
+        #     lower-court amar, NOT a previous MENGADILI section (which may be
+        #     a superseded PN/PT verdict). Acquittal-upheld handled here too.
+        last_section = text_lower[last_pos:last_pos + 500]
+        if 'menolak' in last_section[:300]:
+            result = _find_quoted_lower_court_sentence(text_lower, last_pos)
+            if result is not None:
+                return result
+            # JPU kasasi against an acquittal, rejected → acquittal stands.
+            # The acquitted amar may be quoted anywhere (often page 2), so scan
+            # the whole text; skip REQUEST phrasings (pledoi "memohon ... agar
+            # membebaskan"). Partial bebas (primair-only) is filtered by
+            # _is_full_acquittal.
+            before = text_lower[:last_pos + 2000]
+            for bm in re.finditer(
+                r'(?:membebaskan|melepaskan)[\s\S]{0,40}?(?:terdakwa|terpidana)',
+                before,
+            ):
+                left = before[max(0, bm.start() - 200):bm.start()]
+                if any(w in left for w in ("memohon", "supaya", "agar ", "menuntut")):
+                    continue
+                if _is_full_acquittal(before[bm.start():bm.start() + 400]):
+                    return 0
+
+        # 1e. Acquittal in the MA's own amar
+        if _is_full_acquittal(text_lower[last_pos:last_pos + 5000]):
+            return 0
+
+        # 1f. Previous MENGADILI section (only when not a menolak case —
+        #     otherwise this returns the superseded lower-court figure)
+        if 'menolak' not in last_section[:300] and len(mengadili_positions) >= 2:
             prev_pos = mengadili_positions[-2]
             result = _extract_mengadili_sentence(text_lower, prev_pos, last_pos)
             if result is not None:
                 return result
 
-        # 1e. Quoted lower court sentence (menolak without memperbaiki)
-        last_section = text_lower[last_pos:last_pos + 500]
-        if 'menolak' in last_section[:200]:
-            result = _find_quoted_lower_court_sentence(text_lower, last_pos)
-            if result is not None:
-                return result
-
-        # 1f. General penjara sweep in MENGADILI sections
+        # 1g. General penjara sweep in MENGADILI sections (subsidiary-aware)
         for pos in reversed(mengadili_positions):
             result = _find_penjara(text_lower[pos:pos + 5000])
             if result is not None:
                 return result
-
-        # 1g. Acquittal detection
-        acquittal_section = text_lower[last_pos:last_pos + 5000]
-        if re.search(r'(?:membebaskan|melepaskan)\s+(?:terdakwa|terpidana)', acquittal_section):
-            return 0
 
     # Strategy 2: Search in the first 500 chars (catatan_amar prefix from pipeline)
     prefix = text_lower[:500]
@@ -247,24 +381,28 @@ def extract_vonis_bulan(text: str) -> float | None:
     if result is not None:
         return result
 
-    # Strategy 3: Use the LAST penjara match in the full text
-    all_matches = list(re.finditer(
-        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
-        r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
-        r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
-        text_lower,
-    ))
+    # Strategy 3: Use the LAST non-subsidiary penjara match in the full text
+    all_matches = [
+        m for m in re.finditer(
+            r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+            r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+            r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+            text_lower,
+        ) if not _is_subsidiary_context(text_lower, m.start())
+    ]
     if all_matches:
         m = all_matches[-1]
         years = int(m.group(1))
         months = int(m.group(2)) if m.group(2) else 0
         return years * 12 + months
 
-    all_matches = list(re.finditer(
-        r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
-        r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
-        text_lower,
-    ))
+    all_matches = [
+        m for m in re.finditer(
+            r'(?:pidana\s+)?penjara\s+(?:selama\s+|menjadi\s+)?'
+            r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
+            text_lower,
+        ) if not _is_subsidiary_context(text_lower, m.start())
+    ]
     if all_matches:
         return float(all_matches[-1].group(1))
 
@@ -291,33 +429,35 @@ def extract_tuntutan_bulan(text: str) -> float | None:
 
     text_lower = text.lower()
 
-    # Strategy 1: Find "tuntutan pidana" section header, then search within
-    # next 2500 chars for penjara. Kasasi PDFs quote full tuntutan as numbered
-    # list with long pasal citations before the sentence. Window must be large
-    # enough to skip past "1. Menyatakan..." (pasal citations) to reach
-    # "2. Menjatuhkan pidana penjara..."
-    tuntutan_header = re.search(r'tuntutan\s+pidana', text_lower)
-    if tuntutan_header:
-        section = text_lower[tuntutan_header.start():tuntutan_header.start() + 2500]
+    # Strategy 1: Find "tuntutan pidana" section headers, then search within
+    # next 2500 chars for a NON-SUBSIDIARY penjara. Kasasi PDFs quote full
+    # tuntutan as a numbered list; the subsidiary clause ("...jika uang
+    # pengganti tidak dibayar, dipidana penjara 1 tahun") must be skipped.
+    # Iterate over ALL headers — the first may be a passing reference.
+    for tuntutan_header in re.finditer(r'tuntutan\s+pidana', text_lower):
+        section = text_lower[tuntutan_header.start():tuntutan_header.start() + 4000]
         # Allow up to 150 chars between "penjara" and "selama" to skip
-        # defendant names: "penjara terhadap Terdakwa X selama 2 tahun"
-        m = re.search(
-            r'(?:pidana\s+)?penjara\s+(?:.{0,150}?selama\s+)?'
+        # defendant names; \s* (not \s+) tolerates merged PDF text
+        # ("penjara selama6(enam)tahun")
+        for m in re.finditer(
+            r'(?:pidana\s*)?penjara\s*(?:.{0,150}?selama\s*)?'
             r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
-            r'(?:\s+(?:dan\s+)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+            r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
             section,
-        )
-        if m:
+        ):
+            if _is_subsidiary_context(section, m.start()):
+                continue
             years = int(m.group(1))
             months = int(m.group(2)) if m.group(2) else 0
             return years * 12 + months
 
-        m = re.search(
-            r'(?:pidana\s+)?penjara\s+(?:.{0,150}?selama\s+)?'
+        for m in re.finditer(
+            r'(?:pidana\s*)?penjara\s*(?:.{0,150}?selama\s*)?'
             r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
             section,
-        )
-        if m:
+        ):
+            if _is_subsidiary_context(section, m.start()):
+                continue
             return float(m.group(1))
 
     # Strategy 2: Original pattern — menuntut/dituntut near penjara (no period between)
@@ -360,42 +500,51 @@ def extract_kerugian_negara(text: str) -> float | None:
 
     text_lower = text.lower()
 
-    # Look for kerugian negara context
+    # Contexts where an Rp figure near "kerugian" is NOT the established loss:
+    # restitution (uang pengganti), partial repayment, payment orders.
+    blockers = ("uang pengganti", "pengembalian", "mengembalikan", "dikembalikan",
+                "menyetor", "dititipkan", "membayar", "pembayaran")
+    # Contexts marking the audited/established loss figure
+    audit_anchors = ("laporan hasil audit", "hasil audit", "penghitungan kerugian",
+                     "bpkp", "inspektorat", "badan pemeriksa keuangan", "akuntan")
+
     patterns = [
-        r'kerugian\s+(?:keuangan\s+)?negara[^.]{0,100}?'
+        r'(?:kerugian|merugikan)\s+(?:keuangan\s+)?negara[^.]{0,100}?'
         r'rp\.?\s*([\d.,]+)',
-        r'merugikan\s+(?:keuangan\s+)?negara[^.]{0,100}?'
-        r'rp\.?\s*([\d.,]+)',
+        r'kerugian[^.]{0,200}?rp\.?\s*([\d.,]+)',
     ]
 
+    # Collect ALL candidates (first match is often a restitution recap);
+    # decide by audit-anchoring, then by how often a value is repeated.
+    candidates = []  # (amount, position, audit_anchored)
+    seen_pos = set()
     for pattern in patterns:
-        m = re.search(pattern, text_lower)
-        if m:
-            amount_str = m.group(1)
-            amount = _parse_rupiah(amount_str)
-            if amount and amount > 0:
-                return amount
+        for m in re.finditer(pattern, text_lower):
+            if m.start(1) in seen_pos:
+                continue
+            seen_pos.add(m.start(1))
+            left = text_lower[max(0, m.start() - 150):m.start()]
+            if any(b in left or b in m.group(0) for b in blockers):
+                continue
+            amount = _parse_rupiah(m.group(1))
+            if not amount or amount <= 0:
+                continue
+            ctx = text_lower[max(0, m.start() - 250):m.end() + 250]
+            candidates.append((amount, m.start(), any(a in ctx for a in audit_anchors)))
 
-    # Broader: any Rp amount near "kerugian"
-    m = re.search(
-        r'kerugian[^.]{0,200}?rp\.?\s*([\d.,]+)',
-        text_lower,
-    )
-    if m:
-        amount = _parse_rupiah(m.group(1))
-        if amount and amount > 0:
+    if not candidates:
+        return None
+
+    anchored = [c for c in candidates if c[2]]
+    pool = anchored if anchored else candidates
+    counts: dict[float, int] = {}
+    for amount, _, _ in pool:
+        counts[amount] = counts.get(amount, 0) + 1
+    best_count = max(counts.values())
+    modal = {a for a, c in counts.items() if c == best_count}
+    for amount, _, _ in pool:  # earliest occurrence among modal values
+        if amount in modal:
             return amount
-
-    # Pattern: "UP Rp..." (uang pengganti — proxy for kerugian negara)
-    m = re.search(
-        r'(?:uang\s+pengganti|up)\s+(?:sebesar\s+)?rp\.?\s*([\d.,]+)',
-        text_lower,
-    )
-    if m:
-        amount = _parse_rupiah(m.group(1))
-        if amount and amount > 0:
-            return amount
-
     return None
 
 
@@ -574,12 +723,19 @@ def _clean_daerah(name: str) -> str:
         "karena", "tanggal", "nomor", "dalam", "dengan", "yang",
         "pada", "untuk", "telah", "tersebut", "sebagai",
     ]
-    lower = name.lower()
-    for suffix in known_suffixes:
-        if lower.endswith(suffix) and len(lower) > len(suffix) + 2:
-            cleaned = name[:len(name) - len(suffix)]
-            if len(cleaned) >= 3:
-                return cleaned
+    # Merged PDF text can glue SEVERAL words to the city name
+    # ("Padangpadatanggal") — strip suffixes repeatedly until stable
+    stripped = True
+    while stripped:
+        stripped = False
+        lower = name.lower()
+        for suffix in known_suffixes:
+            if lower.endswith(suffix) and len(lower) > len(suffix) + 2:
+                candidate = name[:len(name) - len(suffix)]
+                if len(candidate) >= 3:
+                    name = candidate
+                    stripped = True
+                    break
     # Strip "Negeri " prefix if accidentally captured
     if name.startswith("Negeri "):
         return name[7:]
@@ -603,14 +759,24 @@ def extract_daerah(text: str, metadata: dict | None = None) -> str | None:
 
     # Extract origin court from text — MA verdicts reference the lower court
     if text:
-        # Pattern: "PN {City}" or "Pengadilan Negeri {City}"
-        m = re.search(
+        # Page-break watermarks can interrupt the court phrase mid-sentence
+        text = _strip_watermark(text)
+        # Function words that regex fragments sometimes capture as a "city"
+        blocklist = {"dalam", "yang", "pada", "tersebut", "negeri", "tinggi",
+                     "telah", "untuk", "dengan", "sebagai", "kelas", "direktori"}
+
+        # Priority: the Tipikor trial venue ("Tindak Pidana Korupsi pada
+        # Pengadilan Negeri X") — beats other PN mentions (asal terdakwa etc.)
+        for pat in [
+            r'Tindak\s+Pidana\s+Korupsi\s+pada\s+Pengadilan\s+Negeri\s+'
+            r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
             r'(?:Pengadilan\s+(?:Negeri|Tindak\s+Pidana\s+Korupsi(?:\s+pada\s+Pengadilan\s+Negeri)?)\s+)'
             r'([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)',
-            text,
-        )
-        if m:
-            return _clean_daerah(m.group(1).strip())
+        ]:
+            for m in re.finditer(pat, text):
+                cleaned = _clean_daerah(m.group(1).strip())
+                if cleaned and cleaned.lower() not in blocklist and len(cleaned) >= 3:
+                    return cleaned
 
         # Short form: case number like "19/Pid.Sus-TPK/2025/PN Smg"
         m = re.search(r'/PN\s+([A-Z][A-Za-z.]+)', text)
