@@ -1,6 +1,13 @@
-# Handoff — Session 17 (2026-07-07) → Next
+# Handoff — Session 17 (2026-07-07, sesi diakhiri ~16:00 auto-shutdown kantor) → Next
 
-## Status: Paper 2 desk-rejected CLSC (satu-satunya yang pernah disubmit). **Paper 4 BELUM PERNAH disubmit** (terkoreksi 2026-07-07 — "semua paper reject" ternyata hanya Paper 2; lihat SUBMISSIONS.md). Program LANJUT dengan produk diubah. Fase A de-risk Paper 4 berjalan: G1 hijau, G2 (golden set) in progress.
+## Status: PARSER SUDAH DIPERBAIKI & DI-COMMIT (`ebcd238`). Re-ekstraksi 693 putusan BERJALAN saat handoff ditulis (214/693) — **KEMUNGKINAN TERPOTONG oleh shutdown. BACA "RECOVERY" DI BAWAH SEBELUM ANALISIS APA PUN.** Paper 2 = satu-satunya submission (desk-reject CLSC). Paper 4 BELUM PERNAH disubmit (terkonfirmasi via email SSRN — hanya preprint).
+
+## ⚠️ RECOVERY RE-EKSTRAKSI (kerjakan PERTAMA di sesi berikutnya)
+
+1. Cek kelengkapan: `python -c "import sqlite3; c=sqlite3.connect(r'data/korupsinlp.db'); print(c.execute(\"select count(*) from verdicts where date(parsed_at) >= '2026-07-07'\").fetchone()[0], '/693')"`
+2. Jika < 693: DB dalam keadaan CAMPURAN (sebagian nilai parser lama, sebagian baru) — **JANGAN analisis**. Jalankan ulang sampai tuntas: `python -m scripts.03_parse_sample` (idempoten, re-parse semua baris, ±20-30 menit).
+3. Backup DB pra-re-ekstraksi ada di `data/korupsinlp_pre_reparse_s17.db` (kalau butuh rollback/diff lama-vs-baru).
+4. Setelah 693/693: `python -m scripts.16_prosecutorial_analysis` dan `python scripts/19_fair_comparison.py` → **bandingkan elasticity baru vs 0.126** (prediksi: naik, karena bug kerugian menukar angka audit dengan uang pengganti yang lebih kecil). Semua angka Paper 4 (abstrak, tabel §4, robustness, §5) harus di-update dari hasil baru.
 
 > **Fakta keras program sekarang hidup di ledger, bukan di file ini**: `SUBMISSIONS.md`,
 > `GATES.md`, `DECISIONS.md`, `MAP.md`. Baca keempatnya di awal sesi. File ini hanya narasi.
@@ -48,16 +55,38 @@
   Elasticity 0.126 kemungkinan underestimate (kerugian tersubstitusi angka lebih kecil);
   arah temuan kompresi robust, angkanya akan berubah setelah re-ekstraksi.
 
+## Yang selesai sesi ini (semuanya SUDAH di-commit)
+
+- `dc65fff` — ledgers + review + revisi truth Paper 4 + corpus freeze (lihat commit message).
+- `ebcd238` — **parser fix D14/D15, test-first, 9 putaran debug**: golden30 vonis 30/30,
+  kerugian 30/30, daerah 30/30, tuntutan 29/30 (xfail multi-terdakwa), tahun 29/30 (xfail
+  konvensi tahun registrasi); suite penuh **218 passed, 2 xfailed**; suite lama tetap 69/69.
+  Bug kunci yang dipelajari (untuk konteks debug berikutnya): watermark MA menyela amar
+  lintas halaman; teks PDF merged tanpa spasi; "dakwaan subsidiair" (tingkat dakwaan) ≠
+  "subsidiair" (pidana pengganti); kutipan putusan sah selalu menyebut "Nomor" — pembeda
+  dari kutipan permintaan JPU; amar bebas bisa dikutip di halaman 2 (jauh dari MENGADILI).
+- Fixture permanen: `tests/fixtures/golden30/` + `tests/test_golden30.py` — jalankan pada
+  SETIAP perubahan parser.
+
 ## Immediate next actions (urutan)
 
-1. **Commit seluruh kerja session 17** (belum ada yang di-commit).
-2. **D14 parser fix, test-first**: 30 kasus tervalidasi → pytest fixtures; perbaiki 4 bug di
-   src/parser/fields.py; D15 filter domain. Lalu **re-ekstraksi 693 → re-run scripts 16/19 →
-   validasi holdout 20 kasus segar → update angka Paper 4** (elasticity, tabel, abstrak).
-3. G4 editor-simulation vs scope AJC → rebuild DOCX/PDF → user submit perdana ke AJC.
-4. Zenodo release = korpus v1.1 (pasca-fix) + update datasheet → dataset paper.
-5. HANYA-USER: email co-author hukum (UB/UMM/Unair); 1 percakapan mantan jaksa (§5.1).
-6. Setelah Paper 4 terkirim: scoping Edge 2 (funnel KPK/ICW) per MAP.md — batu "mengapa".
+1. **Recovery re-ekstraksi** (lihat atas) → angka elasticity baru → update Paper 4.
+2. **Validasi holdout 20 kasus SEGAR** (anti-overfit ke golden30): sampling stratified baru
+   (pakai pola scripts di scratchpad/golden_sample.py → sudah hilang, tulis ulang ±20 baris,
+   exclude 30+25 kasus lama), validasi via 2 agent Sonnet (prompt sama seperti sesi ini),
+   hitung akurasi. Target: vonis/kerugian ≥90% → **G2 HIJAU**.
+3. D15 wiring: `is_tipikor_document` sudah ada di fields.py tapi BELUM dipakai pipeline —
+   tambahkan flag/filter saat re-parse atau post-hoc; audit berapa kasus non-tipikor di 693.
+4. G4 editor-simulation vs scope AJC → rebuild DOCX/PDF (pandoc) → user submit perdana ke AJC.
+5. Zenodo release = korpus v1.1 (pasca-fix, JANGAN rilis v1.0 yang sudah dibekukan — nilainya
+   salah) + update datasheet (557→693, konvensi tahun, akurasi per-field) → dataset paper.
+6. HANYA-USER: email co-author hukum (UB/UMM/Unair); 1 percakapan mantan jaksa (§5.1).
+7. Setelah Paper 4 terkirim: scoping Edge 2 (funnel KPK/ICW) per MAP.md — batu "mengapa".
+
+## Mode operasi (permintaan user, tersimpan di memori)
+
+**Hemat token**: subagent mekanis → `model: sonnet`; Fable hanya untuk penalaran inti;
+minimal agent; jangan re-read yang sudah di konteks. Standar ilmiah tidak dikompromikan.
 
 ## Verifikasi cepat
 
