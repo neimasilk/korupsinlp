@@ -1,65 +1,72 @@
-# Handoff — Session 16 (2026-05-25) → Next
+# Handoff — Session 17 (2026-07-07) → Next
 
-## Status: Paper 2 DESK-REJECTED by CLSC. Program reframed around Paper 4 (upstream prosecutorial proportionality failure). Paper 4 reworked & submit-ready.
+## Status: Paper 2 desk-rejected CLSC (satu-satunya yang pernah disubmit). **Paper 4 BELUM PERNAH disubmit** (terkoreksi 2026-07-07 — "semua paper reject" ternyata hanya Paper 2; lihat SUBMISSIONS.md). Program LANJUT dengan produk diubah. Fase A de-risk Paper 4 berjalan: G1 hijau, G2 (golden set) in progress.
 
----
+> **Fakta keras program sekarang hidup di ledger, bukan di file ini**: `SUBMISSIONS.md`,
+> `GATES.md`, `DECISIONS.md`, `MAP.md`. Baca keempatnya di awal sesi. File ini hanya narasi.
 
-## The big reframe this session
+## Yang terjadi session 17
 
-- **Paper 2 (CRIS-D-26-00272) was DESK-REJECTED by CLSC on 2026-05-22** on *novelty* grounds ("does not make the kind of novel theoretical or empirical contribution... we are looking for") — NOT methods. It sat ~5 weeks then was rejected = a considered decision. The previous handoff wrongly recorded it as "under review."
-- **External confirmation of an ignored internal warning.** Session 14's own critique already flagged "R²=0.60 is normal globally" and "manifesto↔research gap." That warning was filed, then ignored while 4 more papers were produced from the same 367 MA verdicts.
-- **Root diagnosis — "searching under the streetlight":** the portfolio answers *HOW judges sentence* (convenient data) instead of the manifesto's *WHY corruption persists*. Competing in crowded fields (sentencing → criminologists; audit-corruption → accountants) where others have better data positioning. The real moat is the verdict-text corpus + NLP.
-- **Two pivots killed fast (fail-fast):** (1) Darkness Index — saturated in Indonesian public-sector accounting literature (BPK's own TAKEN journal published it); (2) reposition Paper 3 — regression-to-the-mean explains the compression + cassation confound, both unresolved.
-- **New unifying thesis (touches the manifesto's "why"):** the proportionality failure is **UPSTREAM (prosecutorial), not judicial.** Judges anchor faithfully (R²=0.60, globally normal); the anchor itself (tuntutan) is inelastic to harm. Papers 2 & 3 become supporting evidence for ONE thesis, not 4 salami submissions.
+1. **Review kritis menyeluruh** → `reports/critical_review_session17.md`. Inti: (a) blind spot
+   "mengapa korupsi" = peta kausal yang hilang, bukan teknik — korpus hanya mengukur 1 dari 4
+   term expected-sanction; (b) 3 Truth-critique pra-submit Paper 4; (c) 4 mode kegagalan
+   kolaborasi human-AI terdokumentasi (F1-F4) + mekanisasi perbaikannya; (d) mekanisme seleksi
+   kritik Truth/Contribution/Reception.
+2. **User mengonfirmasi semua paper rejected** → keputusan (D12): lanjut, tapi produk berubah —
+   (1) dataset ber-DOI + data paper, (2) SATU flagship (Paper 4) lewat gate, (3) paper sintesis
+   "why" dari Edge 2 (funnel). Bukan resubmit mekanis turun tangga.
+3. **Paper 4 direvisi — G1 (Truth) HIJAU** (semua di `reports/paper4_draft.md`, belum di-rebuild DOCX/PDF):
+   - **D1 benchmark AS**: agent riset USSC → realized elasticity AS = **0.288** (0.27–0.33, FY2012
+     cross-tab N=8.507, R²=0.98). Headline SELAMAT & menguat: Indonesia 0.126 ≈ 44% dari gradien
+     yang di-deliver AS di praktik. §2.1 ditulis ulang ke realized benchmark + caveat tail >$20M.
+     Referensi baru: USSC 2013, Bennett et al. 2017, Hewitt 2016.
+   - **D2 klaim diskresi**: regresi fair (`scripts/19_fair_comparison.py`, n=290):
+     R²(tuntutan|fakta)=0.357 vs R²(vonis|fakta)=0.355 — klaim lama "prosecutors less predictable"
+     SALAH; klaim baru lebih kuat: "diskresi masuk sekali di hulu, hakim merambatkan tanpa koreksi
+     (elasticity vonis 0.137 ≈ tuntutan 0.126)". Abstrak/§4.2/§5.3/konklusi ditulis ulang.
+   - **D3 attenuation** + **D5 seleksi kasasi & subsampel**: paragraf sensitivitas + disclosure di §5.5.
+4. **Korpus v1.0 dibekukan**: `reports/corpus_release/korpuskorupsi_v1.csv` (693 records) +
+   `SHA256SUMS_v1.0.txt`. Siap Zenodo — upload = aksi user (butuh akun). Datasheet masih basi (557).
+5. **Golden set expansion DIMULAI, TERPOTONG**: sampel stratified 30 kasus →
+   `data/golden_set/golden_expansion_30_template.csv` (24 dari populasi analisis per tercile
+   kerugian + 6 tanpa-kerugian). 3 agent validasi dihentikan di tengah SEBELUM menulis CSV hasil
+   — anotasi hilang, harus diluncurkan ulang (prompt: baca PDF penuh, ground truth independen,
+   kutipan bukti, agree flags; lihat critical_review §III.1).
+6. Higiene: CLAUDE.md dimutakhirkan (pointer ledger, skrip 01-19).
 
-## Paper 4 — reworked & submit-ready (commit 659af0c)
+## UPDATE AKHIR SESI (2026-07-07 malam) — KRISIS INSTRUMEN DITEMUKAN
 
-| Item | Before | After |
-|------|--------|-------|
-| Elasticity (tuntutan~kerugian) | 0.109 (uncleaned) | **0.126** cleaned, CI [0.102, 0.156], R²=0.285 |
-| Data | Rp 100 parse error + PT Timah co-defendant triple inflating leverage | dropped/flagged; cleaning STRENGTHENS finding (robustness table in script 16) |
-| Framing | naive "proportionality = elasticity 1.0" straw man | comparative: US Sentencing Guidelines §2B1.1 loss table (~0.25–0.30) + Dec-2025 USSC reform debate. Indonesia ~0.13 = half of even the explicitly loss-graduated system, unstructured |
-| Artifacts | — | abstract/§2.1/§3.1/§4.1/§5/refs rewritten; fig7 relabeled; DOCX+PDF regenerated; SSRN 6580258 live |
+- **Koreksi fakta**: Paper 4 BELUM PERNAH disubmit ke jurnal (hanya SSRN 6580258; dikonfirmasi
+  via email SSRN). Satu-satunya rejection program = Paper 2/CLSC. Ladder AJC→EJCPR→IJCJS utuh.
+- **Validasi golden set n=30 stratified SELESAI** (2 agent Sonnet, mode hemat; hasil:
+  `data/golden_set/golden_expansion_30_validated.csv`, skrip: `scripts/20_golden_accuracy.py`):
+  **vonis 73.3%, kerugian 80.0%, tuntutan 93.3%**, daerah 93.3%, tahun/nama 96.7% (Wilson 95%).
+  4 bug sistematis → DECISIONS.md **D14** (uang pengganti↔kerugian; vonis superseded/subsider +
+  pola "menolak tapi memperbaiki"; putusan BEBAS diberi vonis; daerah fragment) dan **D15**
+  (kontaminasi domain: kasus narkotika lolos ke korpus).
+- **Konsekuensi**: G2 merah-terkonfirmasi; submit Paper 4 dan rilis Zenodo v1.0 DIBLOKIR.
+  Elasticity 0.126 kemungkinan underestimate (kerugian tersubstitusi angka lebih kecil);
+  arah temuan kompresi robust, angkanya akan berubah setelah re-ekstraksi.
 
-## Venue decision (constraints: Scopus + FREE; Q irrelevant per user). Submit SEQUENTIALLY, never parallel.
+## Immediate next actions (urutan)
 
-1. **PRIMARY — Asian Journal of Criminology** (Springer, Scopus **Q1**/SSCI, subscription = free to publish). Regional fit attacks the exact cause of Paper 2's desk-reject (general journals ask "why does this matter globally?"; a regional journal treats Indonesian corruption as core).
-2. **Backup — EJCPR** (European J. on Criminal Policy & Research; Springer, Scopus Q1, hybrid = free). Criminal-policy fit.
-3. **Safety net — IJCJS** (Int'l J. of Criminal Justice Sciences; Diamond OA, fully free, Scopus Q3 + WoS; publishes Indonesian work). Guarantees Scopus placement.
+1. **Commit seluruh kerja session 17** (belum ada yang di-commit).
+2. **D14 parser fix, test-first**: 30 kasus tervalidasi → pytest fixtures; perbaiki 4 bug di
+   src/parser/fields.py; D15 filter domain. Lalu **re-ekstraksi 693 → re-run scripts 16/19 →
+   validasi holdout 20 kasus segar → update angka Paper 4** (elasticity, tabel, abstrak).
+3. G4 editor-simulation vs scope AJC → rebuild DOCX/PDF → user submit perdana ke AJC.
+4. Zenodo release = korpus v1.1 (pasca-fix) + update datasheet → dataset paper.
+5. HANYA-USER: email co-author hukum (UB/UMM/Unair); 1 percakapan mantan jaksa (§5.1).
+6. Setelah Paper 4 terkirim: scoping Edge 2 (funnel KPK/ICW) per MAP.md — batu "mengapa".
 
-## Portfolio triage
-
-| Paper | Verdict | Action |
-|-------|---------|--------|
-| 2 (charge type/opacity) | Dead as flagship (desk-rejected, R²=0.60 normal) | Keep on SSRN 6574140; fold charge-type finding as supporting evidence |
-| **4 (broken proportionality)** | **FLAGSHIP, submit-ready** | → Asian Journal of Criminology |
-| 3 (bidirectional anchoring) | HOLD — RTM + cassation confound unresolved | Needs PN trial-level data for clean identification |
-| 5 (corruption anatomy) | Weakest novelty | SSRN/hold |
-
-## Immediate next actions
-
-1. **Prepare AJC submission package** — format manuscript to AJC guidelines, cover letter (disclose SSRN 6580258 preprint + Paper 2 companion), structured abstract + keywords + JEL codes, 3–5 reviewer suggestions. (Claude can do this; user submits via own login.)
-2. **Domain input wanted from user** for §5.1: institutional cause of prosecutorial inelasticity — Kejaksaan tuntutan culture? target-conviction incentives? asymmetry vs powerful defendants?
-3. **Medium-term: PN (trial-level) scraping** — re-justified as the identification fix for the cassation confound in Papers 3 & 4, NOT "more sentencing papers."
-4. Find a legal/criminology collaborator (the closed human-AI loop's blind spot is what the desk-reject exposed).
-
-## Key lesson (also in project memory)
-
-Internal adversarial review optimized for "will a reviewer find a methodological hole?" but never asked the gatekeeper's question "is this novel/significant enough to matter?" → add a **contribution-significance gate** before journal investment; get an external signal (preprint + a real criminologist) before the editor does.
-
-## Verification
+## Verifikasi cepat
 
 ```bash
-python -m pytest tests/ -q                      # 69 passed (as of session 12)
-python -m scripts.16_prosecutorial_analysis     # elasticity 0.126 cleaned + robustness table + fig7/fig8
+python -m pytest tests/ -q                    # 69 passed
+python scripts/19_fair_comparison.py          # R² 0.357 vs 0.355; elasticity 0.126/0.137
 ```
-- Branch: `autoresearch/apr9-textfeatures`
-- DOCX/PDF built with pandoc + xelatex (pandoc at `~/AppData/Local/Pandoc`)
-- python: anaconda (`~/anaconda3/python`); no `.venv` present this session
+- Branch: `autoresearch/apr9-textfeatures` (rename/merge = D10, masih OPEN)
+- **SEMUA PEKERJAAN SESSION 17 BELUM DI-COMMIT** (review, ledgers, MAP, revisi paper4, script 19,
+  template golden, corpus freeze, CLAUDE.md) — commit di awal sesi berikutnya setelah user setuju.
 
-## SSRN (both live)
-- Paper 2: 6574140 · Paper 4: 6580258
-
-## Recent commits
-- `659af0c` Paper 4 rework: comparative reframe + cleaned elasticity (flagship)
-- `faca620` sessions 13-17: 4 paper drafts, 7 scripts, 11 figures, critical reviews
+## SSRN (tetap live): Paper 2 = 6574140 · Paper 4 = 6580258

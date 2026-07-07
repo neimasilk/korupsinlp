@@ -2,7 +2,13 @@
 
 ## Project Overview
 Computational analysis of Indonesian corruption court verdicts (putusan tipikor).
-Currently in **Fase 1: Corpus Building + Sentencing Analysis** — Paper 1 submission-ready.
+
+**Status & fakta program**: baca ledger, bukan prosa — `SUBMISSIONS.md` (status submission,
+satu-satunya sumber kebenaran), `GATES.md` (gate blocking per paper — tidak ada submit
+dengan gate merah), `DECISIONS.md` (triase kritik: FIXED/DISCLOSED/REJECTED), `MAP.md`
+(peta kausal — setiap analisis baru wajib menyebut edge-nya dulu), lalu `HANDOFF.md`
+(narasi sesi terakhir). Kerangka besar: `MANIFESTO_KEADILAN_NUSANTARA.md` (konstitusi).
+Papers 1-5 drafted di `reports/`; flagship = Paper 4 (lihat GATES.md sebelum menyentuh).
 
 ## Architecture
 ```
@@ -16,7 +22,7 @@ src/parser/fields.py   — Regex extractors per field (including pertimbangan)
 src/parser/normalizer.py — Currency, duration, court→region
 src/parser/pipeline.py — Orchestrate parsing
 src/analysis/feasibility.py — Compute success rates, GO/NO-GO
-scripts/01-09          — Sequential execution scripts
+scripts/01-19          — Pipeline (01-05,08-11: scrape/parse/export/validate) + analisis per-paper (06,07,12-19)
 autoresearch/          — Autonomous experiment framework (see below)
 ```
 

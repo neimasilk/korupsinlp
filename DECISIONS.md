@@ -1,0 +1,26 @@
+# DECISIONS.md — Log Triase Kritik (mengabaikan boleh; mengabaikan DIAM-DIAM tidak)
+
+> **Aturan**: Setiap kritik (internal/eksternal) berakhir di salah satu: **FIXED** /
+> **DISCLOSED** (diakui sebagai limitation di paper) / **REJECTED** (dengan alasan
+> tertulis + tanggal revisit). Truth-critique [T] tidak boleh REJECTED dengan alasan
+> effort — hanya fix/disclose/kill klaim. Contribution-critique [C] diadili sinyal
+> eksternal. Reception-critique [R] boleh di-reject dengan ROI.
+> (Pelajaran F2: warning session 14 mati diam-diam → 4 paper dari korpus yang sama → desk-reject.)
+
+| ID | Tanggal | Kritik | Kelas | Status | Bukti/Alasan |
+|---|---|---|---|---|---|
+| D1 | 2026-07-07 | Benchmark AS Paper 4 memakai table-implied (0.25–0.30), bukan realized; jika realized AS ≈ Indonesia, headline runtuh | T | **FIXED — headline SELAMAT & menguat** | Realized elasticity AS = 0.288 (0.27–0.33), dihitung dari USSC FY2012 cross-tab (N=8.507, R²=0.98; USSC 2013; Bennett et al. 2017). Below-range sentencing menekan LEVEL, bukan SLOPE. Indonesia 0.126 ≈ 44% dari realized AS. §2.1/§4.1/§5.3/abstrak/konklusi Paper 4 direvisi ke benchmark realized + caveat tail >$20M di-disclose. Referensi USSC 2013, Bennett 2017, Hewitt 2016 ditambahkan. |
+| D2 | 2026-07-07 | Perbandingan R² 0.315 vs 0.600 apples-oranges; klaim "prosecutors less predictable than judges" tidak sahih | T | **FIXED** | Regresi fair dijalankan (n=290, spec sama): R²(tuntutan\|fakta)=0.357 vs R²(vonis\|fakta)=0.355 — identik. Klaim lama SALAH; klaim baru lebih kuat: "diskresi masuk sekali di hulu; hakim merambatkannya tanpa koreksi (elasticity vonis 0.137 ≈ tuntutan 0.126)". §4.2/§5.3 Paper 4 harus ditulis ulang sebelum submit berikutnya. Script: scratchpad/fair_regression.py (pindahkan ke scripts/19). |
+| D3 | 2026-07-07 | Attenuation bias measurement error kerugian tidak dibound | T | **FIXED** | Paragraf sensitivitas kuantitatif ditambahkan ke §5.5 Paper 4 (error SD 0.5 log10 → atenuasi ~10%; robustness bergerak NAIK saat tail dibuang — berlawanan arah artefak error). |
+| D4 | 2026-07-07 | Golden set field kunci tervalidasi hanya n=5 | T | **FIXED — dan menemukan krisis instrumen** | Validasi stratified n=30 selesai: vonis 73%, kerugian 80%, tuntutan 93%. Kritik terbukti bukan paranoia: golden set lama (n=5-20) kebetulan kasus mudah/recent. Lihat D14-D15. |
+| D14 | 2026-07-07 | **4 bug parser sistematis** (dari validasi D4): (a) uang pengganti↔kerugian negara; (b) vonis superseded/subsider, pola "memperbaiki"; (c) putusan bebas dapat vonis dari klausul tuntutan; (d) daerah fragment ("Dalam") & venue vs asal | T | **OPEN — prioritas #1 sesi berikutnya** | Fix test-first: 30 kasus tervalidasi → pytest fixtures; lalu re-ekstraksi 693; re-run 16/19; holdout 20 segar. Arah dampak: elasticity 0.126 kemungkinan UNDERESTIMATE (kerugian tersubstitusi angka lebih kecil → slope tertekan) — temuan kompresi robust secara arah, angka akan berubah. |
+| D15 | 2026-07-07 | Kontaminasi domain korpus: kasus narkotika murni (961 K/Pid.Sus/2026) lolos filter — scraper global tidak memverifikasi kategori tipikor per dokumen | T | OPEN | Tambah filter domain (regex "korupsi/tipikor/UU 31/1999/20/2001" wajib ada) saat re-ekstraksi; audit berapa kasus non-tipikor lain di 693. |
+| D5 | 2026-07-07 | Seleksi kasasi + seleksi subsampel kerugian belum di-disclose eksplisit | T | **FIXED** | §5.5 Paper 4: collider kasasi (arah bias tak bisa ditanda) + subsampel kerugian-terdokumentasi (excludes suap/gratifikasi; 3.67 vs 4.92 thn, p=0.002). |
+| D6 | 2026-07-07 | results.tsv tidak lengkap (34 baris; eksperimen pasca-pivot tak tercatat; best 0.626 vs klaim "decisive negative") | T | OPEN | Un-gitignore, rekonstruksi dari git history, rekonsiliasi 0.626-vs-0.600. |
+| D7 | 2026-07-07 | Peta kausal hilang — akar "blind spot mengapa" | C | **FIXED** | MAP.md dibuat session 17. |
+| D8 | 2026-07-07 | Korpus tidak punya versi beku; angka n tersebar (290/367/557/693) | T | **IN PROGRESS** | Freeze v1.0 dijalankan session 17. |
+| D9 | 2026-07-07 | Janji manifesto E4 (rilis terbuka) belum ditepati | C | IN PROGRESS | Release candidate disiapkan; upload Zenodo = aksi human (butuh akun). |
+| D10 | 2026-07-07 | EKSEKUSI basi sebagai dokumen status; CLAUDE.md basi; branch name menyesatkan | R | OPEN | Higiene 1 jam; jadwalkan. |
+| D11 | 2026-07-07 | Rekrut co-author hukum + percakapan jaksa | C | OPEN — **HANYA-HUMAN** | Tidak bisa dikerjakan agent. Satu email + satu jam kopi. |
+| D12 | 2026-07-07 | Strategi pasca-rejection: ubah produk (dataset paper + 1 flagship + sintesis Edge 2), bukan resubmit mekanis turun tangga | C | **DECIDED (session 17)** | Lihat rekomendasi session 17; user dapat membatalkan dengan menulis REJECTED + alasan di sini. |
+| D13 | 2026-04-14 | (Retroaktif) Warning session 14: "R²=0.60 normal global; gap manifesto↔riset" | C | FIXED-TERLAMBAT | Diabaikan diam-diam → desk-reject Paper 2 membuktikannya. Dicatat retroaktif sebagai kasus uji aturan ledger ini. |
