@@ -13,10 +13,37 @@ _MA_WATERMARK_RE = re.compile(
     re.DOTALL,
 )
 
+# Page-footer variant: "Dalam hal Anda menemukan inakurasi ... Telp : 021-384
+# 3348 (ext.318) ... Halaman N dari N halaman Putusan Nomor ...". This block
+# splits amar sentences mid-number at page breaks (holdout R3, 10690 K/2025).
+_MA_FOOTER_RE = re.compile(
+    r'\f?\s*dalam hal anda menemukan inakurasi[\s\S]{0,400}?'
+    r'\(ext\.\s*318\)\s*'
+    # page markers, longest variant first so "halaman N" never eats the
+    # start of "halaman N dari M halaman putusan nomor <case-no>"; the case
+    # number = 1-2 tokens, bounded so the regex never eats the resumed amar
+    r'(?:(?:halaman\s+\d+\s+dari\s+\d+\s+halaman\s+putusan\s+nomor\s*'
+    r'[\w./-]+(?:\s+[\w./-]+)?|halaman\s+\d+)\s*)*',
+    re.IGNORECASE,
+)
+
+
+# Old-style page marker ("Hal.20dari55hal. Put. No. 692 K/PID.SUS/2015"),
+# printed on every page of older PDFs and merged mid-sentence into amar text.
+# The case-number tail is tightly bounded (\d{4} year) so merged text that
+# follows it ("...2015PUTUSANNOMOR...") is never eaten.
+_MA_PAGEMARK_RE = re.compile(
+    r'hal\.\s*\d+\s*dari\s*\d+\s*hal\.?\s*put\.?\s*no\.?\s*'
+    r'\d+\s*[a-z]{1,3}[./][\w.]+/\d{4}',
+    re.IGNORECASE,
+)
+
 
 def _strip_watermark(text: str) -> str:
     """Remove MA watermark/disclaimer blocks from PDF text."""
-    return _MA_WATERMARK_RE.sub(' ', text)
+    text = _MA_WATERMARK_RE.sub(' ', text)
+    text = _MA_FOOTER_RE.sub(' ', text)
+    return _MA_PAGEMARK_RE.sub(' ', text)
 
 
 # Left-context markers indicating a prison term is a SUBSIDIARY clause
@@ -118,11 +145,14 @@ def _is_full_acquittal(section: str) -> bool:
     if not m:
         return False
     after = section[m.start():m.start() + 400]
-    # Spelling varies across documents: "primair" / "primer" / "pertama"
-    if re.search(r'dakwaan\s+(?:prim(?:air|er)|pertama)', after) and not re.search(
-            r'prim(?:air|er)\s+dan\s+(?:dakwaan\s+)?subsid'
-            r'|semua\s+dakwaan|seluruh\s+dakwaan',
-            after):
+    # Spelling varies: "primair"/"primer"/"pertama"; an ordinal may intervene
+    # ("dakwaan KESATU primair" — holdout R3, 2892 K/2024)
+    # No trailing \b: merged text ("dakwaan primairpenuntut umum") is common
+    if re.search(r'dakwaan\s+(?:\w+\s+)?(?:prim(?:air|er)|pertama)', after) \
+            and not re.search(
+                r'prim(?:air|er)\s+dan\s+(?:dakwaan\s+)?subsid'
+                r'|semua\s+dakwaan|seluruh\s+dakwaan',
+                after):
         return False
     return True
 
@@ -224,6 +254,26 @@ def _find_quoted_lower_court_sentence(text_lower: str, mengadili_pos: int) -> fl
                                            "mohon agar", "agar kiranya")):
                 continue
             section = search_text[m.start():m.start() + 2000]
+            # Skip COMPANION-case citations: a quoted decision "atas nama
+            # terpidana/terdakwa X" where X is not a party named in the
+            # document head belongs to someone else's chain (holdout R3,
+            # 2960 PK/2025 quoting a comparator defendant's sentence).
+            an = re.search(
+                r'atas\s+nama\s+(?:para\s+)?(?:terpidana|terdakwa)\s+([^;]{0,60})',
+                section[:400],
+            )
+            if an:
+                # First plain-alphabetic word >=4 chars = the name's core
+                # (skips titles like "ir."/"h."/"s.t." which carry dots)
+                words = [w.strip('.,') for w in an.group(1).split()]
+                words = [w for w in words if len(w) >= 4 and w.isalpha()]
+                core = words[0] if words else ""
+                # Party-identity block = text before the first "membaca"
+                # (the reading list); a name absent there is another case's
+                head_end = text_lower.find('membaca')
+                head = text_lower[:head_end if 0 < head_end < 4000 else 4000]
+                if core and core not in head:
+                    continue
             found = None
             # FULL acquittal amar first — the 2000-char window can reach past
             # a bebas amar into quoted tuntutan text with penjara numbers
