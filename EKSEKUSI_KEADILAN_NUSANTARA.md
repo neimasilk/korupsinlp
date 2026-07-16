@@ -1,9 +1,12 @@
 # EKSEKUSI KEADILAN NUSANTARA
 ## Rencana Operasional — Dokumen Hidup
 
-**Status**: Aktif — diperbarui seiring perkembangan riset
+**Status**: ⚠️ **SUPERSEDED (16 Juli 2026)** — dokumen ini beku per 14 April 2026 dan
+TIDAK mencerminkan keadaan program. Rencana operasional kini di `ROADMAP.md`
+(gate-driven); fakta program di ledger (`SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md`,
+`MAP.md`). File ini dipertahankan sebagai arsip sejarah fase awal.
 **Konstitusi**: Lihat `MANIFESTO_KEADILAN_NUSANTARA.md` untuk visi dan prinsip
-**Terakhir diperbarui**: 14 April 2026
+**Terakhir diperbarui**: 14 April 2026 (dibekukan)
 
 ### Status Per Fase (14 April 2026)
 - **Fase 0:** SELESAI ✅ — GO decision (65.9% P0 success rate)

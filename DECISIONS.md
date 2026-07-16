@@ -20,7 +20,7 @@
 | D7 | 2026-07-07 | Peta kausal hilang — akar "blind spot mengapa" | C | **FIXED** | MAP.md dibuat session 17. |
 | D8 | 2026-07-07 | Korpus tidak punya versi beku; angka n tersebar (290/367/557/693) | T | **IN PROGRESS** | Freeze v1.0 dijalankan session 17. |
 | D9 | 2026-07-07 | Janji manifesto E4 (rilis terbuka) belum ditepati | C | IN PROGRESS | Release candidate disiapkan; upload Zenodo = aksi human (butuh akun). |
-| D10 | 2026-07-07 | EKSEKUSI basi sebagai dokumen status; CLAUDE.md basi; branch name menyesatkan | R | OPEN | Higiene 1 jam; jadwalkan. |
+| D10 | 2026-07-07 | EKSEKUSI basi sebagai dokumen status; CLAUDE.md basi; branch name menyesatkan | R | **SEBAGIAN FIXED (2026-07-16)** | EKSEKUSI ditandai SUPERSEDED (arsip; rencana hidup = ROADMAP.md); CLAUDE.md dimutakhirkan (ROADMAP + skrip 20-23). Sisa: rename branch `autoresearch/apr9-textfeatures` → tunda sampai Paper 4 terkirim (rename mid-work berisiko; nilai rendah). |
 | D11 | 2026-07-07 | Rekrut co-author hukum + percakapan jaksa | C | OPEN — **HANYA-HUMAN** | Tidak bisa dikerjakan agent. Satu email + satu jam kopi. |
 | D12 | 2026-07-07 | Strategi pasca-rejection: ubah produk (dataset paper + 1 flagship + sintesis Edge 2), bukan resubmit mekanis turun tangga | C | **DECIDED (session 17)** | Lihat rekomendasi session 17; user dapat membatalkan dengan menulis REJECTED + alasan di sini. |
 | D13 | 2026-04-14 | (Retroaktif) Warning session 14: "R²=0.60 normal global; gap manifesto↔riset" | C | FIXED-TERLAMBAT | Diabaikan diam-diam → desk-reject Paper 2 membuktikannya. Dicatat retroaktif sebagai kasus uji aturan ledger ini. |

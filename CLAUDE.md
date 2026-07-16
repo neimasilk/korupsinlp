@@ -6,8 +6,9 @@ Computational analysis of Indonesian corruption court verdicts (putusan tipikor)
 **Status & fakta program**: baca ledger, bukan prosa — `SUBMISSIONS.md` (status submission,
 satu-satunya sumber kebenaran), `GATES.md` (gate blocking per paper — tidak ada submit
 dengan gate merah), `DECISIONS.md` (triase kritik: FIXED/DISCLOSED/REJECTED), `MAP.md`
-(peta kausal — setiap analisis baru wajib menyebut edge-nya dulu), lalu `HANDOFF.md`
-(narasi sesi terakhir). Kerangka besar: `MANIFESTO_KEADILAN_NUSANTARA.md` (konstitusi).
+(peta kausal — setiap analisis baru wajib menyebut edge-nya dulu), `ROADMAP.md`
+(peta jalan gate-driven; jalur agent vs HANYA-USER), lalu `HANDOFF.md` (narasi sesi
+terakhir). Kerangka besar: `MANIFESTO_KEADILAN_NUSANTARA.md` (konstitusi, Amandemen 1).
 Papers 1-5 drafted di `reports/`; flagship = Paper 4 (lihat GATES.md sebelum menyentuh).
 
 ## Architecture
@@ -22,7 +23,7 @@ src/parser/fields.py   — Regex extractors per field (including pertimbangan)
 src/parser/normalizer.py — Currency, duration, court→region
 src/parser/pipeline.py — Orchestrate parsing
 src/analysis/feasibility.py — Compute success rates, GO/NO-GO
-scripts/01-19          — Pipeline (01-05,08-11: scrape/parse/export/validate) + analisis per-paper (06,07,12-19)
+scripts/01-23          — Pipeline (01-05,08-11: scrape/parse/export/validate) + analisis per-paper (06,07,12-19) + validasi instrumen (20-23: golden/holdout accuracy, sampling, audit tipikor)
 autoresearch/          — Autonomous experiment framework (see below)
 ```
 
