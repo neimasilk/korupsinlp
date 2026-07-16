@@ -21,6 +21,7 @@ df = pd.read_sql_query(
       AND vonis_bulan   IS NOT NULL AND vonis_bulan > 0
       AND kerugian_negara IS NOT NULL AND kerugian_negara > 0
       AND tahun IS NOT NULL
+      AND is_tipikor = 1
     """,
     conn,
 )

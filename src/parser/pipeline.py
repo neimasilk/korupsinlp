@@ -13,6 +13,7 @@ from src.parser.fields import (
     extract_daerah,
     extract_pemohon_kasasi,
     extract_faktor_pertimbangan,
+    is_tipikor_document,
     _strip_watermark,
 )
 from src.parser.normalizer import court_to_province
@@ -47,6 +48,12 @@ def parse_verdict(metadata: dict, text: str | None = None) -> dict:
     # Strip MA watermark/disclaimer from PDF text — these blocks inflate
     # character offsets and break window-based extraction
     combined = _strip_watermark(combined)
+
+    # Domain gate (D15): flag non-tipikor documents that leaked in via the
+    # global Pid.Sus scrape; analysis scripts filter on this.
+    result["is_tipikor"] = 1 if is_tipikor_document(combined) else 0
+    if not result["is_tipikor"]:
+        errors.append("is_tipikor: no corruption markers in document text")
 
     # === P0 Fields ===
 

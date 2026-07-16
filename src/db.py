@@ -103,6 +103,7 @@ def migrate_db(db_path: Path = DB_PATH):
         existing = {row[1] for row in conn.execute("PRAGMA table_info(verdicts)").fetchall()}
         migrations = [
             ("pertimbangan_text", "TEXT"),
+            ("is_tipikor", "INTEGER"),
         ]
         for col, typ in migrations:
             if col not in existing:

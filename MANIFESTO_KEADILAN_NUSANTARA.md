@@ -8,8 +8,8 @@
 
 **Penulis**: Mukhlis Amien
 **Dimulai**: 18 Maret 2026
-**Status**: Konstitusi — stabil, jarang berubah
-**Eksekusi**: Lihat `EKSEKUSI_KEADILAN_NUSANTARA.md` untuk rencana operasional
+**Status**: Konstitusi — stabil, jarang berubah. **Amandemen 1: 16 Juli 2026** (lihat §XII)
+**Eksekusi**: Lihat `ROADMAP.md` (peta jalan gate-driven) dan ledger: `SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md`, `MAP.md`
 
 ---
 
@@ -64,7 +64,8 @@ Gunung ini terlalu besar untuk satu orang, satu proyek, atau satu generasi. Tapi
 Setiap "batu" adalah satu proyek riset yang mandiri, publishable, dan berkontribusi pada pemahaman yang lebih utuh tentang gunung. Beberapa batu yang sudah teridentifikasi:
 
 **Batu 1: Putusan Pengadilan Korupsi** *(batu pertama — sedang dikerjakan)*
-Ratusan ribu putusan tipikor tersedia di Direktori Putusan Mahkamah Agung. Belum pernah dianalisis secara komputasional pada skala penuh. Di dalamnya tersembunyi pola: proporsionalitas vonis, disparitas geografis, bahasa hakim, jaringan aktor. → Lihat `EKSEKUSI_KEADILAN_NUSANTARA.md`
+Ratusan ribu putusan tipikor tersedia di Direktori Putusan Mahkamah Agung. Belum pernah dianalisis secara komputasional pada skala penuh. Di dalamnya tersembunyi pola: proporsionalitas vonis, disparitas geografis, bahasa hakim, jaringan aktor. → Lihat `ROADMAP.md`
+*Status eksekusi (Amandemen 1): korpus v1 = 693 putusan tingkat MA — bukan "ratusan ribu". Angka itu deskripsi direktori dan aspirasi program, bukan pencapaian. Jalan ke skala sesungguhnya: putusan tingkat pertama (PN). Sampai itu ditempuh, novelty program bukan skala — ia adalah korpus machine-readable pertama dan pengukuran kuantitatif pertama atas proporsionalitas penuntutan-vonis untuk korupsi Indonesia.*
 
 **Batu 2: Data Audit BPK**
 BPK menerbitkan laporan audit keuangan daerah setiap tahun. Opini WTP, WDP, TMP, TW — dan catatan temuan audit. Belum pernah ada yang menghubungkan temuan audit BPK dengan kasus korupsi yang kemudian muncul dari daerah yang sama.
@@ -81,11 +82,30 @@ Korupsi bukan fenomena acak. Ia berkorelasi dengan struktur ekonomi (daerah kaya
 **Batu-batu yang belum teridentifikasi:**
 Manifesto ini tidak berpura-pura tahu semua batu yang harus dipindahkan. Seiring riset berjalan, batu-batu baru akan muncul. Mungkin dari data media sosial. Mungkin dari data perizinan. Mungkin dari sumber yang hari ini belum terpikirkan. Manifesto ini cukup luas untuk menampung semuanya — selama prinsip-prinsipnya dipegang.
 
+### Aturan pemilihan batu *(Amandemen 1)*
+
+Batu TIDAK dipilih karena datanya kebetulan tersedia — itu *streetlight drift*, mencari
+kunci di bawah lampu jalan. Batu dipilih karena ia mengidentifikasi term yang belum
+terukur dalam peta kausal program (`MAP.md`):
+
+```
+E[sanksi] = P(deteksi) × P(dituntut | deteksi) × P(divonis | dituntut) × severity(| divonis)
+```
+
+Tiga aturan: (1) maksimum SATU sumber data baru per tahun; (2) setiap batu punya
+kriteria mati — kondisi yang, jika terpenuhi, batu ditinggalkan dan itu ditulis;
+(3) sebuah batu dihitung "berpindah" hanya jika menghasilkan DOI dataset yang hidup
+atau paper yang lolos peer review — draft bukan batu.
+
 ---
 
 ## IV. HIPOTESIS KERJA
 
 Bukan kesimpulan, tapi peta kerja yang bisa difalsifikasi. Setiap hipotesis harus bisa salah — dan temuan bahwa hipotesis SALAH sama berharganya dengan temuan bahwa hipotesis benar.
+
+**Kerangka kausal** *(Amandemen 1)*: Pertanyaan sentral §I — mengapa sistem gagal menghentikan korupsi — didekomposisi dalam kerangka deterrence (Becker): korupsi persisten jika sanksi-yang-diharapkan jauh lebih kecil dari keuntungannya, dan sanksi-yang-diharapkan adalah hasil kali empat term — P(deteksi) × P(dituntut|deteksi) × P(divonis|dituntut) × severity. Hipotesis-hipotesis di bawah adalah sudut pandang; kemajuan program diukur *per term*, di `MAP.md`. Empat bulan pertama eksekusi mengajarkan: tanpa kerangka ini, semua analisis berkerumun di satu term (severity) tanpa ada yang menyadarinya.
+
+Konstitusi yang mengklaim "hipotesis boleh salah" wajib memajang bangkainya. Status per 16 Juli 2026 ditulis di bawah setiap hipotesis.
 
 ### H1: Disproporsionalitas Sistemik (*Systematic Disproportionality*)
 
@@ -97,6 +117,8 @@ Pola vonis korupsi tidak berkorelasi kuat dengan besaran kerugian negara. Variab
 
 **Catatan kritis:** R² yang rendah BUKAN otomatis bukti disproporsionalitas. Ia bisa berarti model kehilangan variabel legal yang sah tapi belum diekstrak dari teks. **Kualitas ekstraksi variabel legal dari teks putusan menentukan kualitas klaim ini.**
 
+> **Status (Amandemen 1): SEBAGIAN TERJAWAB — dengan pelintiran.** Disproporsionalitas ada, tapi masuk di hulu (tuntutan jaksa: elasticity terhadap kerugian ≈ 0.1), bukan di hakim (yang menjangkar kuat ke tuntutan). Dan catatan kritis di atas terbukti nubuat: validasi 2026-07 menemukan akurasi ekstraksi vonis hanya 73% — parser diperbaiki dan seluruh korpus diekstraksi ulang sebelum satu klaim pun boleh terbit. Instrumen menentukan klaim, persis seperti ditulis.
+
 ### H2: Normalisasi Linguistik (*Linguistic Normalization*)
 
 Bahasa yang digunakan dalam putusan korupsi secara sistematis menormalisasi tindakan korupsi. Frasa tertentu berkorelasi dengan vonis ringan — dan frasa-frasa ini lebih sering muncul dalam putusan korupsi daripada putusan pidana umum.
@@ -107,6 +129,8 @@ Bahasa yang digunakan dalam putusan korupsi secara sistematis menormalisasi tind
 
 **Catatan kritis:** Jika classifier berhasil, ada dua interpretasi: (a) bahasa hakim mengandung bias, atau (b) bahasa hakim mencerminkan faktor legal yang sah tapi tidak dikuantifikasi. Membedakan (a) dari (b) membutuhkan analisis lebih lanjut — bukan klaim otomatis.
 
+> **Status (Amandemen 1): FALSIFIED — dan itu temuan sah.** 34+ eksperimen (TF-IDF, embeddings, keyword, IndoBERT) pada n≈300 putusan MA: teks pertimbangan tidak menambah daya prediksi di atas fitur numerik. Falsifikasi terjadi persis lewat jalur yang diprediksi manifesto. Kemungkinan tetap terbuka pada korpus PN yang lebih besar dan lebih dekat ke fakta persidangan — tapi pada data yang ada, hipotesis ini mati dan tidak akan dihidupkan kembali tanpa data baru.
+
 ### H3: Erosi Temporal (*Temporal Erosion*)
 
 Semangat antikorupsi memiliki siklus. Energi pasca-Reformasi 1998 digerus oleh "kelelahan reformasi" — dan ini terlihat dalam data vonis. Peristiwa politik (revisi UU KPK 2019, tahun Pilkada, pergantian pimpinan KPK) mempengaruhi pola vonis.
@@ -115,6 +139,8 @@ Semangat antikorupsi memiliki siklus. Energi pasca-Reformasi 1998 digerus oleh "
 
 **Falsifikasi:** Tren temporal menunjukkan vonis stabil atau semakin berat secara konsisten, tidak terpengaruh peristiwa politik.
 
+> **Status (Amandemen 1): BELUM TERUJI** — dan sinyal awal berlawanan arah dengan intuisi: tuntutan justru naik 2014→2025. Uji formal terhadap peristiwa politik belum dijalankan.
+
 ### H4: Dualisme Struktural (*Structural Dualism*)
 
 Korupsi "kecil" dan korupsi "besar" adalah fenomena yang berbeda secara fundamental — berbeda profil pelaku, modus, bahasa putusan, dan pola vonis. Memperlakukan keduanya sebagai satu fenomena mengaburkan analisis.
@@ -122,6 +148,8 @@ Korupsi "kecil" dan korupsi "besar" adalah fenomena yang berbeda secara fundamen
 **Prediksi:** Clustering pada profil perkara menghasilkan kluster-kluster yang terpisah secara jelas.
 
 **Falsifikasi:** Profil seragam di semua skala — tidak ada kluster yang bermakna.
+
+> **Status (Amandemen 1): BELUM TERUJI.**
 
 ### H5: Kegagalan Umpan Balik (*Feedback Failure*)
 
@@ -133,6 +161,8 @@ Tidak ada yang mengukur apakah upaya pemberantasan korupsi bekerja. Efek deterre
 
 **Catatan kritis:** Korelasi temporal bukan kausalitas. Framing harus jujur tentang batasan ini.
 
+> **Status (Amandemen 1): TIDAK IDENTIFIABLE dari putusan saja.** Butuh data penindakan (Edge 1–2 di `MAP.md`: laporan KPK/Kejagung, tabulasi ICW). Pertanyaannya tetap di konstitusi; korpus putusan keluar sebagai metodenya. Inilah batu berikutnya setelah Batu 1 selesai — bukan karena datanya mudah, tapi karena ia term yang belum terukur.
+
 ### H6: Kegelapan Terukur (*Measurable Darkness*)
 
 Semua ranking "daerah paling korup" yang beredar cacat karena mengukur *penindakan*, bukan *korupsi*. Normalisasi metrik (per kapita, per APBD, per jumlah PNS) akan mengubah ranking secara drastis. Daerah dengan nol kasus bisa jadi yang paling gelap.
@@ -140,6 +170,8 @@ Semua ranking "daerah paling korup" yang beredar cacat karena mengukur *penindak
 **Prediksi:** Ranking provinsi berubah signifikan setelah normalisasi.
 
 **Falsifikasi:** Ranking sama setelah normalisasi — metrik populer sudah benar.
+
+> **Status (Amandemen 1): DIBUNUH (Juni 2026).** Dua alasan: tidak identifiable dari putusan saja, dan konsepnya ternyata sudah jenuh di literatur akuntansi publik — pelanggaran cek novelty. Dipertahankan di sini sebagai catatan sejarah dan sebagai bukti bahwa membunuh hipotesis sendiri adalah bagian dari metode, bukan kegagalan.
 
 ---
 
@@ -171,6 +203,8 @@ Seluruh analisis bersifat conditional: "**Di antara kasus yang terekam dalam dat
 ### B2: Satu Orang, Bukan Tim
 Riset ini dimulai oleh satu dosen teknik informatika. Tidak ada keahlian hukum, kriminologi, atau sosiologi dalam tim. Interpretasi temuan harus bersifat deskriptif dan kuantitatif — bukan normatif atau kausal. Kolaborasi sangat diinginkan tapi tidak menjadi prasyarat untuk memulai.
 
+*Amandemen 1 — dikeraskan oleh pengalaman:* empat bulan eksekusi membuktikan B2 bukan sekadar batasan yang cukup diakui — ia bottleneck aktif. Satu-satunya desk-reject program menyebut kontribusi, dan yang memisahkan "latihan komputasi" dari "kontribusi kriminologi" di mata editor adalah persis keahlian domain yang tidak ada di tim. Maka aturannya berubah: **memulai tidak butuh kolaborator; menerbitkan klaim substantif di jurnal domain butuh minimal sinyal eksternal (pembaca, korespondensi, atau co-author) sebelum submit** — diformalkan sebagai gate G3/G5 di `GATES.md`.
+
 ### B3: Tool Builder, Bukan Hakim
 Posisi riset ini: **tool builder.** Saya membangun mesin diagnostik — ahli hukum, ICW, KPK, jurnalis yang menginterpretasi hasilnya. Saya membangun MRI — ribuan dokter yang menggunakannya. Tapi tanpa MRI, mereka mendiagnosis dengan meraba-raba.
 
@@ -195,6 +229,16 @@ Setiap temuan harus disertai interpretasi alternatif. Riset yang jujur menyajika
 
 ### E4: Keterbukaan Radikal
 Seluruh dataset, kode, dan temuan harus terbuka. Tidak ada paywall. Tidak ada klaim proprietary. Alat diagnostik untuk keadilan publik harus menjadi milik publik.
+
+*Amandemen 1 — resolusi ketegangan E1↔E4 (yang semula tidak disadari konstitusi ini):*
+korpus putusan memuat nama terdakwa — data level individu, persis yang E1 batasi. Resolusinya:
+putusan adalah dokumen publik yang diterbitkan Mahkamah Agung sendiri; korpus adalah salinan
+setia dan terverifikasi dari rekaman publik itu, bukan agregasi baru yang menambah paparan
+individu. E1 tetap mengikat pada level *analisis dan klaim* (institusi/daerah, bukan individu).
+Kebijakan rilis lengkap — termasuk argumen ini — wajib ditulis di datasheet setiap rilis korpus,
+bukan diasumsikan. Dan keterbukaan radikal punya prasyarat yang baru dipelajari dengan mahal:
+**data yang dirilis harus tervalidasi dulu** — merilis korpus dengan nilai yang diketahui salah
+bukan keterbukaan, ia polusi. Rilis menunggu gate instrumen hijau.
 
 ### E5: Kesadaran Dampak
 Temuan riset bisa disalahgunakan. Risiko ini diakui dan dimitigasi melalui publikasi akademik dan diskusi terbuka tentang implikasi.
@@ -224,6 +268,9 @@ Temuan riset bisa disalahgunakan. Risiko ini diakui dan dimitigasi melalui publi
 ### Prinsip 7: Simple is Better
 *Regresi sebelum deep learning. Satu provinsi sebelum seluruh Indonesia. Satu paper solid sebelum sepuluh draft. Kompleksitas hanya jika kesederhanaan terbukti tidak cukup.*
 
+### Prinsip 8: Instrumen Sebelum Klaim *(Amandemen 1)*
+*Tidak ada klaim tanpa instrumen tervalidasi, dan tidak ada submit dengan gate merah (`GATES.md`). Akurasi ekstraksi diukur pada sampel tervalidasi manusia — blind, stratified, dengan holdout segar — dan dilaporkan di dalam paper. Pelajaran Juli 2026: parser dengan akurasi vonis 73% nyaris membawa angka salah ke jurnal; yang menyelamatkan bukan kejeniusan, melainkan prosedur validasi yang dijalankan sebelum submit. Mesin diagnostik yang tidak dikalibrasi bukan MRI — ia pembangkit artefak.*
+
 ---
 
 ## IX. KONEKSI INTELEKTUAL
@@ -247,7 +294,7 @@ Jika kamu membaca manifesto ini di masa depan — mungkin sebagai mahasiswa huku
 
 2. **Alat ada.** Python, IndoBERT, scikit-learn. Kamu tidak perlu izin siapa pun. Aksesnya terbuka. Alatnya gratis.
 
-3. **Keberanian yang dibutuhkan bukan keberanian melawan koruptor.** Keberanian yang dibutuhkan adalah keberanian akademik: mempublikasikan temuan yang mungkin membuat orang berkuasa tidak nyaman, dalam jurnal yang peer-reviewed, dengan metodologi yang tidak bisa dibantah. Data yang kuat lebih berbahaya bagi korupsi daripada seribu demonstrasi.
+3. **Keberanian yang dibutuhkan bukan keberanian melawan koruptor.** Keberanian yang dibutuhkan adalah keberanian akademik: mempublikasikan temuan yang mungkin membuat orang berkuasa tidak nyaman, dalam jurnal yang peer-reviewed, dengan metodologi yang *auditable* — setiap angka bisa dilacak kembali ke dokumen sumbernya oleh siapa pun. (Bukan "tidak bisa dibantah" — tidak ada metodologi yang tidak bisa dibantah, dan mengklaim itu adalah overclaim pertama yang akan dibantah. Yang bisa dijanjikan: setiap bantahan bisa diperiksa terhadap data terbuka.) Data yang kuat lebih berbahaya bagi korupsi daripada seribu demonstrasi. Dan bentuk keberanian akademik yang paling sering dihindari ternyata paling sederhana: mengirim draft ke manusia lain sebelum yakin ia sempurna.
 
 4. **Kamu tidak sendirian.** ICW sudah melakukan ini secara manual selama bertahun-tahun. Transparency International memantau global. LeIP memetakan reformasi peradilan. Manifesto ini menambahkan satu lensa baru: **lensa komputasional** yang bisa melihat pola yang mata manusia tidak bisa.
 
@@ -275,3 +322,44 @@ Jika kamu membaca manifesto ini di masa depan — mungkin sebagai mahasiswa huku
 
 *Dimulai di Malang, 18 Maret 2026.*
 *Untuk Indonesia yang lebih jujur tentang dirinya sendiri.*
+
+---
+
+## XII. LOG AMANDEMEN
+
+Konstitusi yang tidak pernah diamandemen setelah bertabrakan dengan kenyataan bukan
+konstitusi yang stabil — ia konstitusi yang diabaikan. Setiap amandemen dicatat di sini
+dengan alasannya.
+
+### Amandemen 1 — 16 Juli 2026
+
+*Konteks: empat bulan eksekusi. Satu desk-reject (Paper 2/CLSC, alasan kontribusi),
+satu krisis instrumen (akurasi vonis 73% → parser diperbaiki → 693 putusan diekstraksi
+ulang), dua preprint SSRN, korpus 693 putusan, satu hipotesis terfalsifikasi. Amandemen
+ini menyerap pelajaran-pelajaran itu ke dalam konstitusi.*
+
+Perubahan:
+
+1. **Kerangka kausal masuk konstitusi** (§IV): dekomposisi deterrence 4-term dari `MAP.md`
+   menjadi tulang punggung; hipotesis adalah sudut pandang, kemajuan diukur per term.
+2. **Status hipotesis dipajang** (§IV): H1 sebagian terjawab (disproporsionalitas di hulu),
+   H2 FALSIFIED, H3–H4 belum teruji, H5–H6 tidak identifiable dari putusan saja
+   (H6 dibunuh). Konstitusi falsifikasionis wajib memajang bangkainya.
+3. **Kalibrasi retorika skala** (§III Batu 1): korpus = 693 putusan MA, bukan "ratusan
+   ribu"; novelty program dikoreksi dari "skala" ke "korpus pertama + pengukuran pertama".
+4. **Aturan pemilihan batu** (§III): dipilih per edge kausal, bukan per ketersediaan data;
+   max satu sumber baru/tahun; kill criteria ditulis di muka; "berpindah" = DOI/peer-review.
+5. **B2 dikeraskan** (§VI): klaim substantif level jurnal butuh sinyal eksternal pra-submit
+   (gate G3/G5) — pelajaran langsung dari desk-reject.
+6. **Resolusi E1↔E4** (§VII): argumen rilis data individu-sebagai-rekaman-publik ditulis
+   eksplisit; rilis menunggu validasi instrumen.
+7. **Prinsip 8: Instrumen Sebelum Klaim** (§VIII): tidak ada submit dengan gate merah.
+8. **"Tidak bisa dibantah" → "auditable"** (§X): aspirasi yang jujur dan bisa ditepati.
+9. **Identitas produk** (keputusan D12, tercermin di `ROADMAP.md`): tool-builder-first —
+   urutan produk per batu: dataset ber-DOI + datasheet → data paper → paper substantif.
+   Klaim substantif adalah *hasil* dari alat yang tervalidasi, bukan pengganti alatnya.
+
+Yang TIDAK berubah: kegelisahan (§I), tesis (§II), empat kegelapan (§V), komitmen etis
+selain E4 (§VII), prinsip 1–7 (§VIII), dan seluruh penutup. Gunung masih gunung;
+batu masih dipindahkan satu per satu. Amandemen ini hanya memperbaiki cara memilih
+batu dan cara membuktikan bahwa batu itu benar-benar berpindah.
