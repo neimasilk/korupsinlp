@@ -436,7 +436,27 @@ def extract_tuntutan_bulan(text: str) -> float | None:
     # Iterate over ALL headers — the first may be a passing reference.
     for tuntutan_header in re.finditer(r'tuntutan\s+pidana', text_lower):
         section = text_lower[tuntutan_header.start():tuntutan_header.start() + 4000]
-        # Allow up to 150 chars between "penjara" and "selama" to skip
+        # 1a. Canonical demand amar, which may OMIT the word "penjara"
+        # ("Menjatuhkan pidana terhadap Terdakwa X ... selama 6 tahun dan
+        # 4 bulan") — holdout bug 12367 K/PID.SUS/2025. The gap covers the
+        # defendant's name/titles; reject if a non-prison penalty type or a
+        # subsidiary clause sits inside it.
+        for m in re.finditer(
+            r'menjatuhkan\s+pidana\s+(?:terhadap|kepada)\s*(.{0,150}?)selama\s*'
+            r'(\d+)\s*(?:\([^)]+\)\s*)?tahun'
+            r'(?:\s*(?:dan\s*)?(\d+)\s*(?:\([^)]+\)\s*)?bulan)?',
+            section,
+        ):
+            gap = m.group(1)
+            if any(w in gap for w in ("denda", "kurungan", "pengganti", "percobaan")):
+                continue
+            if _is_subsidiary_context(section, m.start()):
+                continue
+            years = int(m.group(2))
+            months = int(m.group(3)) if m.group(3) else 0
+            return years * 12 + months
+
+        # 1b. Allow up to 150 chars between "penjara" and "selama" to skip
         # defendant names; \s* (not \s+) tolerates merged PDF text
         # ("penjara selama6(enam)tahun")
         for m in re.finditer(
@@ -508,10 +528,24 @@ def extract_kerugian_negara(text: str) -> float | None:
     audit_anchors = ("laporan hasil audit", "hasil audit", "penghitungan kerugian",
                      "bpkp", "inspektorat", "badan pemeriksa keuangan", "akuntan")
 
+    # A figure directly preceded by comparative/threshold language is a legal
+    # bound (e.g. the Pasal 2/3 Rp100jt boundary: "telah melebihi jumlah
+    # Rp100.000.000,00 yakni sebesar Rp1,98M"), not the established loss.
+    threshold_terms = ("melebihi", "lebih dari", "kurang dari", "di atas",
+                       "di bawah", "paling sedikit", "paling banyak",
+                       "minimal", "maksimal", "setidak-tidaknya")
+
     patterns = [
         r'(?:kerugian|merugikan)\s+(?:keuangan\s+)?negara[^.]{0,100}?'
         r'rp\.?\s*([\d.,]+)',
         r'kerugian[^.]{0,200}?rp\.?\s*([\d.,]+)',
+        # "sebesar Rp" is a strong anchor, so the gap may safely cross
+        # abbreviation periods ("Cq. Dinas...", "c.q. PT Antam") that break
+        # the [^.] gaps above — holdout bugs 1009 K/2013, 27 K/2026.
+        # \s* (not \s+) tolerates merged PDF text ("keuangannegara...
+        # tomohonsebesarrp59.700.000,00").
+        r'(?:kerugian|merugikan)\s*(?:keuangan\s*)?negara'
+        r'[\s\S]{0,160}?sebesar\s*rp\.?\s*([\d.,]+)',
     ]
 
     # Collect ALL candidates (first match is often a restitution recap);
@@ -525,6 +559,9 @@ def extract_kerugian_negara(text: str) -> float | None:
             seen_pos.add(m.start(1))
             left = text_lower[max(0, m.start() - 150):m.start()]
             if any(b in left or b in m.group(0) for b in blockers):
+                continue
+            fig_left = text_lower[max(0, m.start(1) - 35):m.start(1)]
+            if any(t in fig_left for t in threshold_terms):
                 continue
             amount = _parse_rupiah(m.group(1))
             if not amount or amount <= 0:
@@ -563,7 +600,12 @@ def _parse_rupiah(amount_str: str) -> float | None:
     elif '.' in cleaned:
         parts = cleaned.split('.')
         if len(parts) > 2:
-            cleaned = cleaned.replace('.', '')
+            # Malformed cents separator: "3.308.079.265.127.04" — a final
+            # 2-digit group cannot be a thousands group (always 3 digits)
+            if len(parts[-1]) == 2:
+                cleaned = "".join(parts[:-1]) + "." + parts[-1]
+            else:
+                cleaned = cleaned.replace('.', '')
         elif len(parts) == 2 and len(parts[-1]) == 3:
             cleaned = cleaned.replace('.', '')
     elif ',' in cleaned:
