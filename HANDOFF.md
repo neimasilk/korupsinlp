@@ -1,122 +1,111 @@
-# Handoff — Session 17 (2026-07-07, sesi diakhiri ~16:00 auto-shutdown kantor) → Next
+# Handoff — Session 18 (2026-07-16) → Next
 
-## Status: PARSER SUDAH DIPERBAIKI & DI-COMMIT (`ebcd238`). Re-ekstraksi 693 putusan BERJALAN saat handoff ditulis (214/693) — **KEMUNGKINAN TERPOTONG oleh shutdown. BACA "RECOVERY" DI BAWAH SEBELUM ANALISIS APA PUN.** Paper 2 = satu-satunya submission (desk-reject CLSC). Paper 4 BELUM PERNAH disubmit (terkonfirmasi via email SSRN — hanya preprint).
+## Status: RE-EKSTRAKSI RONDE 2 BERJALAN saat handoff ditulis (153/693, ±11 dok/menit — task background `python -m scripts.03_parse_sample`). **KEMUNGKINAN TERPOTONG. BACA "RECOVERY" DI BAWAH SEBELUM ANALISIS APA PUN.** Semua pekerjaan lain sesi ini SUDAH di-commit (7d71dc3, c2ac9a4, 2eaa12d, f98ecf4).
 
-## ✅ RE-EKSTRAKSI SELESAI (693/693, exit 0, sebelum shutdown) — ANGKA BARU PRELIMINER
+> **Fakta keras program hidup di ledger, bukan file ini**: `SUBMISSIONS.md`, `GATES.md`,
+> `DECISIONS.md`, `MAP.md`, dan (baru) `ROADMAP.md`. Baca kelimanya di awal sesi.
+> File ini hanya narasi + recovery.
 
-Backup DB lama tetap di `data/korupsinlp_pre_reparse_s17.db` (untuk diff lama-vs-baru).
-Hasil `scripts/19_fair_comparison.py` pada DB baru (**PRELIMINER — jangan masuk paper
-sebelum holdout validation**):
+## ⚠️ RECOVERY — urutan WAJIB setelah re-ekstraksi selesai/terpotong
 
-| Metrik | Lama (parser buggy) | **Baru (parser fixed)** |
-|---|---|---|
-| n sampel elasticity | 290 | **237** (kerugian palsu dari uang pengganti kini NULL — sampel lebih kecil tapi bersih; coverage kerugian 49.6%→40.0%) |
-| Elasticity tuntutan~kerugian | 0.126 | **0.097** (SE 0.013, R²=0.197) — kompresi LEBIH parah; vs realized AS 0.288 → Indonesia ≈ **sepertiga**, bukan "kurang dari separuh" |
-| Elasticity vonis~kerugian | 0.137 | 0.123 |
-| Anchor vonis~tuntutan R² | 0.597 | **0.647** — anchoring lebih kuat dengan vonis yang benar |
-| R²(tuntutan\|fakta) vs R²(vonis\|fakta) | 0.357 vs 0.355 (setara) | **0.319 vs 0.423 — TIDAK lagi setara!** Vonis kini LEBIH terprediksi dari fakta perkara daripada tuntutan |
+1. **Cek selesai**: `SELECT COUNT(*) FROM verdicts WHERE parsed_at LIKE '2026-07-16%'`
+   → harus 693. Kurang = re-ekstraksi terpotong → jalankan ulang
+   `python -m scripts.03_parse_sample` (idempoten, re-parse semua; ±60 menit).
+2. **WAJIB re-run `python -m scripts.23_tipikor_audit`** — pipeline menimpa flag
+   `is_tipikor` audit dengan versi teks-saja; logika rescue register TPK + PDT/TUN
+   HANYA ada di script 23, tidak di pipeline. Lupa langkah ini = kasus TPK sah
+   ter-flag 0 dan populasi analisis menyusut diam-diam.
+3. `python scripts/19_fair_comparison.py` → angka baru (n akan berubah dari 237 —
+   parser fix ronde 2 menambah coverage kerugian; angka lama preliminer: elasticity
+   0.097, anchor R²=0.647, R²(vonis|fakta)=0.423 > R²(tuntutan|fakta)=0.319).
+4. **Holdout R2** (penentu G2): `python -m scripts.21_holdout_sample` (sudah exclude
+   70 kasus lama: golden 50 + holdout R1 20) → luncurkan 2 agent Sonnet BLIND
+   (prompt sama sesi ini: hanya case_number+pdf_path, TANPA nilai parser; konvensi
+   field lengkap ada di prompt sesi ini / lihat scripts/22 docstring). **Tambahan
+   prompt dari pelajaran R1**: peringatkan agent membedakan kutipan di bawah header
+   "MEMBACA TUNTUTAN" (= tuntutan JPU) vs "MEMBACA PUTUSAN ... PN" (= vonis) —
+   error anotator R1 (11852) persis di situ.
+5. `python -m scripts.22_holdout_accuracy` → **adjudikasi MANUAL setiap mismatch
+   terhadap PDF** (R1: 1 dari 20 "mismatch" ternyata error anotator, parser benar).
+6. **Verdict G2**: vonis & kerugian ≥90% (adjudicated) → G2 HIJAU → update GATES.md.
+   Gagal → holdout R2 jadi training (JANGAN dipakai ulang), fix ronde 3, holdout R3.
+   Ekspektasi jujur: 2 kasus atribusi per-terdakwa di R1 = ~10% sampel; jika R2
+   menarik kasus serupa, kerugian bisa mendarat 85-90% — keputusan "refine gate
+   spec vs hold the line" saat itu = keputusan user, tulis di DECISIONS.
 
-**Konsekuensi penulisan**: §4.2/§5.3/abstrak Paper 4 yang saya tulis ulang sesi ini
-("discretion enters once — equally unpredictable") **harus ditulis ulang LAGI** — data
-bersih justru MENDUKUNG klaim asli paper ("prosecutors less predictable than judges"),
-sekarang lewat perbandingan yang fair. Ini contoh bagus untuk §metodologi: bug parser
-mengaburkan temuan; instrumen bersih menajamkannya.
+## Yang terjadi session 18
 
-**Field success pasca-fix** (03_parse_sample): P0 avg 67.1%; kerugian 277/693 (40%) —
-turun karena false positive terhapus (kejujuran, bukan regresi); nama_jaksa 0.3% (memang
-rusak, tidak dipakai paper).
+1. **Review manifesto adversarial** (permintaan user) → `reports/manifesto_review_session18.md`
+   (8 kritik: retorika skala 3-orde; teori "mengapa" absen dari konstitusi; batu =
+   streetlight drift; B2 bottleneck aktif — 4 bulan 0 kontak eksternal; kontradiksi
+   identitas tool-builder; E1↔E4 tabrakan; "tidak bisa dibantah" = overclaim; teori
+   publikasi absen).
+2. **Manifesto Amandemen 1** (§XII, 9 butir — semua kritik ditindaklanjuti): kerangka
+   Becker masuk §IV + status hipotesis dipajang per-hipotesis; Batu 1 dikalibrasi
+   (693, bukan ratusan ribu); aturan pemilihan batu (per edge; max 1 sumber/tahun;
+   berpindah = DOI/peer-review); B2 dikeraskan (klaim substantif butuh G3/G5);
+   resolusi E1↔E4 (rekaman-publik + rilis menunggu instrumen valid); Prinsip 8
+   "Instrumen Sebelum Klaim"; §X.3 "auditable".
+3. **ROADMAP.md dibuat**: M1 = G2 hijau; Horizon 0 (minggu ini) → 1 (dataset+Paper 4+
+   HANYA-USER) → 2 (paper "mengapa" Edge 2) → 3 (kondisional); anti-goals eksplisit.
+4. **D15 FIXED**: `is_tipikor` wired (db.py + pipeline + filter script 19); audit 693
+   (`scripts/23`): 465 tipikor OK / 14 pasti non-tipikor (7 PDT/TUN + 7 Pid.Sus 2026,
+   termasuk narkotika 961) / 119 suspect no-PDF / 95 no-text. **Sampel elasticity
+   n=237: 0 kontaminasi.** D17 baru (metadata: 70 NULL case_number, 25 '?', 2 duplikat
+   → wajib masuk datasheet v1.1). Detail: `data/tipikor_audit.csv`.
+5. **Holdout R1 n=20 BLIND selesai + diadjudikasi** (perbaikan metodologi vs s17:
+   agent tak melihat nilai parser; agree dihitung `scripts/22`, bukan oleh agent):
+   **vonis 20/20 (100%)** — 1 "mismatch" = error anotator (11852, kutipan tuntutan
+   tertukar amar PN; parser BENAR); **tuntutan 19/20 (95%)**; **kerugian 13/18 (72%,
+   1 AMBIGUOUS**: 460 K/2015 dokumen inkonsisten internal 424.842rb vs 424.824rb);
+   daerah 19/20; tahun 20/20; nama ~80% (bukan field klaim). File:
+   `data/golden_set/holdout_20_{template,validation_A,validation_B,validated}.csv`.
+6. **Parser fix ronde 2** (`c2ac9a4`, test-first `tests/test_holdout_bugs.py`, suite
+   223 passed 2 xfailed): (a) angka ambang statutori Pasal 2/3 ("melebihi jumlah
+   Rp100jt yakni sebesar RpX" → threshold-blocker di kiri-figur + pola sebesar-anchored);
+   (b) gap ber-titik + teks merged ("keuangannegara...tomohoncq...sebesarrp59jt" →
+   \s* + [\s\S] gap); (c) dot-cents cacat ("3.308.079.265.127.04" → grup akhir 2-digit
+   = sen); (d) tuntutan tanpa kata "penjara" ("menjatuhkan pidana terhadap Terdakwa X
+   selama 6 tahun 4 bulan"). **TIDAK di-fix (semantik, D18)**: atribusi kerugian
+   per-terdakwa dokumen multi-terdakwa (2/18 R1; parser ambil total proyek, pengadilan
+   pakai komponen per-terdakwa utk kategori Perma 1/2020) → disclosed + robustness
+   excluding multi-terdakwa di paper; arah error konservatif utk klaim kompresi.
+7. **D6 FIXED**: results.tsv un-gitignored + 5 baris pasca-pivot direkonstruksi.
+   Rekonsiliasi: best single-split 0.6256 = artefak seleksi adaptif; CV verdict:
+   TF-IDF −0.072 (p<1e-4 BURUK), structured +0.007 (ns), 3 keyword biner tipe-dakwaan
+   +0.030 (p=0.002 — fitur fakta legal, bukan gaya bahasa) → **H2 FALSIFIED utuh**;
+   kutip selalu angka CV, jangan val-split.
+8. **D10 sebagian**: EKSEKUSI ditandai SUPERSEDED (arsip); CLAUDE.md dimutakhirkan
+   (ROADMAP + skrip 20-23). Sisa: rename branch → tunda sampai Paper 4 terkirim.
 
-> **Fakta keras program sekarang hidup di ledger, bukan di file ini**: `SUBMISSIONS.md`,
-> `GATES.md`, `DECISIONS.md`, `MAP.md`. Baca keempatnya di awal sesi. File ini hanya narasi.
+## Setelah G2 hijau (urutan ROADMAP.md Horizon 0-1)
 
-## Yang terjadi session 17
-
-1. **Review kritis menyeluruh** → `reports/critical_review_session17.md`. Inti: (a) blind spot
-   "mengapa korupsi" = peta kausal yang hilang, bukan teknik — korpus hanya mengukur 1 dari 4
-   term expected-sanction; (b) 3 Truth-critique pra-submit Paper 4; (c) 4 mode kegagalan
-   kolaborasi human-AI terdokumentasi (F1-F4) + mekanisasi perbaikannya; (d) mekanisme seleksi
-   kritik Truth/Contribution/Reception.
-2. **User mengonfirmasi semua paper rejected** → keputusan (D12): lanjut, tapi produk berubah —
-   (1) dataset ber-DOI + data paper, (2) SATU flagship (Paper 4) lewat gate, (3) paper sintesis
-   "why" dari Edge 2 (funnel). Bukan resubmit mekanis turun tangga.
-3. **Paper 4 direvisi — G1 (Truth) HIJAU** (semua di `reports/paper4_draft.md`, belum di-rebuild DOCX/PDF):
-   - **D1 benchmark AS**: agent riset USSC → realized elasticity AS = **0.288** (0.27–0.33, FY2012
-     cross-tab N=8.507, R²=0.98). Headline SELAMAT & menguat: Indonesia 0.126 ≈ 44% dari gradien
-     yang di-deliver AS di praktik. §2.1 ditulis ulang ke realized benchmark + caveat tail >$20M.
-     Referensi baru: USSC 2013, Bennett et al. 2017, Hewitt 2016.
-   - **D2 klaim diskresi**: regresi fair (`scripts/19_fair_comparison.py`, n=290):
-     R²(tuntutan|fakta)=0.357 vs R²(vonis|fakta)=0.355 — klaim lama "prosecutors less predictable"
-     SALAH; klaim baru lebih kuat: "diskresi masuk sekali di hulu, hakim merambatkan tanpa koreksi
-     (elasticity vonis 0.137 ≈ tuntutan 0.126)". Abstrak/§4.2/§5.3/konklusi ditulis ulang.
-   - **D3 attenuation** + **D5 seleksi kasasi & subsampel**: paragraf sensitivitas + disclosure di §5.5.
-4. **Korpus v1.0 dibekukan**: `reports/corpus_release/korpuskorupsi_v1.csv` (693 records) +
-   `SHA256SUMS_v1.0.txt`. Siap Zenodo — upload = aksi user (butuh akun). Datasheet masih basi (557).
-5. **Golden set expansion DIMULAI, TERPOTONG**: sampel stratified 30 kasus →
-   `data/golden_set/golden_expansion_30_template.csv` (24 dari populasi analisis per tercile
-   kerugian + 6 tanpa-kerugian). 3 agent validasi dihentikan di tengah SEBELUM menulis CSV hasil
-   — anotasi hilang, harus diluncurkan ulang (prompt: baca PDF penuh, ground truth independen,
-   kutipan bukti, agree flags; lihat critical_review §III.1).
-6. Higiene: CLAUDE.md dimutakhirkan (pointer ledger, skrip 01-19).
-
-## UPDATE AKHIR SESI (2026-07-07 malam) — KRISIS INSTRUMEN DITEMUKAN
-
-- **Koreksi fakta**: Paper 4 BELUM PERNAH disubmit ke jurnal (hanya SSRN 6580258; dikonfirmasi
-  via email SSRN). Satu-satunya rejection program = Paper 2/CLSC. Ladder AJC→EJCPR→IJCJS utuh.
-- **Validasi golden set n=30 stratified SELESAI** (2 agent Sonnet, mode hemat; hasil:
-  `data/golden_set/golden_expansion_30_validated.csv`, skrip: `scripts/20_golden_accuracy.py`):
-  **vonis 73.3%, kerugian 80.0%, tuntutan 93.3%**, daerah 93.3%, tahun/nama 96.7% (Wilson 95%).
-  4 bug sistematis → DECISIONS.md **D14** (uang pengganti↔kerugian; vonis superseded/subsider +
-  pola "menolak tapi memperbaiki"; putusan BEBAS diberi vonis; daerah fragment) dan **D15**
-  (kontaminasi domain: kasus narkotika lolos ke korpus).
-- **Konsekuensi**: G2 merah-terkonfirmasi; submit Paper 4 dan rilis Zenodo v1.0 DIBLOKIR.
-  Elasticity 0.126 kemungkinan underestimate (kerugian tersubstitusi angka lebih kecil);
-  arah temuan kompresi robust, angkanya akan berubah setelah re-ekstraksi.
-
-## Yang selesai sesi ini (semuanya SUDAH di-commit)
-
-- `dc65fff` — ledgers + review + revisi truth Paper 4 + corpus freeze (lihat commit message).
-- `ebcd238` — **parser fix D14/D15, test-first, 9 putaran debug**: golden30 vonis 30/30,
-  kerugian 30/30, daerah 30/30, tuntutan 29/30 (xfail multi-terdakwa), tahun 29/30 (xfail
-  konvensi tahun registrasi); suite penuh **218 passed, 2 xfailed**; suite lama tetap 69/69.
-  Bug kunci yang dipelajari (untuk konteks debug berikutnya): watermark MA menyela amar
-  lintas halaman; teks PDF merged tanpa spasi; "dakwaan subsidiair" (tingkat dakwaan) ≠
-  "subsidiair" (pidana pengganti); kutipan putusan sah selalu menyebut "Nomor" — pembeda
-  dari kutipan permintaan JPU; amar bebas bisa dikutip di halaman 2 (jauh dari MENGADILI).
-- Fixture permanen: `tests/fixtures/golden30/` + `tests/test_golden30.py` — jalankan pada
-  SETIAP perubahan parser.
-
-## Immediate next actions (urutan)
-
-1. **Validasi holdout 20 kasus SEGAR** (anti-overfit ke golden30): sampling stratified baru
-   (tulis ulang ±20 baris, exclude 30+25 kasus lama), validasi via 2 agent Sonnet (prompt
-   sama seperti sesi ini), hitung akurasi terhadap NILAI DB BARU. Target: vonis/kerugian
-   ≥90% → **G2 HIJAU** → baru angka preliminer di atas boleh masuk Paper 4.
-1b. **Update Paper 4 dengan angka baru** — elasticity 0.097 [CI dari bootstrap script 16],
-   n=237, anchor 0.647, dan §4.2/§5.3/abstrak ditulis ulang LAGI (lihat tabel di atas —
-   arah klaim berubah kembali mendukung versi asli, dengan spec yang fair). Jalankan juga
-   `python -m scripts.16_prosecutorial_analysis` (robustness table + fig7/8 regenerate) dan
-   `python -m scripts.18_paper4_robustness` bila ada.
-3. D15 wiring: `is_tipikor_document` sudah ada di fields.py tapi BELUM dipakai pipeline —
-   tambahkan flag/filter saat re-parse atau post-hoc; audit berapa kasus non-tipikor di 693.
-4. G4 editor-simulation vs scope AJC → rebuild DOCX/PDF (pandoc) → user submit perdana ke AJC.
-5. Zenodo release = korpus v1.1 (pasca-fix, JANGAN rilis v1.0 yang sudah dibekukan — nilainya
-   salah) + update datasheet (557→693, konvensi tahun, akurasi per-field) → dataset paper.
-6. HANYA-USER: email co-author hukum (UB/UMM/Unair); 1 percakapan mantan jaksa (§5.1).
-7. Setelah Paper 4 terkirim: scoping Edge 2 (funnel KPK/ICW) per MAP.md — batu "mengapa".
+1. **H0.3 Update Paper 4** dengan angka DB final (bukan preliminer!): elasticity, n,
+   anchor R², §4.2/§5.3/abstrak ditulis ulang — data bersih mendukung klaim ASLI
+   ("prosecutors less predictable") via spec fair; + paragraf metodologi "bug parser
+   mengaburkan temuan, instrumen bersih menajamkannya" + akurasi per-field golden50+
+   holdout di paper. Re-run `scripts.16` (+ `scripts.18` bila ada) untuk robustness/fig.
+2. G4 editor-sim vs scope AJC (sesi agent SEGAR, hanya abstrak+cover letter) →
+   rebuild DOCX/PDF (pandoc) → user submit perdana AJC.
+3. Jalur dataset paralel: datasheet v1.1 (693, akurasi per-field, konvensi tahun
+   registrasi, D17 metadata, kebijakan etika E1↔E4) → Zenodo v1.1 (JANGAN v1.0) →
+   data paper (G3 sudah hijau).
+4. **HANYA-USER (±3 jam, ROI tertinggi, tertunda 4 bulan)**: 1 email co-author hukum
+   (UB/UMM/Unair); 1 email penulis paper terdekat (komentar SSRN); 1 pembaca eksternal
+   draft; 1 kopi mantan jaksa; akun Zenodo.
 
 ## Mode operasi (permintaan user, tersimpan di memori)
 
-**Hemat token**: subagent mekanis → `model: sonnet`; Fable hanya untuk penalaran inti;
-minimal agent; jangan re-read yang sudah di konteks. Standar ilmiah tidak dikompromikan.
+Hemat token: subagent mekanis = sonnet; Fable untuk penalaran inti; anotasi holdout
+WAJIB blind + adjudikasi manual. Standar ilmiah tidak dikompromikan.
 
 ## Verifikasi cepat
 
 ```bash
-python -m pytest tests/ -q                    # 69 passed
-python scripts/19_fair_comparison.py          # R² 0.357 vs 0.355; elasticity 0.126/0.137
+python -m pytest tests/ -q                    # 223 passed, 2 xfailed
+python scripts/19_fair_comparison.py          # n & elasticity DB terkini
+python -m scripts.23_tipikor_audit            # restore flag is_tipikor pasca re-parse
 ```
-- Branch: `autoresearch/apr9-textfeatures` (rename/merge = D10, masih OPEN)
-- **SEMUA PEKERJAAN SESSION 17 BELUM DI-COMMIT** (review, ledgers, MAP, revisi paper4, script 19,
-  template golden, corpus freeze, CLAUDE.md) — commit di awal sesi berikutnya setelah user setuju.
-
-## SSRN (tetap live): Paper 2 = 6574140 · Paper 4 = 6580258
+- Branch: `autoresearch/apr9-textfeatures` (rename ditunda, D10)
+- Backup DB pra-fix-s17: `data/korupsinlp_pre_reparse_s17.db`
+- SSRN (tetap live): Paper 2 = 6574140 · Paper 4 = 6580258
