@@ -30,6 +30,7 @@ GOLDEN_FILES = [
     "holdout_r1_validated.csv",  # holdout R1 drove parser fix round 2 -> now training
     "holdout_r2_validated.csv",  # holdout R2 drove parser fix round 3 -> now training
     "holdout_r3_validated.csv",  # holdout R3 drove parser fix round 4 -> now training
+    "holdout_r4_validated.csv",  # holdout R4 drove parser fix round 5 -> now training
     "holdout_20_template.csv",   # current round's template -> also excluded
 ]
 
