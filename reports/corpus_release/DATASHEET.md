@@ -1,14 +1,21 @@
-# Datasheet: KorpusKorupsi v1.0
+# Datasheet: KorpusKorupsi v1.1
 
 Following the framework of Gebru et al. (2021), "Datasheets for Datasets."
+
+> **v1.1 (July 2026) supersedes v1.0.** v1.0 (frozen 2026-07-07) contained field values
+> from a parser version later shown to have systematic extraction errors (see Validation)
+> and was never publicly released. v1.1 is the first release version.
+> `TBD-R5` marks numbers to be refreshed from the final database before release.
 
 ## Motivation
 
 **For what purpose was the dataset created?**
-To enable computational analysis of corruption sentencing patterns in Indonesia. No structured, machine-readable dataset of Indonesian corruption verdicts previously existed, despite the public availability of court decisions.
+To enable computational analysis of corruption sentencing patterns in Indonesia. No
+structured, machine-readable dataset of Indonesian corruption verdicts previously
+existed, despite the public availability of court decisions.
 
 **Who created the dataset and on behalf of which entity?**
-Mukhlis Amien, Universitas [redacted], Malang, Indonesia. Independent research project, not funded by any external entity.
+Mukhlis Amien, Universitas [redacted], Malang, Indonesia. Independent research project.
 
 **Who funded the creation of the dataset?**
 Self-funded. No external funding.
@@ -16,119 +23,155 @@ Self-funded. No external funding.
 ## Composition
 
 **What do the instances represent?**
-Each instance is one Supreme Court (Mahkamah Agung) decision in a corruption case, either a cassation (kasasi) or case review (peninjauan kembali, PK) decision.
+Each instance is one court decision document in a corruption case scraped from the
+Supreme Court directory — predominantly Mahkamah Agung cassation (kasasi) and case
+review (PK) decisions, with a small number of first-instance (PN) and appellate (PT)
+tipikor decisions that appear in the same directory.
 
 **How many instances are there in total?**
-557 records. Of these, 488 have case metadata, 344 have extracted sentences (327 with prison sentences > 0, 17 acquittals), and 69 are empty scrapes (server errors during collection).
+693 records. Domain audit (document-text based, never trusting the directory's
+category label): 465 confirmed corruption cases (447 by database text, 8 by full-PDF
+check, 10 by TPK register code), **14 confirmed NON-corruption** (7 civil/administrative
+PDT/TUN cases, 7 Pid.Sus cases without corruption markers, including one pure narcotics
+case), 119 unconfirmable without PDF, 95 with no text at all. All rows are released
+with an `is_tipikor` flag (1/0/NULL); **analysis should filter `is_tipikor = 1`.**
 
-**Does the dataset contain all possible instances?**
-No. The dataset represents a sample of MA corruption decisions available on putusan3.mahkamahagung.go.id as of March 2026. The MA website contains approximately 22,000+ corruption-category pages; our corpus covers a fraction obtained through paginated scraping with year-filtered queries (2011-2026). Additionally, only cases appealed to the MA are included — first-instance PN Tipikor verdicts are excluded.
+**Known metadata-quality issues (kept transparent, not silently dropped):**
+- 70 rows with NULL case_number and 25 with case_number `'?'` (early scrape batches);
+- 2 genuinely duplicated case numbers (3 extra rows);
+- `date_decided` contains mojibake for a subset of rows;
+- `tahun` follows the REGISTRATION-year convention (the year printed in the case
+  number), which can differ from the decision year, and for PK documents postdates
+  the underlying trial.
 
 **What data does each instance consist of?**
-13 structured fields extracted from PDF verdict text and HTML metadata:
-- **Identifiers**: corpus_id, case_number, date_decided
-- **Case characteristics**: tahun (year), daerah (region), pasal (legal articles)
-- **Parties**: nama_terdakwa (defendant name), pemohon_kasasi (appeal filer), nama_hakim (judges)
-- **Sentencing**: vonis_bulan (sentence in months), tuntutan_bulan (prosecution demand), kerugian_negara (state financial loss in Rupiah)
-- **Metadata**: amar (verdict summary category)
+14 structured fields extracted from PDF verdict text and HTML metadata: identifiers
+(corpus_id, case_number, date_decided), case characteristics (tahun, daerah, pasal,
+is_tipikor), parties (nama_terdakwa, pemohon_kasasi, nama_hakim), sentencing
+(vonis_bulan, tuntutan_bulan, kerugian_negara), and amar category.
+See `data_dictionary.json` for field descriptions and missing-data rates (`TBD-R5`).
 
-See `data_dictionary.json` for complete field descriptions and missing data rates.
-
-**Is there a label or target associated with each instance?**
-No single designated label. For sentencing analysis, `vonis_bulan` serves as the outcome variable.
+**Extraction conventions (important for correct use):**
+- `vonis_bulan` = the FINAL operative prison term in months after the document's
+  decision, tracing the appellate chain: kasasi rejected → the quoted lower-court
+  sentence stands; "menolak dengan perbaikan" → the corrected term; MENGADILI SENDIRI
+  → the MA's own term; PK → the term standing after the PK ruling. Acquittal = 0.
+  Subsidiary imprisonment (in lieu of unpaid fines/restitution) is excluded.
+- `tuntutan_bulan` = the prosecutor's demanded prison term in months.
+- `kerugian_negara` = the state financial loss the court accepts (typically the
+  BPKP/BPK/inspectorate audit figure), in Rupiah. It is NOT uang pengganti
+  (restitution), NOT fines, NOT bribe/gratuity amounts, and NOT "kerugian
+  perekonomian negara" (a distinct legal category). For acquittals the field is NULL
+  by rule: a figure in an acquitted case is an allegation or dissent, not an
+  established loss.
+- Multi-defendant documents are represented by ONE defendant's consistent
+  (nama, tuntutan, vonis, kerugian) tuple; see Validation for the residual
+  attribution error this creates.
+- `daerah` = city of the first-instance trial court, not the defendant's origin.
 
 **Is any information missing from individual instances?**
-Yes, substantially. Field completeness ranges from 49% (kerugian_negara) to 100% (corpus_id). Missing data is NOT random — cases without kerugian have significantly lower mean sentences (3.67yr vs 4.92yr, p=0.002), likely because they involve gratification/bribery rather than embezzlement. See Section 6.7.5 of the accompanying paper for analysis.
+Yes, substantially, and NOT at random: kerugian_negara coverage is ~40% (`TBD-R5`);
+cases without a documented kerugian are structurally different (more bribery/
+gratification — formal offenses with no state-loss element — with lower mean
+sentences). Analyses conditioning on kerugian therefore use a selected subsample;
+this is disclosed in the accompanying paper.
 
-**Are there any errors, sources of noise, or redundancies?**
-- 3 suspected kerugian extraction artifacts (< Rp1M) have been set to NULL
-- 3 PT Timah cases share identical Rp300T kerugian (a single mega-corruption case with multiple defendants)
-- Some kerugian values include environmental damage (e.g., PT Timah Rp300T includes Rp271T environmental)
-- Regex-based extraction has known failure modes documented in Section 5.3 of the paper
-- 69 records are empty scrapes (server errors) with no useful data
+## Validation (NEW in v1.1)
 
-**Is the dataset self-contained?**
-Yes. All structured fields are included. Raw PDF text and HTML are not included in the release but can be re-obtained from the public source.
+**How accurate are the extracted fields?**
+Four rounds of BLIND holdout validation (July 2026), 20 freshly sampled cases per
+round, stratified by kerugian tercile + a no-kerugian stratum. Annotators (LLM agents
+reading the full PDFs) never saw parser output; agreement was computed
+programmatically and every mismatch was manually adjudicated against the PDF.
+Each failed round drove a test-first parser fix; fixed rounds become regression
+fixtures and are never reused for validation.
+
+Accuracy of the RELEASED parser version on the latest fresh holdout (n=20, Wilson
+95% CI) — `TBD-R5: replace with round-5 holdout numbers`:
+- vonis_bulan: 95% [76–99] (round 4)
+- tuntutan_bulan: 90% [70–97]
+- kerugian_negara: 85% [64–95] (round 4, pre-round-5 fixes)
+- daerah: 100% (after PN/PT-prefix normalization) · tahun: 100%
+
+**Residual error taxonomy (what the ~10% consists of):**
+1. **Per-defendant attribution** (semantic, not fixable by pattern matching): in
+   multi-defendant documents the parser may return the project-wide loss where the
+   court attributes only a component to the document's defendant, or mix defendants'
+   tuple elements. Error direction: overstates kerugian for split cases.
+2. **Document-internal inconsistencies**: digit transpositions between sections,
+   conflicting court names — irreducible without external sources.
+3. **Rare phrasing variants**: the long tail. Nineteen distinct failure classes were
+   found and fixed across four rounds (statutory-threshold figures, dissenting-opinion
+   sentences in majority-acquittal cases, MA footer blocks splitting amounts
+   mid-number, comparator-case quotes, merged text without spaces, reversed word
+   order, fine amounts near loss mentions, and others — full list in the repository's
+   DECISIONS.md D14–D21 and tests/test_holdout*_bugs.py).
+
+**Methodological caveat for reusers:** document weirdness is heavy-tailed. A static
+golden set will overestimate extraction accuracy; repeated fresh holdouts are the
+only honest measurement. The released accuracy figures come from holdout cases the
+released parser version never trained on.
 
 ## Collection Process
 
-**How was the data associated with each instance acquired?**
-Scraped from putusan3.mahkamahagung.go.id (official public MA verdict repository). HTML metadata extracted from listing and detail pages. Structured fields extracted from PDF verdict text using regex-based pipeline.
-
-**What mechanisms or procedures were used to collect the data?**
-Polite sequential web scraper with 2-second inter-request delays. PDFs downloaded and processed with pdfminer for text extraction. Regex extractors target specific sections of Indonesian legal document format (MENGADILI, Tuntutan Pidana, etc.).
+**How was the data acquired?**
+Scraped from putusan3.mahkamahagung.go.id (official public MA verdict repository),
+March 2026; polite sequential scraper (2s delays). PDFs processed with pdfminer;
+regex extraction targeting Indonesian legal document structure (MENGADILI sections,
+Tuntutan Pidana, audit-anchored loss statements), with MA watermark/footer/page-marker
+stripping.
 
 **If the dataset relates to people, were they informed?**
-The dataset contains defendant names, which are public record in Indonesian court verdicts. Court decisions are published by the MA specifically for public access and transparency. No consent was sought as this is publicly available government data.
+See Ethics below.
 
-**Over what timeframe was the data collected?**
-Scraping performed March 20-22, 2026. Verdicts span decisions from 2011 to 2026.
+**Over what timeframe?**
+Scraping March 2026; verdicts span 2011–2026 registrations.
 
-## Preprocessing/Cleaning/Labeling
+## Ethics & Release Policy (expanded in v1.1)
 
-**Was any preprocessing applied?**
-- PDF text extracted using pdfminer with MA watermark stripping
-- Indonesian Rupiah amounts normalized (dot-as-thousands, comma-as-decimal)
-- Duration expressions normalized to months (tahun/bulan/hari)
-- Court names mapped to province-level regions
-- 3 suspected kerugian artifacts (< Rp1M) set to NULL
-
-**Was the "raw" data saved?**
-Raw HTML and PDF files are stored locally but not included in the public release due to size. They can be re-obtained from the source URL.
-
-**Is the software used to preprocess the data available?**
-Yes. The full extraction pipeline is released as open source (MIT license) at the accompanying GitHub repository.
+Court verdicts are public documents that the Mahkamah Agung itself publishes for
+transparency; this corpus is a faithful, verified copy of that public record — not a
+new aggregation that increases individual exposure. Defendant names are retained
+because removing them would break verifiability against the source (auditable-by-
+anyone is a design goal). However:
+- The accompanying analyses make claims at the institution/region level only, never
+  about individuals.
+- The dataset must NOT be used for individual case prediction, litigation support,
+  targeting or profiling of specific persons (see Uses below).
+- Released values are validated (see Validation); v1.0, which contained values known
+  to be wrong, was withheld — releasing unvalidated individual-level data is not
+  transparency but pollution.
 
 ## Uses
 
-**Has the dataset been used for any tasks already?**
-Yes, in the accompanying paper: descriptive corpus analysis, OLS regression of sentencing determinants, sensitivity analysis, and missing data characterization.
+**Has the dataset been used already?**
+Yes: descriptive corpus analysis, sentencing-proportionality regressions (elasticity
+of demands/sentences w.r.t. loss), demand-anchoring analysis, and 34+ registered
+text-feature experiments (negative result: pertimbangan text adds no predictive power
+over numeric features at this n; binary charge-type keywords add +0.03 CV R²).
 
-**Is there a repository that links to any or all papers that use this dataset?**
-The accompanying GitHub repository will maintain a list of publications.
-
-**What (other) tasks could the dataset be used for?**
-- Predictive sentencing models (predicting vonis from case characteristics)
-- Named entity recognition training for Indonesian legal text
-- Judge-level sentencing variation analysis
-- Geographic corruption pattern mapping
-- Temporal trend analysis (with appropriate controls for composition effects)
-- Comparative legal studies (Indonesian vs other jurisdictions)
-
-**Is there anything about the composition that might impact future uses?**
-- **Selection bias**: Only MA cassation/PK cases. Not representative of all corruption sentencing.
-- **Temporal skew**: 2025 is overrepresented (42% of sentenced cases).
-- **Missing data bias**: Cases without kerugian are structurally different (more likely gratification).
-- **Mega-case influence**: Extreme outliers (Rp300T PT Timah) strongly influence statistical relationships.
-
-**Are there tasks for which the dataset should NOT be used?**
-- Individual case prediction or litigation support
-- Identifying or targeting specific defendants
-- Drawing causal conclusions about sentencing fairness without appropriate controls
-- Generalizing to all Indonesian corruption cases (only MA appeals are included)
+**What should the dataset NOT be used for?**
+- Individual case prediction or litigation support;
+- identifying, profiling, or targeting specific defendants;
+- causal claims about sentencing fairness without design for selection (only appealed
+  cases reach the MA — collider risk is documented in the accompanying paper);
+- generalizing to all Indonesian corruption cases (first-instance verdicts are
+  largely absent);
+- using `kerugian_negara` as if it were complete or exact: ~40% coverage, ~85–90%
+  exact-match accuracy with a known error taxonomy (see Validation).
 
 ## Distribution
 
-**How is the dataset distributed?**
-CSV and JSON formats via GitHub repository and Zenodo (with DOI).
-
-**When was the dataset first released?**
-2026 (upon publication of accompanying paper).
-
-**What license is the dataset distributed under?**
-CC-BY-4.0 for the data. MIT for the extraction code.
+CSV + JSON via GitHub and Zenodo (DOI), CC-BY-4.0 (data), MIT (code). v1.1 is the
+first public release; SHA256 checksums accompany the archive.
 
 ## Maintenance
 
-**Who is supporting/hosting/maintaining the dataset?**
-Mukhlis Amien (primary author).
-
-**Will the dataset be updated?**
-Potentially. Future versions may include additional verdicts, expanded field extraction, and PN Tipikor first-instance verdicts.
-
-**If others want to extend/augment/build on this dataset, is there a mechanism?**
-Pull requests to the GitHub repository are welcome. The extraction pipeline is designed to be extensible.
+Mukhlis Amien. Planned extensions: PN Tipikor first-instance verdicts (scaling +
+fixing the cassation-selection confound), additional fields, periodic re-scrapes.
+Pull requests welcome; parser changes must pass the full regression suite
+(golden30 + holdout fixtures).
 
 ## References
 
-Gebru, T., Morgenstern, J., Vecchione, B., Vaughan, J. W., Wallach, H., Daume III, H., & Crawford, K. (2021). Datasheets for Datasets. *Communications of the ACM*, 64(12), 86-92.
+Gebru, T., et al. (2021). Datasheets for Datasets. *CACM*, 64(12), 86-92.
