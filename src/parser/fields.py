@@ -40,10 +40,20 @@ def _is_subsidiary_context(text_lower: str, pos: int, window: int = 120) -> bool
     "dakwaan subsidiair", which is a CHARGE tier and must not block.
     """
     left = text_lower[max(0, pos - window):pos]
-    if any(b in left for b in _SUBSIDIARY_BLOCKERS):
-        return True
+    # A blocker phrase is void if an amar-item boundary follows it inside the
+    # window: "memperbaiki ... pidana uang pengganti menjadi sebagai berikut:
+    # 1. menjatuhkan pidana ... penjara 2 tahun" lists uang pengganti among
+    # the CORRECTED items — the sentence after the reset is primary, not
+    # subsidiary (holdout R2 bug 11256 K/PID.SUS/2025).
+    _reset = re.compile(r'sebagai\s*berikut|menjatuhkan|menghukum')
+    for b in _SUBSIDIARY_BLOCKERS:
+        i = left.rfind(b)
+        if i >= 0 and not _reset.search(left, i + len(b)):
+            return True
     for m in re.finditer(r'subsid[a-z]*', left):
-        if 'dakwaan' not in left[max(0, m.start() - 12):m.start()]:
+        if 'dakwaan' in left[max(0, m.start() - 12):m.start()]:
+            continue
+        if not _reset.search(left, m.end()):
             return True
     return False
 
@@ -108,8 +118,10 @@ def _is_full_acquittal(section: str) -> bool:
     if not m:
         return False
     after = section[m.start():m.start() + 400]
-    if re.search(r'dakwaan\s+primair', after) and not re.search(
-            r'primair\s+dan\s+(?:dakwaan\s+)?subsid|semua\s+dakwaan|seluruh\s+dakwaan',
+    # Spelling varies across documents: "primair" / "primer" / "pertama"
+    if re.search(r'dakwaan\s+(?:prim(?:air|er)|pertama)', after) and not re.search(
+            r'prim(?:air|er)\s+dan\s+(?:dakwaan\s+)?subsid'
+            r'|semua\s+dakwaan|seluruh\s+dakwaan',
             after):
         return False
     return True
@@ -118,9 +130,16 @@ def _is_full_acquittal(section: str) -> bool:
 def _find_all_mengadili(text_lower: str) -> list[int]:
     """Find all MENGADILI section positions in text."""
     positions = []
-    # Variants: spaced header, colon, newline, merged-with-hyphen ("MENGADILI-Menolak")
+    # Variants: spaced header, colon, newline, merged-with-hyphen
+    # ("MENGADILI-Menolak"), and fully merged with the first amar verb
+    # ("mengadilimenolak..." — holdout R2, 2305 K/Pid.Sus/2016). "sendiri" is
+    # deliberately NOT in the verb lookahead: "mengadili sendiri" appears in
+    # prose/dissent argument, not as a header.
     for pat in [r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i', r'mengadili\s*:',
-                r'mengadili\s*\n', r'mengadili\s*[-–—]']:
+                r'mengadili\s*\n', r'mengadili\s*[-–—]',
+                r'mengadili\s*(?=menolak|mengabulkan|menyatakan|membebaskan'
+                r'|memperbaiki|menguatkan|menerima|menghukum|menjatuhkan'
+                r'|membatalkan|menetapkan)']:
         for m in re.finditer(pat, text_lower):
             # Don't add duplicates (close positions from different patterns)
             if not any(abs(m.start() - p) < 50 for p in positions):
@@ -333,11 +352,13 @@ def extract_vonis_bulan(text: str) -> float | None:
         if result is not None:
             return result
 
-        # 1d. Menolak (kasasi rejected): the standing sentence is the QUOTED
-        #     lower-court amar, NOT a previous MENGADILI section (which may be
-        #     a superseded PN/PT verdict). Acquittal-upheld handled here too.
+        # 1d. Menolak (kasasi rejected) / Menguatkan (banding affirmed): the
+        #     standing sentence is the QUOTED lower-court amar, NOT a previous
+        #     MENGADILI section (which may be a superseded PN/PT verdict).
+        #     Acquittal-upheld handled here too. "Menguatkan" covers PT-level
+        #     documents whose amar only affirms (holdout R2, 8/PID.TPK/2026).
         last_section = text_lower[last_pos:last_pos + 500]
-        if 'menolak' in last_section[:300]:
+        if 'menolak' in last_section[:300] or 'menguatkan' in last_section[:300]:
             result = _find_quoted_lower_court_sentence(text_lower, last_pos)
             if result is not None:
                 return result
@@ -361,9 +382,11 @@ def extract_vonis_bulan(text: str) -> float | None:
         if _is_full_acquittal(text_lower[last_pos:last_pos + 5000]):
             return 0
 
-        # 1f. Previous MENGADILI section (only when not a menolak case —
-        #     otherwise this returns the superseded lower-court figure)
-        if 'menolak' not in last_section[:300] and len(mengadili_positions) >= 2:
+        # 1f. Previous MENGADILI section (only when not a menolak/menguatkan
+        #     case — otherwise this returns the superseded lower-court figure)
+        if 'menolak' not in last_section[:300] \
+                and 'menguatkan' not in last_section[:300] \
+                and len(mengadili_positions) >= 2:
             prev_pos = mengadili_positions[-2]
             result = _extract_mengadili_sentence(text_lower, prev_pos, last_pos)
             if result is not None:
@@ -523,7 +546,9 @@ def extract_kerugian_negara(text: str) -> float | None:
     # Contexts where an Rp figure near "kerugian" is NOT the established loss:
     # restitution (uang pengganti), partial repayment, payment orders.
     blockers = ("uang pengganti", "pengembalian", "mengembalikan", "dikembalikan",
-                "menyetor", "dititipkan", "membayar", "pembayaran")
+                "menyetor", "dititipkan", "membayar", "pembayaran",
+                # bribe/gratuity amounts are not state-loss figures
+                "hadiah", "gratifikasi berupa")
     # Contexts marking the audited/established loss figure
     audit_anchors = ("laporan hasil audit", "hasil audit", "penghitungan kerugian",
                      "bpkp", "inspektorat", "badan pemeriksa keuangan", "akuntan")
@@ -535,24 +560,36 @@ def extract_kerugian_negara(text: str) -> float | None:
                        "di bawah", "paling sedikit", "paling banyak",
                        "minimal", "maksimal", "setidak-tidaknya")
 
+    # Tier 2: the court's own summing conclusion ("Dengan demikian ...
+    # merugikan keuangan negara sebesar RpX") outranks component figures
+    # cited from audit items (holdout R2 bug 1107 PK/Pid.Sus/2024).
+    conclusion_pattern = (
+        r'dengan\s*demikian[\s\S]{0,120}?'
+        r'merugikan\s*(?:keuangan\s*)?negara\s*sebesar\s*rp\.?\s*([\d.,]+)'
+    )
+
     patterns = [
-        r'(?:kerugian|merugikan)\s+(?:keuangan\s+)?negara[^.]{0,100}?'
+        # [^.;] — clause-bound: crossing ';' bled a doctrinal "kerugian"
+        # mention into a bribe amount (holdout R2 bug 438 K/Pid.Sus/2021)
+        r'(?:kerugian|merugikan)\s+(?:keuangan\s+)?negara[^.;]{0,100}?'
         r'rp\.?\s*([\d.,]+)',
-        r'kerugian[^.]{0,200}?rp\.?\s*([\d.,]+)',
+        r'kerugian[^.;]{0,200}?rp\.?\s*([\d.,]+)',
         # "sebesar Rp" is a strong anchor, so the gap may safely cross
         # abbreviation periods ("Cq. Dinas...", "c.q. PT Antam") that break
         # the [^.] gaps above — holdout bugs 1009 K/2013, 27 K/2026.
         # \s* (not \s+) tolerates merged PDF text ("keuangannegara...
-        # tomohonsebesarrp59.700.000,00").
+        # tomohonsebesarrp59.700.000,00"). Gap 300: long project names
+        # (holdout R2 bug 1682 K/Pid.Sus/2021, gap ~225).
         r'(?:kerugian|merugikan)\s*(?:keuangan\s*)?negara'
-        r'[\s\S]{0,160}?sebesar\s*rp\.?\s*([\d.,]+)',
+        r'[\s\S]{0,300}?sebesar\s*rp\.?\s*([\d.,]+)',
     ]
 
     # Collect ALL candidates (first match is often a restitution recap);
-    # decide by audit-anchoring, then by how often a value is repeated.
-    candidates = []  # (amount, position, audit_anchored)
+    # decide by tier (conclusion > audit-anchored > plain), then by how often
+    # a value is repeated.
+    candidates = []  # (amount, position, tier)
     seen_pos = set()
-    for pattern in patterns:
+    for tier_boost, pattern in [(2, conclusion_pattern)] + [(0, p) for p in patterns]:
         for m in re.finditer(pattern, text_lower):
             if m.start(1) in seen_pos:
                 continue
@@ -567,13 +604,14 @@ def extract_kerugian_negara(text: str) -> float | None:
             if not amount or amount <= 0:
                 continue
             ctx = text_lower[max(0, m.start() - 250):m.end() + 250]
-            candidates.append((amount, m.start(), any(a in ctx for a in audit_anchors)))
+            tier = tier_boost or (1 if any(a in ctx for a in audit_anchors) else 0)
+            candidates.append((amount, m.start(), tier))
 
     if not candidates:
         return None
 
-    anchored = [c for c in candidates if c[2]]
-    pool = anchored if anchored else candidates
+    top = max(t for _, _, t in candidates)
+    pool = [c for c in candidates if c[2] == top]
     counts: dict[float, int] = {}
     for amount, _, _ in pool:
         counts[amount] = counts.get(amount, 0) + 1

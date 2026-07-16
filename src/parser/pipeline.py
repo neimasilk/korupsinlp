@@ -62,10 +62,16 @@ def parse_verdict(metadata: dict, text: str | None = None) -> dict:
     if result["vonis_bulan"] is None:
         errors.append("vonis_bulan: not found")
 
-    # Kerugian negara (state loss in Rupiah)
-    result["kerugian_negara"] = extract_kerugian_negara(combined)
-    if result["kerugian_negara"] is None:
-        errors.append("kerugian_negara: not found")
+    # Kerugian negara (state loss in Rupiah). An acquittal means the court
+    # established NO state loss — any figure in the text is an allegation or
+    # a dissenting opinion, not an established loss (holdout R2, 2305 K/2016).
+    if result["vonis_bulan"] == 0:
+        result["kerugian_negara"] = None
+        errors.append("kerugian_negara: nulled (acquittal — no loss established)")
+    else:
+        result["kerugian_negara"] = extract_kerugian_negara(combined)
+        if result["kerugian_negara"] is None:
+            errors.append("kerugian_negara: not found")
 
     # Daerah (region)
     result["daerah"] = extract_daerah(combined, metadata)
