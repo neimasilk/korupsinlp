@@ -1,0 +1,40 @@
+commit	val_r2	val_mae	status	description
+3187e10	0.545788	1.974222	keep	baseline: tfidf(5000,1-2)+tuntutan, Ridge(1.0)
+n/a	0.088700	2.613069	discard	text_only: tfidf alone R2=0.09 (very weak)
+n/a	0.449650	2.140610	discard	Ridge alpha=100 (too much reg)
+n/a	0.567958	1.936716	keep	max_features=200 (beats baseline!)
+22829cc	0.568730	1.949111	keep	max_features=100
+n/a	0.558497	1.978127	discard	max_features=50 (too few)
+6a7b6e4	0.575621	1.947214	keep	unigrams only (1,1) — bigrams were noise
+n/a	0.546849	2.002629	discard	Ridge alpha=10 (worse)
+n/a	0.543079	1.980667	discard	Lasso alpha=0.1 (worse than Ridge)
+n/a	0.507842	2.058642	discard	keyword features (15 domain keywords — hurt)
+494dd9b	0.580343	1.933724	keep	text_all: +kerugian_negara
+n/a	0.570822	1.924765	discard	max_features=150 (worse)
+n/a	0.575188	1.923028	discard	stopword removal (35 words — slightly worse)
+n/a	0.579246	1.890034	discard	GBR(100,d=3,lr=0.1) spearman=0.597 but R2 slightly worse
+n/a	0.578326	1.911929	discard	SVD(30)+struct: 32 features, close but slightly worse
+n/a	0.568914	1.939173	discard	last 2000 chars only (lost signal)
+n/a	0.565623	1.951697	discard	ElasticNet (worse than Ridge)
+n/a	0.571786	1.935494	discard	add text_len + log_kerugian (slightly worse)
+b0afbc6	0.621563	1.846084	keep	Ridge alpha=0.1 — BEATS BASELINE! +0.055 over tuntutan-only
+n/a	0.580280	1.997929	discard	alpha=0.01 (too little reg)
+n/a	0.610828	1.856366	discard	alpha=0.2 (slightly worse than 0.1)
+a5d9ed1	0.625616	1.869158	keep	alpha=0.05 — new best!
+n/a	0.620760	1.895765	discard	alpha=0.03 (slightly worse than 0.05)
+n/a	0.576347	1.943245	discard	max_features=75 (too few for alpha=0.05)
+n/a	0.625616	1.869158	discard	min_df=1 (identical — no difference at 100 features)
+n/a	0.602037	1.855245	discard	sublinear_tf=False (worse)
+n/a	0.599801	1.843193	discard	max_df=0.7 (lost useful common terms)
+n/a	0.290020	2.245951	discard	RandomForest (overfits badly on 200 samples)
+n/a	0.601102	1.867811	discard	max_features=120 (worse — 100 still best)
+n/a	0.622522	1.859112	discard	use_idf=False (slightly worse)
+n/a	0.624788	1.854646	discard	alpha=0.07 (very close, slightly worse)
+n/a	0.617446	1.797031	discard	binary TF-IDF (R2 worse but MAE=1.80, spearman=0.61)
+n/a	0.000000	0.000000	crash	BayesianRidge (needs dense, not worth fixing)
+n/a	0.618369	1.866225	discard	HuberRegressor (robust but worse R2)
+06f2b5c	0.538000		infra	10-fold CV added; baseline tuntutan-only CV R2=0.538 — all rows above are SINGLE-SPLIT val_r2, inflated by 34 adaptive experiments on the same split (best 0.6256 NOT reproducible in CV)
+087a2a0	0.505000		keep	pivot to structured keyword features: CV -0.033 vs baseline (TF-IDF was -0.072, p<0.0001 WORSE)
+2e278be	0.545000		keep	structured features alpha=50: parity with baseline (+0.007, p=0.69)
+e088c52	0.561000		keep	minimal model tuntutan+pasal_2+gratifikasi: 10-fold +0.023; 5x10 CV +0.030 (p=0.055)
+d3ca1ae	0.547000		keep	final: +pencucian_uang, alpha=20; 5x10 CV delta=+0.030 (p=0.0016) — binary charge-type keywords = legal facts, not language style; H2 linguistic-normalization verdict stays FALSIFIED

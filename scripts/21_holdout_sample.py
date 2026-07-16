@@ -27,6 +27,7 @@ GOLDEN_FILES = [
     "golden_expansion_30_template.csv",
     "golden_20_verified.csv",
     "golden_5_verified.csv",
+    "holdout_20_template.csv",  # holdout R1 drove parser fix round 2 -> now training
 ]
 
 
