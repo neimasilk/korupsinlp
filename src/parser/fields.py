@@ -598,9 +598,14 @@ def extract_kerugian_negara(text: str) -> float | None:
     blockers = ("uang pengganti", "pengembalian", "mengembalikan", "dikembalikan",
                 "menyetor", "dititipkan", "membayar", "pembayaran",
                 # bribe/gratuity amounts are not state-loss figures
-                "hadiah", "gratifikasi berupa")
+                "hadiah", "gratifikasi berupa",
+                # fines: the 300-char sebesar-anchor gap can cross from a
+                # kerugian mention into a denda clause (holdout R4, 1969 K/2020)
+                "pidana denda", "denda masing-masing", "denda sebesar",
+                "denda sejumlah")
     # Contexts marking the audited/established loss figure
     audit_anchors = ("laporan hasil audit", "hasil audit", "penghitungan kerugian",
+                     "hasil perhitungan",
                      "bpkp", "inspektorat", "badan pemeriksa keuangan", "akuntan")
 
     # A figure directly preceded by comparative/threshold language is a legal
@@ -608,14 +613,21 @@ def extract_kerugian_negara(text: str) -> float | None:
     # Rp100.000.000,00 yakni sebesar Rp1,98M"), not the established loss.
     threshold_terms = ("melebihi", "lebih dari", "kurang dari", "di atas",
                        "di bawah", "paling sedikit", "paling banyak",
-                       "minimal", "maksimal", "setidak-tidaknya")
+                       "minimal", "maksimal", "setidak-tidaknya",
+                       # SEMA/Perma category bounds ("nilai kerugian ...
+                       # sampai dengan Rp200jt") — holdout R4, 1969 K/2020
+                       "sampai dengan")
 
-    # Tier 2: the court's own summing conclusion ("Dengan demikian ...
-    # merugikan keuangan negara sebesar RpX") outranks component figures
-    # cited from audit items (holdout R2 bug 1107 PK/Pid.Sus/2024).
+    # Tier 2: the court's own summing conclusion — "Dengan demikian ...
+    # merugikan keuangan negara sebesar RpX" (holdout R2, 1107 PK/2024) or
+    # "sehingga total kerugian negara RpX" (holdout R4, 1958 K/2021) —
+    # outranks component figures cited from audit items.
     conclusion_pattern = (
-        r'dengan\s*demikian[\s\S]{0,120}?'
-        r'merugikan\s*(?:keuangan\s*)?negara\s*sebesar\s*rp\.?\s*([\d.,]+)'
+        r'(?:dengan\s*demikian[\s\S]{0,120}?'
+        r'merugikan\s*(?:keuangan\s*)?negara\s*sebesar'
+        r'|(?:sehingga|dengan\s*demikian)\s*(?:jumlah\s*)?total\s*kerugian\s*'
+        r'(?:keuangan\s*)?negara(?:\s*sebesar|\s*sejumlah|\s*adalah)?'
+        r')\s*rp\.?\s*([\d.,]+)'
     )
 
     patterns = [
@@ -632,6 +644,9 @@ def extract_kerugian_negara(text: str) -> float | None:
         # (holdout R2 bug 1682 K/Pid.Sus/2021, gap ~225).
         r'(?:kerugian|merugikan)\s*(?:keuangan\s*)?negara'
         r'[\s\S]{0,300}?sebesar\s*rp\.?\s*([\d.,]+)',
+        # Reversed word order: "negara dirugikan sebesar RpX" — an MA finding
+        # phrasing in kasasi reasoning (holdout R4, 3040 K/Pid.Sus/2021)
+        r'negara\s+dirugikan\s+sebesar\s*rp\.?\s*([\d.,]+)',
     ]
 
     # Collect ALL candidates (first match is often a restitution recap);
