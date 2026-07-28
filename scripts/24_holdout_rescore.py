@@ -20,7 +20,8 @@ ROOT = Path(__file__).resolve().parent.parent
 GS = ROOT / "data" / "golden_set"
 DB = ROOT / "data" / "korupsinlp.db"
 ROUNDS = ["holdout_r1_validated.csv", "holdout_r2_validated.csv",
-          "holdout_r3_validated.csv", "holdout_r4_validated.csv"]
+          "holdout_r3_validated.csv", "holdout_r4_validated.csv",
+          "holdout_r5_validated.csv"]
 FIELDS = ["vonis", "tuntutan", "kerugian", "daerah", "tahun"]
 DB_COL = {"vonis": "vonis_bulan", "tuntutan": "tuntutan_bulan",
           "kerugian": "kerugian_negara", "daerah": "daerah", "tahun": "tahun"}
@@ -90,6 +91,27 @@ def judge(field, parser_v, human_v):
     return "1" if str(p).upper() == str(h).upper() else "0"
 
 
+def _adjudicated(row, field):
+    """True if this field's archived agreement came from a manual adjudication
+    that overruled the annotator (parser judged correct against the PDF)."""
+    note = row.get("adjudication")
+    if note is None or (isinstance(note, float) and pd.isna(note)):
+        return False
+    return f"{field}:" in str(note) and \
+        str(row.get(f"{field}_agree", "")).strip() in ("1", "A")
+
+
+def _same_value(field, archived, current):
+    """Has the parser value moved since the adjudication was made?"""
+    if field in ("vonis", "tuntutan", "kerugian", "tahun"):
+        a, c = as_num(archived), as_num(current)
+        if isinstance(a, float) and isinstance(c, float):
+            return abs(a - c) < 0.5
+        return a == c
+    a, c = as_str(archived), as_str(current)
+    return (a or "").upper() == (c or "").upper()
+
+
 def main():
     con = sqlite3.connect(DB)
     db = pd.read_sql_query(
@@ -118,6 +140,13 @@ def main():
         results = []
         for _, r in merged.iterrows():
             verdict = judge(fld, r[DB_COL[fld]], r[HUMAN_COL[fld]])
+            # An adjudicated override (human cell judged WRONG against the PDF)
+            # must not be re-litigated by raw comparison — otherwise it reads as
+            # a permanent regression. Valid only while the DB value is unchanged
+            # from the one that was adjudicated.
+            if _adjudicated(r, fld):
+                if _same_value(fld, r.get(f"parser_{DB_COL[fld]}"), r[DB_COL[fld]]):
+                    verdict = str(r.get(f"{fld}_agree", verdict)).strip()
             results.append(verdict)
             old = str(r.get(f"{fld}_agree", "")).strip()
             if verdict == "0" and old in ("1", "A"):
