@@ -750,12 +750,22 @@ def extract_kerugian_negara(text: str) -> float | None:
                 continue
             seen_pos.add(m.start(1))
             left = text_lower[max(0, m.start() - 150):m.start()]
-            # The label-after-figure phrasing names the amount as the loss in
-            # its own clause, so payment/restitution words to the left are
-            # context, not disqualifiers — "terdapat selisih PEMBAYARAN sebesar
-            # RpX yang merupakan kerugian keuangan Negara" (holdout R5).
-            if pattern is not conclusion_suffix_pattern and \
-                    any(b in left or b in m.group(0) for b in blockers):
+            if pattern is conclusion_suffix_pattern:
+                # The label-after-figure phrasing names the amount as the loss
+                # in its own clause, so payment words alone must not disqualify
+                # it — "terdapat selisih PEMBAYARAN sebesar RpX yang merupakan
+                # kerugian keuangan Negara" (holdout R5, 2505 PK/2025). Every
+                # other blocker still applies, and a RECOVERY context is fatal:
+                # the balance left after partial recovery is not the
+                # established loss (2997 PK/2025, caught by script 24).
+                if any(b in left or b in m.group(0)
+                       for b in blockers if b not in ("membayar", "pembayaran")):
+                    continue
+                if any(w in left for w in ("pemulihan", "belum dibayar",
+                                           "masih terdapat", "masih tersisa",
+                                           "tersisa", "sisa kerugian")):
+                    continue
+            elif any(b in left or b in m.group(0) for b in blockers):
                 continue
             fig_left = text_lower[max(0, m.start(1) - 35):m.start(1)]
             if any(t in fig_left for t in threshold_terms):
