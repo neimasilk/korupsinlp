@@ -1,33 +1,45 @@
 # Handoff — Session 19 (2026-07-28) → Next
 
-## Status saat handoff ditulis: RE-EKSTRAKSI RONDE 8 BERJALAN (background `python -m scripts.03_parse_sample`, ±60 mnt, saat ditulis 550/693). **JIKA TERPOTONG, BACA "RECOVERY".** Semua parser fix ronde 6–8 SUDAH di-commit. **G2 GAGAL di holdout R5** (vonis 85%, kerugian 80%) → ronde fix 7+8 selesai → **keputusan gate menunggu USER (lihat "KEPUTUSAN USER").**
+## Status: **PIPELINE BERSIH & IDLE — tidak ada proses berjalan.** Re-ekstraksi ronde 8 SELESAI (693/693, 12:01→12:47) dan seluruh rantai verifikasi LULUS (rincian di bawah). Semua parser fix ronde 6–8 di-commit (`dfc6ec4` terakhir). **G2 GAGAL di holdout R5** (vonis 85%, kerugian 80%) → ronde fix 7+8 menutup kelas-kelas yang ditemukan → **satu-satunya blocker sekarang = KEPUTUSAN USER (lihat bagian itu). Jangan pilih sendiri, jangan turunkan agent holdout R6 tanpa persetujuan user.**
 
 > **Fakta keras di ledger**: `SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md` (D14–D24),
 > `MAP.md`, `ROADMAP.md`. File ini hanya narasi + recovery.
 
-## ⚠️ RECOVERY — urutan WAJIB (state machine, lanjutkan dari langkah yang belum)
+## ✅ Verifikasi ronde 8 (dijalankan 2026-07-28, semua LULUS — tak perlu diulang)
 
-1. **Cek re-ekstraksi ronde 8 selesai**: `SELECT COUNT(*) FROM verdicts WHERE parsed_at > '2026-07-28T12'`
-   harus 693. Terpotong → jalankan ulang `python -m scripts.03_parse_sample` (idempoten, ±60 mnt).
-   Commit parser terakhir yang harus sudah berlaku: `dfc6ec4` (ronde 8).
-2. **WAJIB `python -m scripts.23_tipikor_audit`** — pipeline menimpa flag is_tipikor;
-   rescue TPK/PDT/TUN hanya ada di script 23. (Ekspektasi stabil 7 ronde: 465 OK /
-   14 non-tipikor / 0 kontaminasi sampel analisis.)
-3. **`python -m scripts.24_holdout_rescore`** — 100 anotasi R1–R5 vs DB terkini.
-   **Harus 0 REGRESI.** Ada regresi → fix test-first dulu, jangan lanjut.
-   (Ronde 7 sempat memperbaiki 2505 sambil merusak 2997; hanya script 24 yang melihatnya.)
-4. `python scripts/19_fair_comparison.py` → angka final ronde 8.
-5. **Bawa "KEPUTUSAN USER" di bawah ke user.** Jangan pilih sendiri.
+| Cek | Hasil |
+|---|---|
+| `SELECT COUNT(*) WHERE parsed_at > '2026-07-28T12'` | **693/693** |
+| `python -m scripts.23_tipikor_audit` | **465 OK / 14 non-tipikor / 0 kontaminasi** (stabil 8 ronde) |
+| `python -m scripts.24_holdout_rescore` | **0 REGRESI**; vonis 97%, tuntutan 97%, kerugian 93.9%, daerah 98%, tahun 100% (batas ATAS, training) |
+| `python -m pytest tests/ -q` | **246 passed, 2 xfailed** |
+| `python scripts/19_fair_comparison.py` | n=257; angka di tabel bawah |
+
+## ⚠️ RECOVERY — hanya jika parser DIUBAH lagi
+
+Setiap perubahan `src/parser/` WAJIB melalui urutan ini, jangan dipotong:
+1. Test-first: tambah test regresi di `tests/test_holdout_rN_bugs.py` / `test_rescore_regressions.py`.
+2. `python -m scripts.03_parse_sample` (idempoten, ±60 mnt) — re-ekstraksi 693.
+3. `python -m scripts.23_tipikor_audit` — **WAJIB**, pipeline menimpa flag is_tipikor;
+   rescue TPK/PDT/TUN hanya ada di script 23.
+4. `python -m scripts.24_holdout_rescore` — **harus 0 REGRESI**. Ada regresi → fix dulu,
+   jangan lanjut. (Ronde 7 memperbaiki 2505 sambil merusak 2997; HANYA script 24 yang
+   melihatnya — holdout ronde berjalan tidak akan pernah menemukan kerusakan pada kasus
+   ronde sebelumnya.)
+5. `python scripts/19_fair_comparison.py` → angka terkini, perbarui tabel di file ini.
 
 ## ⚠️ KEPUTUSAN USER — satu-satunya blocker program saat ini
 
 G2 GAGAL di R5 (D23). Ronde fix 7+8 sudah menutup 3 kelas vonis + 2 kelas kerugian
 yang ditemukan R5. Pilihan:
 
-- **(a) Holdout R6** — sampler sudah mengecualikan 120 kasus (golden 50 + R1–R5 100 →
-  cek `scripts/21_holdout_sample.py` GOLDEN_FILES). 2 agent Sonnet blind (±600rb token)
-  → `scripts.22_holdout_accuracy` → adjudikasi manual vs PDF. Menguji apakah fix 7+8
-  benar-benar menaikkan akurasi ATAU hanya menukar kelas error.
+- **(a) Holdout R6** — sampler sudah mengecualikan 130 kasus (golden 50 + R1–R5 80 arsip
+  + template berjalan; cek `scripts/21_holdout_sample.py` GOLDEN_FILES). Jalankan
+  `python -m scripts.21_holdout_sample` → 2 agent Sonnet blind (±600rb token; prompt R5
+  ada di transkrip sesi 19, konvensi lengkap juga terekam di kolom `adjudication`
+  `holdout_r5_validated.csv`) → `scripts.22_holdout_accuracy` → **adjudikasi manual tiap
+  mismatch vs PDF**. Menguji apakah fix 7+8 benar-benar menaikkan akurasi ATAU hanya
+  menukar kelas error.
 - **(b) Redefinisi gate berbasis bukti terkumpul** — vonis/tuntutan/daerah/tahun lolos +
   kerugian dilaporkan dengan taksonomi error lengkap (D18–D24) + robustness excluding
   multi-terdakwa + bound atenuasi D3 di paper. **WAJIB ditulis di DECISIONS sebagai
@@ -93,22 +105,29 @@ ke `scripts/21` (exclusion) dan `scripts/24` (rescore).
 
 ## Angka (lintasan; arah SANGAT stabil, magnitudo bergeser per ronde)
 
-| | R5 | R6 | R7 | R8 |
+| | R5 | R6 | R7 | **R8 (FINAL)** |
 |---|---|---|---|---|
-| n populasi analisis | 260 | 260 | **257** | TBD |
-| elastisitas tuntutan~kerugian | 0.110 | 0.115 | 0.117 | TBD |
-| elastisitas vonis~kerugian | 0.135 | 0.135 | 0.134 | TBD |
-| anchor R² (vonis~tuntutan) | 0.645 | 0.658 | 0.651 | TBD |
-| R²(tuntutan\|fakta) | 0.357 | 0.377 | 0.384 | TBD |
-| R²(vonis\|fakta) | 0.466 | 0.466 | 0.465 | TBD |
-| **gap** | −0.110 | −0.089 | **−0.081** | TBD |
-| rescore vonis (100 anotasi, batas ATAS) | — | 94% | **97%** | TBD |
+| n populasi analisis | 260 | 260 | 257 | **257** |
+| elastisitas tuntutan~kerugian | 0.110 | 0.115 | 0.117 | **0.1173** (SE 0.0118) |
+| elastisitas vonis~kerugian | 0.135 | 0.135 | 0.134 | **0.1344** (SE 0.0114) |
+| anchor R² (vonis~tuntutan) | 0.645 | 0.658 | 0.651 | **0.6508** |
+| R²(tuntutan\|fakta) | 0.357 | 0.377 | 0.384 | **0.385** |
+| R²(vonis\|fakta) | 0.466 | 0.466 | 0.465 | **0.465** |
+| **gap** | −0.110 | −0.089 | −0.081 | **−0.080** |
+| rescore vonis (100 anotasi, batas ATAS) | — | 94% | 97% | **97%** |
+| rescore kerugian (batas ATAS) | — | 91.8% | 92.9% | **93.9%** |
+
+**Angka R8 inilah yang dipakai paper** (bukan snapshot n=290 di draft lama, bukan angka
+preliminer ronde manapun). Koefisien lengkap: `python scripts/19_fair_comparison.py`.
 
 **Wajib masuk paper**: klaim asli Paper 4 ("prosecutors less predictable") DIDUKUNG di
-semua versi data bersih — arah tidak pernah berbalik. TAPI gap menyempit monoton seiring
-parser membaik (0.110→0.089→0.081): sebagian "tuntutan lebih sulit diprediksi" ternyata
-error pengukuran pada tuntutan, bukan diskresi jaksa. Magnitudo harus dinyatakan sensitif
-terhadap kualitas ekstraksi; jangan klaim angka gap sebagai temuan keras.
+semua versi data bersih — arah tidak pernah berbalik dalam 8 ronde. TAPI gap menyempit
+monoton seiring parser membaik (0.110→0.089→0.081→0.080): sebagian "tuntutan lebih sulit
+diprediksi" ternyata error pengukuran pada tuntutan, bukan diskresi jaksa. Magnitudo harus
+dinyatakan sensitif terhadap kualitas ekstraksi; jangan klaim angka gap sebagai temuan
+keras. Penyempitan melandai di R7→R8 (−0.001) setelah lompatan besar R5→R6 (−0.021),
+konsisten dengan jalur tuntutan yang sudah stabil — tapi itu observasi 2 titik, bukan bukti
+konvergensi.
 
 ## Setelah gate diputuskan → H0.3 update Paper 4
 
