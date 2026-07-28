@@ -509,6 +509,15 @@ def extract_tuntutan_bulan(text: str) -> float | None:
     # Iterate over ALL headers — the first may be a passing reference.
     for tuntutan_header in re.finditer(r'tuntutan\s+pidana', text_lower):
         section = text_lower[tuntutan_header.start():tuntutan_header.start() + 4000]
+        # 1a and 1b are scored TOGETHER and the EARLIEST valid match wins.
+        # Trying 1a exhaustively first let it reach across the whole section
+        # and grab a quoted PN amar whenever the demand itself used a phrasing
+        # 1a cannot match — 858 K/Pid.Sus/2022, "Menjatuhkan pidana ATAS DIRI
+        # Terdakwa dengan pidana penjara selama 10 tahun" (regression surfaced
+        # by the cross-round rescore, script 24). For one and the same clause
+        # 1a still wins: it starts at "menjatuhkan", ahead of 1b's "penjara".
+        candidates: list[tuple[int, float]] = []
+
         # 1a. Canonical demand amar, which may OMIT the word "penjara"
         # ("Menjatuhkan pidana terhadap Terdakwa X ... selama 6 tahun dan
         # 4 bulan") — holdout bug 12367 K/PID.SUS/2025. The gap covers the
@@ -527,7 +536,8 @@ def extract_tuntutan_bulan(text: str) -> float | None:
                 continue
             years = int(m.group(2))
             months = int(m.group(3)) if m.group(3) else 0
-            return years * 12 + months
+            candidates.append((m.start(), years * 12 + months))
+            break
 
         # 1b. Allow up to 150 chars between "penjara" and "selama" to skip
         # defendant names; \s* (not \s+) tolerates merged PDF text
@@ -542,7 +552,11 @@ def extract_tuntutan_bulan(text: str) -> float | None:
                 continue
             years = int(m.group(1))
             months = int(m.group(2)) if m.group(2) else 0
-            return years * 12 + months
+            candidates.append((m.start(), years * 12 + months))
+            break
+
+        if candidates:
+            return min(candidates)[1]
 
         for m in re.finditer(
             r'(?:pidana\s*)?penjara\s*(?:.{0,150}?selama\s*)?'
