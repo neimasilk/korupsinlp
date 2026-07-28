@@ -72,7 +72,13 @@ def judge(field, parser_v, human_v):
         return "A"
     if p is None or h is None:
         return "0"
-    if field in ("vonis", "tuntutan", "kerugian", "tahun"):
+    if field == "kerugian":
+        # Annotators write whole rupiah; the parser keeps the cents printed in
+        # the verdict ("Rp25.356.820.524,74"). A 0.5 tolerance scored those as
+        # disagreements even though the figures are identical to the rupiah
+        # (holdout R6: 2218 PK/2025, 1694 K/2021).
+        return "1" if abs(p - h) < 1.0 else "0"
+    if field in ("vonis", "tuntutan", "tahun"):
         return "1" if abs(p - h) < 0.5 else "0"
     return "1" if str(p).upper() == str(h).upper() else "0"
 

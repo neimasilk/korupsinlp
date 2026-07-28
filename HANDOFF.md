@@ -1,158 +1,173 @@
 # Handoff — Session 19 (2026-07-28) → Next
 
-## Status: **PIPELINE BERSIH & IDLE — tidak ada proses berjalan.** Re-ekstraksi ronde 8 SELESAI (693/693, 12:01→12:47) dan seluruh rantai verifikasi LULUS (rincian di bawah). Semua parser fix ronde 6–8 di-commit (`dfc6ec4` terakhir). **G2 GAGAL di holdout R5** (vonis 85%, kerugian 80%) → ronde fix 7+8 menutup kelas-kelas yang ditemukan → **satu-satunya blocker sekarang = KEPUTUSAN USER (lihat bagian itu). Jangan pilih sendiri, jangan turunkan agent holdout R6 tanpa persetujuan user.**
+## Status: **G2 HIJAU.** Holdout R6 blind n=50 LOLOS kriteria pra-registrasi: **vonis 98,0%, kerugian 91,7%**. Pipeline bersih & idle, tidak ada proses berjalan. Suite 246 passed. Rescore 150 anotasi: 0 regresi.
 
-> **Fakta keras di ledger**: `SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md` (D14–D24),
-> `MAP.md`, `ROADMAP.md`. File ini hanya narasi + recovery.
+**Tugas berikutnya = RONDE FIX 9** (sudah terdiagnosis lengkap, tinggal dikerjakan — lihat
+bagian itu). Sesudahnya Paper 4 tinggal G3/G4/G5, dan **G3+G5 hanya bisa user yang jalankan.**
 
-## ✅ Verifikasi ronde 8 (dijalankan 2026-07-28, semua LULUS — tak perlu diulang)
+> **Fakta keras di ledger**: `SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md` (D14–D26),
+> `MAP.md`, `ROADMAP.md`. File ini hanya narasi + instruksi kerja.
 
-| Cek | Hasil |
-|---|---|
-| `SELECT COUNT(*) WHERE parsed_at > '2026-07-28T12'` | **693/693** |
-| `python -m scripts.23_tipikor_audit` | **465 OK / 14 non-tipikor / 0 kontaminasi** (stabil 8 ronde) |
-| `python -m scripts.24_holdout_rescore` | **0 REGRESI**; vonis 97%, tuntutan 97%, kerugian 93.9%, daerah 98%, tahun 100% (batas ATAS, training) |
-| `python -m pytest tests/ -q` | **246 passed, 2 xfailed** |
-| `python scripts/19_fair_comparison.py` | n=257; angka di tabel bawah |
+---
 
-## ⚠️ RECOVERY — hanya jika parser DIUBAH lagi
+## 🔴 PRIORITAS 1 — RONDE FIX 9 (wajib sebelum angka masuk paper)
 
-Setiap perubahan `src/parser/` WAJIB melalui urutan ini, jangan dipotong:
-1. Test-first: tambah test regresi di `tests/test_holdout_rN_bugs.py` / `test_rescore_regressions.py`.
-2. `python -m scripts.03_parse_sample` (idempoten, ±60 mnt) — re-ekstraksi 693.
-3. `python -m scripts.23_tipikor_audit` — **WAJIB**, pipeline menimpa flag is_tipikor;
-   rescue TPK/PDT/TUN hanya ada di script 23.
-4. `python -m scripts.24_holdout_rescore` — **harus 0 REGRESI**. Ada regresi → fix dulu,
-   jangan lanjut. (Ronde 7 memperbaiki 2505 sambil merusak 2997; HANYA script 24 yang
-   melihatnya — holdout ronde berjalan tidak akan pernah menemukan kerusakan pada kasus
-   ronde sebelumnya.)
-5. `python scripts/19_fair_comparison.py` → angka terkini, perbarui tabel di file ini.
+**Tiga perkara timah membawa kerugian 10x terlalu tinggi dan menempati peringkat 1–3
+kerugian terbesar di populasi analisis** — bukan satu pencilan, tapi seluruh ujung atas
+distribusi, yaitu titik ber-leverage tertinggi dalam regresi log-log.
 
-## ⚠️ KEPUTUSAN USER — satu-satunya blocker program saat ini
+| Perkara | DB sekarang | Seharusnya |
+|---|---|---|
+| 11891 K/PID.SUS/2025 | Rp300.003.263.938.131 | Rp28.933.575.919.431 |
+| 11179 K/PID.SUS/2025 | idem | idem |
+| 11312 K/PID.SUS/2025 | idem | idem |
 
-G2 GAGAL di R5 (D23). Ronde fix 7+8 sudah menutup 3 kelas vonis + 2 kelas kerugian
-yang ditemukan R5. Pilihan:
+Angka Rp300 T adalah audit BPKP yang **MENCAKUP biaya pemulihan lingkungan Rp11,9 T**, dan
+**MA secara eksplisit MENOLAKNYA**: *"dasar untuk menjatuhkan pidana kepada Terdakwa harus
+didasarkan pada kerugian keuangan negara senilai Rp28.933.575.919.431,14"* — alasannya
+kerugian lingkungan tunduk pada rezim hukum berbeda.
 
-- **(a) Holdout R6** — sampler sudah mengecualikan 130 kasus (golden 50 + R1–R5 80 arsip
-  + template berjalan; cek `scripts/21_holdout_sample.py` GOLDEN_FILES). Jalankan
-  `python -m scripts.21_holdout_sample` → 2 agent Sonnet blind (±600rb token; prompt R5
-  ada di transkrip sesi 19, konvensi lengkap juga terekam di kolom `adjudication`
-  `holdout_r5_validated.csv`) → `scripts.22_holdout_accuracy` → **adjudikasi manual tiap
-  mismatch vs PDF**. Menguji apakah fix 7+8 benar-benar menaikkan akurasi ATAU hanya
-  menukar kelas error.
-- **(b) Redefinisi gate berbasis bukti terkumpul** — vonis/tuntutan/daerah/tahun lolos +
-  kerugian dilaporkan dengan taksonomi error lengkap (D18–D24) + robustness excluding
-  multi-terdakwa + bound atenuasi D3 di paper. **WAJIB ditulis di DECISIONS sebagai
-  keputusan user, bukan keputusan agent.**
+**Dampak terukur** (dihitung sesi ini, elastisitas log-log n=257):
 
-**Bahan untuk memutuskan (jangan sembunyikan dari user):** akurasi holdout SEGAR tidak
-konvergen lintas 5 ronde — vonis 100→85→85→95→85, kerugian 72→79→90→85→80. Asumsi
-"ekor panjang yang menipis" tidak lolos ujinya sendiri. Pada n=20 Wilson terlalu lebar
-untuk memisahkan 85% dari 90%, jadi R6 pun belum tentu memutuskan. Argumen pro-(a):
-kelas R5 spesifik dan sudah tertutup, jadi R6 menguji hipotesis yang jelas.
+| | sekarang | dikoreksi | selisih |
+|---|---|---|---|
+| elastisitas vonis~kerugian | 0.1344 | **0.1415** | +5,3% relatif |
+| elastisitas tuntutan~kerugian | 0.1173 | **0.1228** | +4,7% relatif |
 
-## Yang terjadi di session 19
+Headline Paper 4 SELAMAT (Indonesia tetap ±separuh benchmark AS 0.288), tapi desimal kedua
+berubah — tidak boleh masuk paper tanpa dikoreksi.
 
-**Recovery handoff s18 tuntas** (langkah 1–6): re-ekstraksi R5 terverifikasi selesai
-(mulai 14:36:17, tepat setelah commit fix `4d965f0` 14:35:40), audit tipikor bersih.
+**Kelas error lain dari R6 yang layak difix bersamaan (semua sudah diverifikasi vs PDF, D26):**
+1. **Audit yang ditolak majelis** (11179 dkk) — butuh aturan: bila majelis menyatakan angka
+   audit tidak dipakai/"harus didasarkan pada", ambil angka yang dipakai majelis.
+2. **Uang pengganti terambil sebagai kerugian** (10453 K/2025: parser Rp392.184.403 = uang
+   pengganti; benar Rp1.259.759.403 "terdapat kerugian keuangan Negara sebesar").
+3. **Komponen menang atas total** (9645 K/2025: parser Rp722.142.200 satu pos pengadaan;
+   benar Rp12.835.112.730 "dalam perkara a quo terdapat kerugian keuangan Negara sebesar").
+   → pola berulang: frasa **"dalam perkara a quo terdapat kerugian keuangan Negara sebesar"**
+   adalah pernyataan simpulan MA dan layak masuk tier-2 conclusion_pattern.
+4. **Dokumen tanpa header "Tuntutan Pidana"** (905 K/2024, perkara KPK 363rb char, 0
+   kemunculan header) → tuntutan NULL. Perlu jalur cadangan: daftar bernomor
+   "Menjatuhkan pidana terhadap Terdakwa <NAMA> dengan pidana penjara selama ..." di
+   sepertiga awal dokumen, sebelum blok amar mana pun.
+5. **Angka tuntutan terambil sebagai vonis saat PK ditolak** (919 PK/2022: parser 18 =
+   tuntutan; rantai benar tuntutan 18 → PN 11 → berikutnya 8 → PK ditolak → **8**).
+6. **Nama terdakwa perkara lain terambil** (905 K/2024: parser BUDIMAN GANDI SUPARMAN;
+   amar final menyebut PRASETIO NUGROHO).
+7. *(Tidak fixable regex, DISCLOSE saja)* 493 PK/2020: kerugian hanya muncul di dalam klausa
+   uang pengganti, per tahun anggaran, tanpa total gabungan.
 
-**Ronde fix 6** (`e94aa05`) — dari regresi yang ditangkap script 24, BUKAN dari holdout.
-858 K/Pid.Sus/2022 tuntutan db=84 human=120: strategi 1a `extract_tuntutan_bulan`
-(amar tuntutan tanpa kata "penjara") dicoba tuntas SEBELUM 1b sehingga menang tanpa
-memandang posisi; dokumen memakai "menjatuhkan pidana **atas diri** Terdakwa" yang tak
-tertangkap 1a → 1a menjangkau ~2000 char ke depan dan menyambar amar PN yang dikutip.
-Fix: 1a+1b dinilai bersama, **match valid paling awal menang**. Tuntutan training-set
-93.7% → 97.5% (memperbaiki 3 kasus, bukan 1). Detail D22.
+**⚠️ Konsekuensi metodologis yang WAJIB ditulis di paper**: R6 mengukur parser ronde 8.
+Ronde 9 mengubah parser SESUDAH pengukuran, jadi kalimat yang jujur adalah *"instrumen
+divalidasi pada 50 kasus segar (vonis 98,0%, kerugian 91,7%); error yang ditemukan kemudian
+dikoreksi, sehingga korpus rilis setidaknya seakurat angka ini"* — **JANGAN** klaim 98/91,7
+sebagai akurasi parser final. **DILARANG menjalankan holdout R7** untuk "membuktikan"
+perbaikan: D25 mengunci R6 sebagai ronde terakhir, dan mengulang setelah melihat hasil
+persis pathology yang dihindari.
 
-**Holdout R5** (blind, 2 agent, n=20, 16 mismatch diadjudikasi manual vs PDF) →
-**G2 GAGAL**: vonis **85%** (REGRESI dari R4 95%), kerugian **80%**, tuntutan 95%,
-daerah/tahun/nama 100%. 8 error parser dikonfirmasi + 8 flip 0→1 (konvensi/error
-anotator). Alasan per baris ada di kolom `adjudication` pada
-`data/golden_set/holdout_r5_validated.csv`. Detail D23.
+### Prosedur ronde fix (jangan dipotong)
+1. Test-first di `tests/test_holdout_r6_bugs.py`.
+2. `python -m scripts.03_parse_sample` (idempoten, ±60 mnt).
+3. `python -m scripts.23_tipikor_audit` — **WAJIB**, pipeline menimpa is_tipikor.
+4. `python -m scripts.24_holdout_rescore` — **harus 0 REGRESI** (150 anotasi).
+5. `python scripts/19_fair_comparison.py` → angka final, perbarui tabel di bawah.
 
-**D24 — temuan terpenting sesi ini.** Bug vonis R5 bukan cuma statistik akurasi: pemindaian
-seluruh populasi analisis (baca ulang 260 PDF) menemukan **3 terdakwa yang DIBEBASKAN/LEPAS
-tercatat dengan vonis fiktif** — 1052 K/2022 (Fakhri Hilmi, kasasi terdakwa dikabulkan, bebas
-dari semua dakwaan; DB=96 bulan = **vonis PT yang justru DIBATALKAN**), 3247 K/2019 (DB=12),
-4597 K/2021 (ontslag; DB=60) — plus **6 dokumen tanpa jangkar amar** (692 K/2015, 631 K/2015,
-196 PK/2014, 2240 K/2014, 1964 K/2015, 149/Pid.Sus-TPK/2025/PN Sby). Total ±9/260 = 3,5%.
-Vonis = VARIABEL TERIKAT regresi inti Paper 4, jadi ini TIDAK bisa diselesaikan dengan
-disclosure; perbaikan wajib di kedua opsi keputusan.
+---
 
-**Ronde fix 7** (`cefae19`) — 3 kelas vonis + 1 kelas kerugian, test-first, diverifikasi
-pada PDF ASLI (bukan cuplikan):
-(1) header `MENGADILI,Menolak` (KOMA) tak cocok pola mana pun → NOL jangkar di dokumen
-240rb char → fallback menyapu angka kasus PEMBANDING;
-(2) `MENGADILI SENDIRI`/`MENGADILI KEMBALI` kini menjadi jangkar — dulu sengaja
-dikecualikan agar prosa "MA akan mengadili sendiri perkara ini" tak tertangkap, sekarang
-diterima HANYA jika diikuti verba amar (prosa tetap tidak cocok, ada testnya);
-(3) **deteksi bebas dipindah ke DEPAN sapuan kalimat** — dulu jalan paling akhir sehingga
-amar pembebasan kalah dari usulan dissent atau dari vonis yang baru saja dianulir; dijaga
-POSISI, jadi "bebas primair lalu dipidana subsidair" tetap menghasilkan vonis;
-(4) kerugian: angka MENDAHULUI labelnya ("terdapat selisih pembayaran sebesar RpX **yang
-merupakan** kerugian keuangan Negara").
-Hasil: 4597 60→0, 1052 96→0, 3247 12→0, 1254 PK 12→0, 196 PK 12→84, 2505 PK Rp329,7M→Rp139,0M.
+## 🟡 PRIORITAS 2 — temuan terbuka
 
-**Ronde fix 8** (`dfc6ec4`) — script 24 menangkap regresi yang DIBUAT ronde 7:
-2997 PK/2025 kerugian 46,6M→31,9M. Bypass blocker ronde 7 terlalu lebar; Rp31,9M adalah
-SISA setelah pemulihan Rp13,1M. Bypass dipersempit ke "membayar"/"pembayaran" saja +
-guard konteks pemulihan. Konvensi yang ditegakkan: **pengembalian/pemulihan/perbaikan oleh
-terdakwa TIDAK mengurangi kerugian yang ditetapkan** (sama dengan adjudikasi 1288 K/2020).
+- **Filter domain bocor**: `919 PK/Pid.Sus/2022` adalah perkara **UU Perkebunan Pasal 107**,
+  bukan tipikor, tapi `is_tipikor=1` lolos script 23. Sengaja TIDAK dikeluarkan dari
+  denominator R6 (hindari manipulasi post-hoc). Perlu audit ulang filter domain — berapa
+  banyak lagi yang seperti ini? (bersambung dari D15/D17)
+- **Duplikat korpus**: audit menyebut 4 nomor perkara duplikat (96 baris ekstra). Belum
+  ditriase.
 
-**Script 24 diperbaiki**: menghormati override adjudikasi (bandingkan nilai parser terarsip)
-sehingga kasus yang sudah diputus tidak terbaca sebagai regresi permanen. R5 didaftarkan
-ke `scripts/21` (exclusion) dan `scripts/24` (rescore).
+---
 
-## Angka (lintasan; arah SANGAT stabil, magnitudo bergeser per ronde)
+## ✅ Angka terkini (parser ronde 8, DB per 2026-07-28 12:47)
 
-| | R5 | R6 | R7 | **R8 (FINAL)** |
+| | R5 | R6 | R7 | R8 |
 |---|---|---|---|---|
 | n populasi analisis | 260 | 260 | 257 | **257** |
-| elastisitas tuntutan~kerugian | 0.110 | 0.115 | 0.117 | **0.1173** (SE 0.0118) |
-| elastisitas vonis~kerugian | 0.135 | 0.135 | 0.134 | **0.1344** (SE 0.0114) |
+| elastisitas tuntutan~kerugian | 0.110 | 0.115 | 0.117 | **0.1173** |
+| elastisitas vonis~kerugian | 0.135 | 0.135 | 0.134 | **0.1344** |
 | anchor R² (vonis~tuntutan) | 0.645 | 0.658 | 0.651 | **0.6508** |
 | R²(tuntutan\|fakta) | 0.357 | 0.377 | 0.384 | **0.385** |
 | R²(vonis\|fakta) | 0.466 | 0.466 | 0.465 | **0.465** |
 | **gap** | −0.110 | −0.089 | −0.081 | **−0.080** |
-| rescore vonis (100 anotasi, batas ATAS) | — | 94% | 97% | **97%** |
-| rescore kerugian (batas ATAS) | — | 91.8% | 92.9% | **93.9%** |
 
-**Angka R8 inilah yang dipakai paper** (bukan snapshot n=290 di draft lama, bukan angka
-preliminer ronde manapun). Koefisien lengkap: `python scripts/19_fair_comparison.py`.
+*(kolom = ronde parser, bukan ronde holdout)*
 
-**Wajib masuk paper**: klaim asli Paper 4 ("prosecutors less predictable") DIDUKUNG di
-semua versi data bersih — arah tidak pernah berbalik dalam 8 ronde. TAPI gap menyempit
-monoton seiring parser membaik (0.110→0.089→0.081→0.080): sebagian "tuntutan lebih sulit
-diprediksi" ternyata error pengukuran pada tuntutan, bukan diskresi jaksa. Magnitudo harus
-dinyatakan sensitif terhadap kualitas ekstraksi; jangan klaim angka gap sebagai temuan
-keras. Penyempitan melandai di R7→R8 (−0.001) setelah lompatan besar R5→R6 (−0.021),
-konsisten dengan jalur tuntutan yang sudah stabil — tapi itu observasi 2 titik, bukan bukti
-konvergensi.
+**Wajib masuk paper**: klaim asli Paper 4 ("prosecutors less predictable") DIDUKUNG di semua
+versi data bersih — arah tidak pernah berbalik dalam 8 ronde. TAPI gap menyempit monoton
+seiring parser membaik (0.110→0.089→0.081→0.080): sebagian "tuntutan lebih sulit diprediksi"
+ternyata error pengukuran, bukan diskresi jaksa. Nyatakan magnitudo sebagai sensitif terhadap
+kualitas ekstraksi; jangan jual angka gap sebagai temuan keras.
 
-## Setelah gate diputuskan → H0.3 update Paper 4
+## Akurasi instrumen untuk dilaporkan di paper (R6, n=50 segar, blind, teradjudikasi)
 
-Angka DB FINAL (bukan preliminer) ke §4.2/§5.3/abstrak; akurasi per-field golden50 +
-holdout R1–R5 masuk paper; paragraf metodologi "distribusi keanehan dokumen berekor
-panjang; holdout berulang + rescore lintas-ronde satu-satunya validasi jujur; bug parser
-mengaburkan temuan; 3 putusan bebas sempat membawa vonis fiktif ke populasi analisis".
-Re-run `scripts.16_prosecutorial_analysis` + `scripts.18`. Lalu G4 editor-sim AJC (sesi
-agent SEGAR) → rebuild DOCX/PDF → user submit.
+| field | akurasi | Wilson 95% |
+|---|---|---|
+| vonis | 98,0% | [89,5 – 99,6] |
+| tuntutan | 98,0% | [89,5 – 99,6] |
+| kerugian | 91,7% | [80,4 – 96,7] (2 AMBIGUOUS dikeluarkan) |
+| daerah | 100% | [92,9 – 100] |
+| tahun | 100% | [92,9 – 100] |
 
-## HANYA-USER (±3 jam, bottleneck program, tertunda 4 bulan)
+---
 
-1 email co-author hukum (UB/UMM/Unair) · 1 email penulis paper terdekat (komentar SSRN
-6580258) · 1 pembaca eksternal draft · 1 kopi mantan jaksa · akun Zenodo (rilis = v1.1
-PASCA fix, jangan v1.0). G3 & G5 masih 🔴 dan HANYA user yang bisa menghijaukan.
+## Apa yang terjadi di session 19 (ringkas; detail D22–D26)
+
+1. Recovery handoff s18 tuntas; re-ekstraksi R5 terverifikasi.
+2. **Ronde 6** (`e94aa05`): regresi tuntutan yang ditangkap script 24 (bukan holdout) —
+   strategi 1a menang tanpa memandang posisi. Fix: match valid paling awal menang.
+3. **Holdout R5** (n=20) → **G2 GAGAL** (vonis 85%, kerugian 80%). D23.
+4. **D24**: pemindaian 260 PDF menemukan **3 terdakwa BEBAS dengan vonis fiktif** (1052 K/2022
+   Fakhri Hilmi DB=96 bulan = vonis PT yang DIBATALKAN; 3247 K/2019; 4597 K/2021) + 6 dokumen
+   tanpa jangkar amar. Vonis = variabel terikat → tak bisa diselesaikan dengan disclosure.
+5. **Ronde 7** (`cefae19`): header `MENGADILI,Menolak` (koma); `MENGADILI SENDIRI/KEMBALI`
+   jadi jangkar (prosa tetap ditolak, ada testnya); **deteksi bebas dipindah ke DEPAN sapuan
+   kalimat**; kerugian label-mengikuti-angka.
+6. **Ronde 8** (`dfc6ec4`): script 24 menangkap regresi buatan ronde 7 (2997 PK: sisa setelah
+   pemulihan Rp31,9 M terambil, benar Rp46,6 M). Bypass blocker dipersempit.
+7. **D25 pra-registrasi** lalu **R6 n=50** → **G2 HIJAU**. Diagnosis kunci: aturan lama
+   "≥90% pada n=20" mustahil mensertifikasi instrumen 90% (P(gagal)=32%), dan G2 sendiri
+   menuntut ≥50 kasus — 5 ronde sebelumnya mengukur derau.
+
+**Pelajaran struktural yang jangan hilang**: (a) rescore lintas-ronde (script 24) WAJIB tiap
+ronde — dua kali ia menangkap kerusakan yang holdout ronde-berjalan mustahil lihat; (b)
+akurasi per-field pada n kecil MENYEMBUNYIKAN kerusakan tingkat-korpus — tiap kelas error
+vonis wajib dipindai ke seluruh populasi; (c) kasus yang dipakai mendiagnosis fix adalah data
+latih meski tak pernah dianotasi (dua nyaris lolos ke sampel R6).
+
+---
+
+## 🔵 HANYA-USER — bottleneck sebenarnya (tertunda 4 bulan, TIDAK bergerak sesi ini)
+
+G1 🟢 · G2 🟢 · **G3 🔴 · G4 🔴 · G5 🔴**. Delapan ronde perbaikan parser tidak menyentuh
+G3/G5 sedikit pun, dan keduanya mustahil dikerjakan agent:
+
+1. Email co-author hukum (UB/UMM/Unair)
+2. Email penulis paper terdekat (komentar SSRN 6580258) — sinyal eksternal G3
+3. 1 pembaca eksternal draft — G5
+4. Kopi mantan jaksa
+5. Akun Zenodo (rilis = korpus **v1.1 PASCA ronde 9**, jangan v1.0)
+
+G4 (editor-sim AJC) bisa agent, tapi **jalankan di sesi SEGAR tanpa konteks pembelaan**,
+diberi HANYA abstrak + cover letter + scope jurnal.
 
 ## Verifikasi cepat
 
 ```bash
 python -m pytest tests/ -q                 # 246 passed, 2 xfailed
 python -m scripts.23_tipikor_audit         # 465/14/0 — WAJIB tiap re-ekstraksi
-python -m scripts.24_holdout_rescore       # 100 anotasi, harus 0 regresi
+python -m scripts.24_holdout_rescore       # 150 anotasi, harus 0 regresi
 python scripts/19_fair_comparison.py       # n & elastisitas DB terkini
 ```
 - Branch `autoresearch/apr9-textfeatures` (rename ditunda, D10) · Backup DB lama:
   `data/korupsinlp_pre_reparse_s17.db` · SSRN: P2=6574140, P4=6580258
-- Test regresi parser: `tests/test_holdout_bugs.py`, `_r2_`, `_r3_`, `_r4_`, `_r5_`,
+- Arsip validasi: `holdout_r1..r6_validated.csv` (+ `r6_validation_A–E`). Kolom
+  `adjudication` di r5/r6 memuat alasan per baris — sumber konvensi anotasi.
+- Test regresi parser: `test_holdout_bugs.py`, `_r2_`, `_r3_`, `_r4_`, `_r5_`,
   `test_rescore_regressions.py`. Jalankan pada SETIAP perubahan parser.

@@ -32,6 +32,7 @@ GOLDEN_FILES = [
     "holdout_r3_validated.csv",  # holdout R3 drove parser fix round 4 -> now training
     "holdout_r4_validated.csv",  # holdout R4 drove parser fix round 5 -> now training
     "holdout_r5_validated.csv",  # holdout R5 (G2 FAILED: vonis 85%, kerugian 80%) -> now training
+    "holdout_r6_validated.csv",  # holdout R6 n=50 (G2 PASSED) -> now training
     "holdout_20_template.csv",   # current round's template -> also excluded
 ]
 

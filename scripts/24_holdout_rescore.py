@@ -21,7 +21,7 @@ GS = ROOT / "data" / "golden_set"
 DB = ROOT / "data" / "korupsinlp.db"
 ROUNDS = ["holdout_r1_validated.csv", "holdout_r2_validated.csv",
           "holdout_r3_validated.csv", "holdout_r4_validated.csv",
-          "holdout_r5_validated.csv"]
+          "holdout_r5_validated.csv", "holdout_r6_validated.csv"]
 FIELDS = ["vonis", "tuntutan", "kerugian", "daerah", "tahun"]
 DB_COL = {"vonis": "vonis_bulan", "tuntutan": "tuntutan_bulan",
           "kerugian": "kerugian_negara", "daerah": "daerah", "tahun": "tahun"}
@@ -86,7 +86,11 @@ def judge(field, parser_v, human_v):
         return "A"
     if p is None or h is None:
         return "0"
-    if field in ("vonis", "tuntutan", "kerugian", "tahun"):
+    if field == "kerugian":
+        # Cents tolerance — annotators write whole rupiah, the parser keeps the
+        # cents the verdict prints (holdout R6).
+        return "1" if abs(p - h) < 1.0 else "0"
+    if field in ("vonis", "tuntutan", "tahun"):
         return "1" if abs(p - h) < 0.5 else "0"
     return "1" if str(p).upper() == str(h).upper() else "0"
 
