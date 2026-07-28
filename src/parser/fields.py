@@ -161,20 +161,71 @@ def _find_all_mengadili(text_lower: str) -> list[int]:
     """Find all MENGADILI section positions in text."""
     positions = []
     # Variants: spaced header, colon, newline, merged-with-hyphen
-    # ("MENGADILI-Menolak"), and fully merged with the first amar verb
-    # ("mengadilimenolak..." — holdout R2, 2305 K/Pid.Sus/2016). "sendiri" is
-    # deliberately NOT in the verb lookahead: "mengadili sendiri" appears in
-    # prose/dissent argument, not as a header.
+    # ("MENGADILI-Menolak"), merged with a COMMA ("MENGADILI,Menolak" —
+    # holdout R5, 196 PK/2014: this class left a 240k-char document with ZERO
+    # anchors), and fully merged with the first amar verb ("mengadilimenolak..."
+    # — holdout R2, 2305 K/Pid.Sus/2016).
+    #
+    # "MENGADILI SENDIRI" / "MENGADILI KEMBALI" IS the operative re-adjudication
+    # amar and must anchor (holdout R5: 4597 K/2021, 1052 K/2022, 3247 K/2019 —
+    # acquittals that otherwise lost to a dissent's proposed term or to the very
+    # sentence the MA had just annulled). It is admitted ONLY when an amar verb
+    # follows, so the prose "Mahkamah Agung akan mengadili sendiri perkara ini"
+    # — the reason it was excluded before — still does not match.
+    _AMAR_VERBS = (r'menolak|mengabulkan|menyatakan|membebaskan|melepaskan'
+                   r'|memperbaiki|menguatkan|menerima|menghukum|menjatuhkan'
+                   r'|membatalkan|menetapkan|memerintahkan|memulihkan')
     for pat in [r'm\s+e\s+n\s+g\s+a\s+d\s+i\s+l\s+i', r'mengadili\s*:',
                 r'mengadili\s*\n', r'mengadili\s*[-–—]',
-                r'mengadili\s*(?=menolak|mengabulkan|menyatakan|membebaskan'
-                r'|memperbaiki|menguatkan|menerima|menghukum|menjatuhkan'
-                r'|membatalkan|menetapkan)']:
+                r'mengadili\s*,\s*(?=' + _AMAR_VERBS + r')',
+                r'mengadili\s+(?:sendiri|kembali)\s*[:\-–—,]?\s*'
+                r'(?=\d*\s*\.?\s*(?:' + _AMAR_VERBS + r'))',
+                r'mengadili\s*(?=' + _AMAR_VERBS + r')']:
         for m in re.finditer(pat, text_lower):
             # Don't add duplicates (close positions from different patterns)
             if not any(abs(m.start() - p) < 50 for p in positions):
                 positions.append(m.start())
     return sorted(positions)
+
+
+def _is_acquittal_before_sentence(text_lower: str, start: int,
+                                  window: int = 3000) -> bool:
+    """True if the amar block at `start` acquits before it sentences anyone.
+
+    Both an acquittal verb and a prison term can appear in one block: the MA
+    annuls a lower sentence ("membatalkan putusan ... yang menjatuhkan pidana
+    penjara 8 tahun") and then acquits, or a dissent proposes a term after the
+    amar. Whichever comes FIRST is the operative one.
+    """
+    block = text_lower[start:start + window]
+    acquittal_at = None
+    for m in re.finditer(
+        r'(?:membebaskan|melepaskan)[\s\S]{0,40}?(?:terdakwa|terpidana)', block
+    ):
+        left = block[max(0, m.start() - 200):m.start()]
+        # Skip pleas and statutory tests, not operative amars (D24: the first
+        # corpus scan drowned in "memohon agar dibebaskan" / PK boilerplate).
+        if any(w in left for w in ("memohon", "supaya", "agar ", "menuntut",
+                                   "menurut", "dapat mem", "semestinya",
+                                   "setidak-tidaknya", "seharusnya")):
+            continue
+        if _is_full_acquittal(block[m.start():m.start() + 400]):
+            acquittal_at = m.start()
+            break
+    if acquittal_at is None:
+        return False
+
+    sentence_at = None
+    for m in re.finditer(
+        r'(?:menjatuhkan|menghukum)\s*pidana[\s\S]{0,150}?'
+        r'penjara\s*(?:selama\s*|menjadi\s*)?\d+\s*(?:\([^)]+\)\s*)?(?:tahun|bulan)',
+        block,
+    ):
+        if _is_subsidiary_context(block, m.start()):
+            continue
+        sentence_at = m.start()
+        break
+    return sentence_at is None or acquittal_at < sentence_at
 
 
 def _extract_mengadili_sentence(text_lower: str, start: int, end: int | None = None) -> float | None:
@@ -385,6 +436,18 @@ def extract_vonis_bulan(text: str) -> float | None:
 
     if mengadili_positions:
         last_pos = mengadili_positions[-1]
+
+        # 1-PRE. An acquittal in the operative amar outranks ANY sentence sweep.
+        # This check used to run last (step 1e), so a dissenting opinion's
+        # proposed term — or the very sentence the MA had just annulled — was
+        # returned for defendants who had actually been acquitted or released
+        # (holdout R5 / D24: 4597 K/2021 ontslag, 1052 K/2022, 3247 K/2019).
+        # Guarded by POSITION: the acquittal must come before the first
+        # sentence in the block, so "bebas dari dakwaan primair, dipidana atas
+        # subsidair" still yields the sentence (and _is_full_acquittal already
+        # rejects primair-only acquittals).
+        if _is_acquittal_before_sentence(text_lower, last_pos):
+            return 0
 
         # 1a. Strict "menjatuhkan pidana" in last MENGADILI (5000 char window)
         result = _extract_mengadili_sentence(text_lower, last_pos)
@@ -644,6 +707,17 @@ def extract_kerugian_negara(text: str) -> float | None:
         r')\s*rp\.?\s*([\d.,]+)'
     )
 
+    # Tier 2 also covers the LABEL-AFTER-FIGURE phrasing, where the amount is
+    # stated first and only then named as the loss: "terdapat selisih
+    # pembayaran sebesar RpX ... yang merupakan kerugian keuangan Negara"
+    # (holdout R5, 2505 PK/2025 — the parser had taken the gross appraisal
+    # figure the PK annulled). The trailing clause is what makes this the
+    # court's conclusion, so it ranks with the other conclusions.
+    conclusion_suffix_pattern = (
+        r'sebesar\s*rp\.?\s*([\d.,]+)\s*(?:\([^)]{0,200}\)\s*)?'
+        r'yang\s*merupakan\s*kerugian\s*(?:keuangan\s*)?negara'
+    )
+
     patterns = [
         # [^.;] — clause-bound: crossing ';' bled a doctrinal "kerugian"
         # mention into a bribe amount (holdout R2 bug 438 K/Pid.Sus/2021)
@@ -668,13 +742,20 @@ def extract_kerugian_negara(text: str) -> float | None:
     # a value is repeated.
     candidates = []  # (amount, position, tier)
     seen_pos = set()
-    for tier_boost, pattern in [(2, conclusion_pattern)] + [(0, p) for p in patterns]:
+    for tier_boost, pattern in [(2, conclusion_pattern),
+                                (2, conclusion_suffix_pattern)] + \
+            [(0, p) for p in patterns]:
         for m in re.finditer(pattern, text_lower):
             if m.start(1) in seen_pos:
                 continue
             seen_pos.add(m.start(1))
             left = text_lower[max(0, m.start() - 150):m.start()]
-            if any(b in left or b in m.group(0) for b in blockers):
+            # The label-after-figure phrasing names the amount as the loss in
+            # its own clause, so payment/restitution words to the left are
+            # context, not disqualifiers — "terdapat selisih PEMBAYARAN sebesar
+            # RpX yang merupakan kerugian keuangan Negara" (holdout R5).
+            if pattern is not conclusion_suffix_pattern and \
+                    any(b in left or b in m.group(0) for b in blockers):
                 continue
             fig_left = text_lower[max(0, m.start(1) - 35):m.start(1)]
             if any(t in fig_left for t in threshold_terms):
