@@ -35,20 +35,40 @@ GOLDEN_FILES = [
     "holdout_20_template.csv",   # current round's template -> also excluded
 ]
 
+# Cases that were never ANNOTATED but still drove parser fixes, so they are
+# training data in substance (DECISIONS D24: the corpus-wide acquittal /
+# missing-amar-anchor scan that motivated fix round 7, plus the round-8
+# regression driver). Leaving them in a "fresh" holdout would inflate accuracy
+# on exactly the classes just repaired.
+FIX_DRIVER_CASES = [
+    "1052 K/Pid.Sus/2022", "3247 K/Pid.Sus/2019", "4597 K/Pid.Sus/2021",
+    "692 K/PID.SUS/2015", "631 K/PID.SUS/2015", "196 PK/PID.SUS/2014",
+    "2240 K/PID.SUS/2014", "1964 K/Pid.Sus/2015", "149/Pid.Sus-TPK/2025/PN Sby",
+    "2997 PK/PID.SUS/2025",
+]
+
 
 def norm(s: str) -> str:
     s = re.sub(r"\s+", " ", str(s).upper()).strip()
     return re.sub(r"\s*/\s*", "/", s)
 
 
-def main():
+def main(n: int = 20):
+    """Sample `n` fresh holdout cases, ~72% from the elasticity population
+    (split evenly across kerugian terciles) and the rest from the no-kerugian
+    stratum — the R1-R5 proportions (15/5), scaled."""
     rng = np.random.default_rng(SEED)
+    per_tercile = int(round(n * 0.72 / 3))
+    n_no_ker = n - 3 * per_tercile
 
     exclude = set()
     for f in GOLDEN_FILES:
         df = pd.read_csv(ROOT / "data" / "golden_set" / f, dtype=str)
         exclude |= {norm(c) for c in df["case_number"]}
-    print(f"Excluding {len(exclude)} previously-validated cases")
+    n_annotated = len(exclude)
+    exclude |= {norm(c) for c in FIX_DRIVER_CASES}
+    print(f"Excluding {len(exclude)} cases: {n_annotated} annotated + "
+          f"{len(exclude) - n_annotated} unannotated fix-drivers (D24)")
 
     con = sqlite3.connect(DB)
     all_pdf = pd.read_sql_query(
@@ -75,8 +95,10 @@ def main():
     picks = []
     for t in [0, 1, 2]:
         stratum = elas[elas["tercile"] == t]
-        picks.append(stratum.iloc[rng.choice(len(stratum), 5, replace=False)])
-    picks.append(no_ker.iloc[rng.choice(len(no_ker), 5, replace=False)])
+        assert len(stratum) >= per_tercile, f"tercile {t} too small: {len(stratum)}"
+        picks.append(stratum.iloc[rng.choice(len(stratum), per_tercile, replace=False)])
+    assert len(no_ker) >= n_no_ker, f"no-kerugian stratum too small: {len(no_ker)}"
+    picks.append(no_ker.iloc[rng.choice(len(no_ker), n_no_ker, replace=False)])
     sample = pd.concat(picks, ignore_index=True)
 
     tpl = pd.DataFrame({
@@ -99,4 +121,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--n", type=int, default=20,
+                    help="holdout size (R1-R5 used 20; R6 pre-registered at 50)")
+    main(ap.parse_args().n)

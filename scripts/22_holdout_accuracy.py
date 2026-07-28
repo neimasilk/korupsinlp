@@ -79,8 +79,12 @@ def judge(field, parser_v, human_v):
 
 def main():
     tpl = pd.read_csv(GS / "holdout_20_template.csv", dtype=str)
-    val = pd.concat([pd.read_csv(GS / "holdout_validation_A.csv", dtype=str),
-                     pd.read_csv(GS / "holdout_validation_B.csv", dtype=str)],
+    # R1-R5 used two annotator batches; R6 (n=50) uses five. Read whatever
+    # batches are present so the round size is not hard-coded here.
+    batches = sorted(GS.glob("holdout_validation_[A-Z].csv"))
+    assert batches, "no holdout_validation_<X>.csv batches found"
+    print(f"Batch anotator: {', '.join(p.stem[-1] for p in batches)}")
+    val = pd.concat([pd.read_csv(p, dtype=str) for p in batches],
                     ignore_index=True)
     tpl["key"] = tpl["case_number"].map(norm_case)
     val["key"] = val["case_number"].map(norm_case)
