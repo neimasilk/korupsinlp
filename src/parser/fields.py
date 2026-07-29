@@ -794,6 +794,25 @@ def extract_kerugian_negara(text: str) -> float | None:
     # Collect ALL candidates (first match is often a restitution recap);
     # decide by tier (conclusion > audit-anchored > plain), then by how often
     # a value is repeated.
+
+    # Figures stated as a recovery REMAINDER — "masih tersisa/setelah pemulihan
+    # kerugian ... sebesar RpX" — are the post-recovery balance, NOT the gross
+    # established loss. A tier-2 conclusion that restates such a remainder (the
+    # 2997 PK/Pid.Sus/2025 regression: "dalam perkara a quo terdapat kerugian
+    # ... sebesar Rp31,9 M" where 31,9 M = 46,6 M gross − 13,1 M recovery) must
+    # not outrank the gross figure, so any candidate equal to a remainder value
+    # is denied tier-2 elevation below.
+    remainder_figures: set[float] = set()
+    for m in re.finditer(
+        r'(?:masih\s+tersisa|tersisa\s+kerugian|sisa\s+kerugian'
+        r'|setelah\s+pemulihan|pemulihan\s+kerugian\s+keuangan)'
+        r'[\s\S]{0,90}?rp\.?\s*([\d.,]+)',
+        text_lower,
+    ):
+        val = _parse_rupiah(m.group(1))
+        if val:
+            remainder_figures.add(val)
+
     candidates = []  # (amount, position, tier)
     seen_pos = set()
     for tier_boost, pattern in [(2, conclusion_pattern),
@@ -830,6 +849,11 @@ def extract_kerugian_negara(text: str) -> float | None:
                 continue
             amount = _parse_rupiah(m.group(1))
             if not amount or amount <= 0:
+                continue
+            # A recovery-remainder figure never gets tier-2 elevation (see
+            # remainder_figures above); it still competes at tier 0, where the
+            # gross established loss wins on count/earliest-occurrence.
+            if tier_boost == 2 and amount in remainder_figures:
                 continue
             ctx = text_lower[max(0, m.start() - 250):m.end() + 250]
             tier = tier_boost or (1 if any(a in ctx for a in audit_anchors) else 0)

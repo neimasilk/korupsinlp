@@ -131,6 +131,29 @@ def test_kerugian_kelebihan_pembayaran_outranks_audit():
     assert extract_kerugian_negara(SNIPPET_KELEBIHAN_PEMBAYARAN) == 28933575919431.14
 
 
+# Regression guard (ronde 9): the a-quo conclusion must NOT elevate a figure
+# that is elsewhere stated as a recovery REMAINDER. 2997 PK/Pid.Sus/2025 — gross
+# loss Rp46,6 M, partial recovery Rp13,1 M, remainder Rp31,9 M. The remainder is
+# restated both as "masih tersisa kerugian ... sebesar" AND "dalam perkara a quo
+# terdapat kerugian ... sebesar"; the gross established loss (46,6 M) must win.
+SNIPPET_AQUO_IS_REMAINDER = (
+    "telah menimbulkan kerugian keuangan Negara sebesar Rp46.617.192.219,00 "
+    "(empat puluh enam miliar enam ratus tujuh belas juta rupiah). "
+    "telah terdapat pemulihan kerugian keuangan Negara sebesar "
+    "Rp13.101.947.514,00 dan masih tersisa kerugian Negara sebesar "
+    "Rp31.898.052.486,00 (tiga puluh satu miliar delapan ratus sembilan puluh "
+    "delapan juta rupiah) yang merupakan kerugian keuangan Negara. "
+    "yang mana dalam perkara a quo terdapat kerugian keuangan Negara sebesar "
+    "Rp31.898.052.486,00 (tiga puluh satu miliar delapan ratus sembilan puluh "
+    "delapan juta rupiah)"
+)
+
+
+def test_kerugian_aquo_restatement_of_remainder_does_not_outrank_gross():
+    """Ronde-9 regression: a remainder restated as the a-quo loss still loses."""
+    assert extract_kerugian_negara(SNIPPET_AQUO_IS_REMAINDER) == 46617192219.0
+
+
 def test_kerugian_aquo_conclusion_outranks_component():
     """Bug 3: 'dalam perkara a quo terdapat ... sebesar' is the MA total."""
     assert extract_kerugian_negara(SNIPPET_COMPONENT_VS_TOTAL) == 12835112730.0
