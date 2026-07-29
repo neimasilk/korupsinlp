@@ -33,50 +33,25 @@ suite 254 passed. Pipeline bersih & idle.
 > 28,9T via kolom adjudication (catatan asli diawetkan). Ini pilihan substantif,
 > bukan trik — tulis eksplisit di §metode + robustness check dgn 300T di lampiran.
 
-**Tiga perkara timah membawa kerugian 10x terlalu tinggi dan menempati peringkat 1–3
-kerugian terbesar di populasi analisis** — bukan satu pencilan, tapi seluruh ujung atas
-distribusi, yaitu titik ber-leverage tertinggi dalam regresi log-log.
+### Catatan historis diagnosis (sudah dikerjakan — detail D27)
 
-| Perkara | DB sekarang | Seharusnya |
-|---|---|---|
-| 11891 K/PID.SUS/2025 | Rp300.003.263.938.131 | Rp28.933.575.919.431 |
-| 11179 K/PID.SUS/2025 | idem | idem |
-| 11312 K/PID.SUS/2025 | idem | idem |
+**Timah** (peringkat 1–3 kerugian terbesar, titik ber-leverage tertinggi): audit BPKP
+Rp300T mencakup kerugian lingkungan (~Rp271T) yang MA tolak; basis pidana & kerugian
+keuangan negara = Rp28,9T. **Taksonomi 7 error D26, semua sudah ditangani ronde 9:**
+1. Audit ditolak majelis (11891/11179/11312) → pola tier-2 "harus didasarkan pada … senilai"
+   + "kelebihan pembayaran … tidak sebagaimana mestinya" (varian 11312). ✅
+2. Uang pengganti terambil sbg kerugian (10453) → tier-2 "dalam perkara a quo terdapat … sebesar". ✅
+3. Komponen menang atas total (9645) → pola yang sama. ✅
+4. Tuntutan NULL tanpa header (905 KPK) → header merged `\s*`. ✅
+5. Vonis ambil tuntutan saat PK ditolak (919) → quoted-sentence finder +loop bulan. ✅
+6. Nama terdakwa salah (905) → header berspasi `N a m a:`. ✅
+7. 493 PK/2020 (kerugian hanya di klausa UP per tahun anggaran) → **tidak fixable regex, DISCLOSE**. ⚠️
 
-Angka Rp300 T adalah audit BPKP yang **MENCAKUP biaya pemulihan lingkungan Rp11,9 T**, dan
-**MA secara eksplisit MENOLAKNYA**: *"dasar untuk menjatuhkan pidana kepada Terdakwa harus
-didasarkan pada kerugian keuangan negara senilai Rp28.933.575.919.431,14"* — alasannya
-kerugian lingkungan tunduk pada rezim hukum berbeda.
-
-**Dampak terukur** (dihitung sesi ini, elastisitas log-log n=257):
-
-| | sekarang | dikoreksi | selisih |
-|---|---|---|---|
-| elastisitas vonis~kerugian | 0.1344 | **0.1415** | +5,3% relatif |
-| elastisitas tuntutan~kerugian | 0.1173 | **0.1228** | +4,7% relatif |
-
-Headline Paper 4 SELAMAT (Indonesia tetap ±separuh benchmark AS 0.288), tapi desimal kedua
-berubah — tidak boleh masuk paper tanpa dikoreksi.
-
-**Kelas error lain dari R6 yang layak difix bersamaan (semua sudah diverifikasi vs PDF, D26):**
-1. **Audit yang ditolak majelis** (11179 dkk) — butuh aturan: bila majelis menyatakan angka
-   audit tidak dipakai/"harus didasarkan pada", ambil angka yang dipakai majelis.
-2. **Uang pengganti terambil sebagai kerugian** (10453 K/2025: parser Rp392.184.403 = uang
-   pengganti; benar Rp1.259.759.403 "terdapat kerugian keuangan Negara sebesar").
-3. **Komponen menang atas total** (9645 K/2025: parser Rp722.142.200 satu pos pengadaan;
-   benar Rp12.835.112.730 "dalam perkara a quo terdapat kerugian keuangan Negara sebesar").
-   → pola berulang: frasa **"dalam perkara a quo terdapat kerugian keuangan Negara sebesar"**
-   adalah pernyataan simpulan MA dan layak masuk tier-2 conclusion_pattern.
-4. **Dokumen tanpa header "Tuntutan Pidana"** (905 K/2024, perkara KPK 363rb char, 0
-   kemunculan header) → tuntutan NULL. Perlu jalur cadangan: daftar bernomor
-   "Menjatuhkan pidana terhadap Terdakwa <NAMA> dengan pidana penjara selama ..." di
-   sepertiga awal dokumen, sebelum blok amar mana pun.
-5. **Angka tuntutan terambil sebagai vonis saat PK ditolak** (919 PK/2022: parser 18 =
-   tuntutan; rantai benar tuntutan 18 → PN 11 → berikutnya 8 → PK ditolak → **8**).
-6. **Nama terdakwa perkara lain terambil** (905 K/2024: parser BUDIMAN GANDI SUPARMAN;
-   amar final menyebut PRASETIO NUGROHO).
-7. *(Tidak fixable regex, DISCLOSE saja)* 493 PK/2020: kerugian hanya muncul di dalam klausa
-   uang pengganti, per tahun anggaran, tanpa total gabungan.
+**Prosedur (sudah dijalankan, jangan ulang kecuali parser berubah lagi)**: test-first →
+`scripts.03` (±60 mnt) → `scripts.23` (WAJIB, timpa is_tipikor) → `scripts.24` (0 regresi)
+→ `scripts/19` (angka final, lihat tabel §Angka terkini). Dampak aktual ronde 9:
+elastisitas vonis 0,1344→**0,1446** (+7,6%), tuntutan 0,1173→**0,1243** (+6,0%) — sedikit
+lebih besar dari prediksi awal (+5,3%) karena n tumbuh +5.
 
 **⚠️ Konsekuensi metodologis yang WAJIB ditulis di paper**: R6 mengukur parser ronde 8.
 Ronde 9 mengubah parser SESUDAH pengukuran, jadi kalimat yang jujur adalah *"instrumen
@@ -85,13 +60,6 @@ dikoreksi, sehingga korpus rilis setidaknya seakurat angka ini"* — **JANGAN** 
 sebagai akurasi parser final. **DILARANG menjalankan holdout R7** untuk "membuktikan"
 perbaikan: D25 mengunci R6 sebagai ronde terakhir, dan mengulang setelah melihat hasil
 persis pathology yang dihindari.
-
-### Prosedur ronde fix (jangan dipotong)
-1. Test-first di `tests/test_holdout_r6_bugs.py`.
-2. `python -m scripts.03_parse_sample` (idempoten, ±60 mnt).
-3. `python -m scripts.23_tipikor_audit` — **WAJIB**, pipeline menimpa is_tipikor.
-4. `python -m scripts.24_holdout_rescore` — **harus 0 REGRESI** (150 anotasi).
-5. `python scripts/19_fair_comparison.py` → angka final, perbarui tabel di bawah.
 
 ---
 
