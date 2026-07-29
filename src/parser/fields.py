@@ -354,6 +354,22 @@ def _find_quoted_lower_court_sentence(text_lower: str, mengadili_pos: int) -> fl
                     months = int(pm.group(2)) if pm.group(2) else 0
                     found = years * 12 + months
                     break
+            # Bulan-only quoted sentence (holdout R6, 919 PK/Pid.Sus/2022: a
+            # PK rejected, the standing kasasi amar was corrected in MONTHS
+            # — "8 bulan". Without this the finder returned None, the demand's
+            # "1 tahun 6 bulan" was grabbed as the vonis, and shorter genuine
+            # tipikor sentences quoted in months were missed too.)
+            if found is None:
+                for pm in re.finditer(
+                    r'(?:menjatuhkan|menghukum|dijatuhi)\s*pidana[\s\S]{0,300}?penjara'
+                    r'(?:[\s\S]{0,80}?selama|\s*menjadi)?\s*'
+                    r'(\d+)\s*(?:\([^)]+\)\s*)?bulan',
+                    section,
+                ):
+                    if _is_subsidiary_context(section, pm.start(1)):
+                        continue
+                    found = float(pm.group(1))
+                    break
             # A quoted FULL acquittal amar counts as sentence 0
             if found is None and _is_full_acquittal(section):
                 found = 0
@@ -570,7 +586,10 @@ def extract_tuntutan_bulan(text: str) -> float | None:
     # tuntutan as a numbered list; the subsidiary clause ("...jika uang
     # pengganti tidak dibayar, dipidana penjara 1 tahun") must be skipped.
     # Iterate over ALL headers — the first may be a passing reference.
-    for tuntutan_header in re.finditer(r'tuntutan\s+pidana', text_lower):
+    # \s* (not \s+): some KPK kasasi PDFs merge the header to one token
+    # ("TuntutanPidanaPenuntutUmum") so the spaced form never matches and the
+    # demand dropped to NULL — holdout R6, 905 K/Pid.Sus/2024.
+    for tuntutan_header in re.finditer(r'tuntutan\s*pidana', text_lower):
         section = text_lower[tuntutan_header.start():tuntutan_header.start() + 4000]
         # 1a and 1b are scored TOGETHER and the EARLIEST valid match wins.
         # Trying 1a exhaustively first let it reach across the whole section
@@ -718,6 +737,41 @@ def extract_kerugian_negara(text: str) -> float | None:
         r'yang\s*merupakan\s*kerugian\s*(?:keuangan\s*)?negara'
     )
 
+    # Two more MA dispositive conclusions (holdout R6 / ronde-9):
+    # (a) "dalam perkara a quo terdapat kerugian keuangan Negara sebesar RpX"
+    # — the court's own summing total, which outranks procurement COMPONENTS
+    # or uang-pengganti figures tied to a "kerugian" mention (9645 K/Pid.Sus/
+    # 2025, 10453 K/PID.SUS/2025). The required word "terdapat" distinguishes
+    # it from "...kerugian keuangan negara dalam perkara a quo yang mendasarkan
+    # pada ... BPKP ... sejumlah Rp300 T" (11891 K/PID.SUS/2025 — the audit the
+    # MA rejects), so it never grabs the rejected audit.
+    # (b) "harus didasarkan pada kerugian keuangan negara senilai RpX" — the
+    # MA's explicit ruling that THIS figure is the sentencing basis, outranking
+    # the BPKP audit total it has just refused to apply (the three timah cases
+    # 11891/11179/11312 K/PID.SUS/2025, Rp300 T → Rp28,9 T).
+    conclusion_aquo_pattern = (
+        r'dalam\s+perkara\s+a\s+quo\s+terdapat\s+kerugian\s*(?:keuangan\s*)?'
+        r'negara\s*(?:sebesar|sejumlah|senilai)\s*rp\.?\s*([\d.,]+)'
+    )
+    conclusion_didasarkan_pattern = (
+        r'harus\s*didasarkan\s+(?:pada|kepada)\s+kerugian\s*(?:keuangan\s*)?'
+        r'negara\s*(?:senilai|sebesar|sejumlah)\s*rp\.?\s*([\d.,]+)'
+    )
+    # (c) "kelebihan pembayaran yang tidak sebagaimana mestinya sebesar RpX" —
+    # the MA/BPKP formula for an improper excess payment, which IS the
+    # established state loss in procurement-smuggling cases. In the companion
+    # timah file 11312 K/PID.SUS/2025 this is the ONLY place the Rp28,9 T figure
+    # the MA actually applied appears (the Rp300 T BPKP audit it rejected is
+    # stated three times as "Kerugian Keuangan Negara"/"BPKP"); without this
+    # rule 11312 stays at the rejected audit while its two companion files are
+    # corrected, leaving a lone 300 T leverage point. The phrase contains the
+    # blocker word "pembayaran", so it is exempted below just like the
+    # label-after-figure suffix.
+    conclusion_kelebihan_pattern = (
+        r'kelebihan\s+pembayaran\s+yang\s+tidak\s+sebagaimana\s+mestinya\s*'
+        r'(?:sebesar|sejumlah|senilai)\s*rp\.?\s*([\d.,]+)'
+    )
+
     patterns = [
         # [^.;] — clause-bound: crossing ';' bled a doctrinal "kerugian"
         # mention into a bribe amount (holdout R2 bug 438 K/Pid.Sus/2021)
@@ -743,14 +797,18 @@ def extract_kerugian_negara(text: str) -> float | None:
     candidates = []  # (amount, position, tier)
     seen_pos = set()
     for tier_boost, pattern in [(2, conclusion_pattern),
-                                (2, conclusion_suffix_pattern)] + \
+                                (2, conclusion_suffix_pattern),
+                                (2, conclusion_aquo_pattern),
+                                (2, conclusion_didasarkan_pattern),
+                                (2, conclusion_kelebihan_pattern)] + \
             [(0, p) for p in patterns]:
         for m in re.finditer(pattern, text_lower):
             if m.start(1) in seen_pos:
                 continue
             seen_pos.add(m.start(1))
             left = text_lower[max(0, m.start() - 150):m.start()]
-            if pattern is conclusion_suffix_pattern:
+            if pattern is conclusion_suffix_pattern or \
+                    pattern is conclusion_kelebihan_pattern:
                 # The label-after-figure phrasing names the amount as the loss
                 # in its own clause, so payment words alone must not disqualify
                 # it — "terdapat selisih PEMBAYARAN sebesar RpX yang merupakan
@@ -875,9 +933,14 @@ def extract_nama_terdakwa(text: str) -> str | None:
     # This is the identity block at the top of every MA kasasi PDF.
     # Handles "Nama : X bin Y;" or "Nama : X, S.H., binti Y;"
     # Also handles "Nama lengkap : X;" variant
-    # Terminated by semicolon before "Tempat Lahir" or "Tempat lahir"
+    # Terminated by semicolon before "Tempat Lahir" or "Tempat lahir".
+    # "N\s*a\s*m\s*a" also matches the spaced-letter artifact "N a m a:"
+    # (the same PDF merge that yields "M E N G A D I L I") — without it a
+    # co-defendant named in the evidence list was returned instead (holdout
+    # R6, 905 K/Pid.Sus/2024: BUDIMAN GANDI SUPARMAN instead of PRASETIO
+    # NUGROHO).
     m = re.search(
-        r'Nama\s*(?:lengkap\s*)?:\s*(.+?)\s*;\s*(?:Tempat\s*[Ll]ahir|TempatLahir)',
+        r'N\s*a\s*m\s*a\s*(?:lengkap\s*)?:\s*(.+?)\s*;\s*(?:Tempat\s*[Ll]ahir|TempatLahir)',
         text,
     )
     if m:
