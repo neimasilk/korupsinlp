@@ -26,14 +26,13 @@
 | G5 HUMAN | 🔴 | 0 pembaca eksternal sejak program dimulai. |
 
 **Konsekuensi**: Paper 4 TIDAK disubmit (venue perdana = AJC) sampai minimal G1+G2+G4 hijau.
-Per 2026-07-28 G1+G2 hijau; **blocker tersisa G3 (sinyal eksternal) + G4 (editor-sim) + G5
-(pembaca manusia)**, dan G3/G5 HANYA bisa dihijaukan user. Sebelum angka final masuk paper,
-selesaikan dulu ronde fix 9 (3 perkara timah membawa kerugian 10x terlalu tinggi — lihat
-HANDOFF.md); koreksi itu menaikkan elastisitas ~5% relatif.
-G2 kini menuntut: fix 4 bug extractor (30 kasus tervalidasi jadi pytest fixture, test-first) →
-re-ekstraksi 693 → re-run scripts 16/19 → validasi ulang holdout 20 kasus segar → update angka
-paper. ⚠️ **Rilis Zenodo korpus v1.0 juga DIBLOKIR** — freeze 2026-07-07 memuat nilai yang
-diketahui salah; rilis = v1.1 pasca re-ekstraksi.
+Per 2026-07-29 G1+G2 hijau; **blocker tersisa G3 (sinyal eksternal) + G4 (editor-sim) + G5
+(pembaca manusia)**, dan G3/G5 HANYA bisa dihijaukan user. **Ronde fix 9 SELESAI
+(2026-07-29)**: 3 perkara timah + 3 bug lain dikoreksi (lihat HANDOFF.md §session 20);
+elastisitas vonis~kerugian 0,134→**0,145**, tuntutan 0,117→**0,124**, gap −0,080→**−0,093**;
+rescore 150 anotasi 0 regresi; suite 254 passed. Angka ronde-9 siap masuk paper dengan
+disclosure timah (300T audit ≠ kerugian *keuangan* negara; robustness 300T di lampiran).
+⚠️ **Rilis Zenodo korpus v1.0 juga DIBLOKIR** — rilis = v1.1 pasca ronde 9.
 
 ## Paper dataset (baru — "KorpusKorupsi descriptor") — status 2026-07-07
 
