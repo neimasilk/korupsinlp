@@ -34,6 +34,13 @@ rescore 150 anotasi 0 regresi; suite 254 passed. Angka ronde-9 siap masuk paper 
 disclosure timah (300T audit ≠ kerugian *keuangan* negara; robustness 300T di lampiran).
 ⚠️ **Rilis Zenodo korpus v1.0 juga DIBLOKIR** — rilis = v1.1 pasca ronde 9.
 
+**[2026-08-03, D28]** Draft Paper 4 sudah di-refresh ke angka ronde-9 + re-interpretasi §4.2
+(vonis LEBIH dapat diprediksi daripada tuntutan — hakim mengoreksi sebagian, bukan transmisi
+murni; konsisten dgn Paper 3) + 4 disclosure (timah 28,9T/holdout 98-91,7%/error-pengukuran/
+domain 919). Paper↔DB konsisten (grep 0 angka basi); generator angka reproducible =
+`scripts/25_paper4_ronde9.py`. **Maka blocker submit Paper 4 TINGGAL G3/G4/G5** — bukan lagi
+angka basi. G4 (editor-sim AJC) bisa agent di sesi segar; G3+G5 HANYA-USER.
+
 ## Paper dataset (baru — "KorpusKorupsi descriptor") — status 2026-07-07
 
 | Gate | Status | Detail |

@@ -1,12 +1,45 @@
-# Handoff — Session 20 (2026-07-29) → Next
+# Handoff — Session 21 (2026-08-03) → Next
 
-## Status: **G2 HIJAU. RONDE FIX 9 SELESAI.** Holdout R6 blind n=50 tetap vonis 98,0%,
+## Status: **PAPER 4 DRAFT SUDAH DI-REFRESH KE RONDE-9.** Review mata elang menemukan draft
+basi vs DB (n=290→262, vonis 0,137→0,145, R² 0,357/0,355→0,405/0,498, timah 300T→28,9T).
+Refresh selesai: angka, tabel robustness, abstract, §3.1/§4.1–§4.4/§5.2/§5.3/§5.5/§6 semua
+reconcile ke DB via `scripts/25_paper4_ronde9.py` (generator tunggal, reproducible). DOCX/PDF
+di-rebuild. **Tiga temuan sekunder membalik arah** (jujur ditulis ulang, bukan dipalsukan):
+§4.2 vonis kini LEBIH dapat diprediksi (hakim mengoreksi sebagian, bukan transmisi murni —
+konsisten dgn Paper 3); §4.3 diskon vonis MELEBAR signifikan (bukan tetap); §4.4 geografis
+persist lemah (bukan hilang). Headline survived & strengthened. **4 disclosure masuk**: timah,
+holdout 98/91,7%, error-pengukuran, domain 919 PK. Detail D28.
+
+**Blocker submit Paper 4 sekarang TINGGAL G3/G4/G5** — bukan lagi angka basi. G4 (editor-sim
+AJC) bisa agent di sesi segar; **G3+G5 HANYA-USER** (email co-author/komentar SSRN/pembaca
+eksternal) dan macet 4 bulan — itu bottleneck sesungguhnya.
+
+> **Fakta keras di ledger**: `SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md` (D14–D28),
+> `MAP.md`, `ROADMAP.md`. File ini hanya narasi + instruksi kerja.
+
+---
+
+## ✅ PRIORITAS 1 (session 21) — REFRESH PAPER 4 KE RONDE-9 — SELESAI
+
+- Review mata elang + verifikasi: `pytest` 254 passed, `scripts/24` rescore 0 regresi,
+  `scripts/19` fair comparison cocok tabel R9.
+- `scripts/25_paper4_ronde9.py` (baru): generator tunggal semua angka paper di sampel
+  otoritatif (is_tipikor=1, drop<1jt, n=262) — bootstrap CI, practical-terms, robustness,
+  fair comparison, temporal, geographic, marginal. **Wajib di-re-run tiap ronde parser baru.**
+- Re-interpretasi §4.2 (vonis lebih dapat diprediksi → hakim mengoreksi sebagian) +
+  3 reversed secondary findings + 4 disclosure. Grep verifikasi: 0 angka basi tersisa.
+
+---
+
+## Riwayat — Session 20 (2026-07-29)
+
+## Status (s20): **G2 HIJAU. RONDE FIX 9 SELESAI.** Holdout R6 blind n=50 tetap vonis 98,0%,
 kerugian 91,7% (angka instrumen tervalidasi, tak diubah). Ronde 9 mengoreksi 6 bug parser
 + 1 varian (3 timah, 9645, 10453, 905 tuntutan+nama, 919 PK), re-ekstraksi 693, audit
 tipikor 465/14, **rescore 150 anotasi = 0 regresi** (1 re-adjudikasi 11312 transparan),
 suite 254 passed. Pipeline bersih & idle.
 
-**Tugas berikutnya = G3/G4/G5 Paper 4** — dan **G3+G5 hanya bisa user yang jalankan**
+**Tugas berikutnya (s20) = G3/G4/G5 Paper 4** — dan **G3+G5 hanya bisa user yang jalankan**
 (email co-author, komentar SSRN, pembaca eksternal). Angka ronde-9 sudah siap masuk paper
 (dengan disclosure timah, lihat bawah). G4 (editor-sim AJC) bisa agent di sesi segar.
 
@@ -178,6 +211,7 @@ python -m pytest tests/ -q                 # 254 passed, 2 xfailed
 python -m scripts.23_tipikor_audit         # 465/14/0 — WAJIB tiap re-ekstraksi
 python -m scripts.24_holdout_rescore       # 150 anotasi, harus 0 regresi
 python scripts/19_fair_comparison.py       # n & elastisitas DB terkini
+python scripts/25_paper4_ronde9.py         # SEMUA angka paper di n=262 — cek vs draft
 ```
 - Branch `autoresearch/apr9-textfeatures` (rename ditunda, D10) · Backup DB ronde 9:
   `data/korupsinlp_pre_ronde9.db` (ronde 8) · SSRN: P2=6574140, P4=6580258
