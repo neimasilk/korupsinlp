@@ -1,4 +1,21 @@
-# Handoff — Session 21 (2026-08-03) → Next
+# Handoff — Session 22 (2026-08-05) → Next
+
+## Status: **G4 EDITOR-SIM AJC HIJAU — SEND TO REVIEW.** Dijalankan sesuai prosedur gate:
+agent SEGAR tanpa konteks pembelaan, diberi HANYA abstrak ronde-9 + cover letter baru
+(`reports/paper4_cover_letter.md`) + aims&scope AJC → verdict **SEND TO REVIEW** (D29,
+transkrip `reports/g4_editor_sim_ajc.md`). Cover letter Paper 4 dibuat (template Paper 2,
+angka ronde-9: elasticity 0.124, n=262). **Blocker submit Paper 4 tersisa G3+G5 — keduanya
+HANYA-USER** (email co-author / komentar SSRN / pembaca eksternal). Red flag editor (5)
+adalah pertanyaan reviewer, bukan blocker: dokumentasi korpus n=262, komparabilitas benchmark
+AS, spesifikasi eksak 3 formulasi R² (0.300/0.405-vs-0.498/0.642), sel kecil temporal/geografis,
+overgeneralize Asia. #1 opsional pra-submit: parafrase abstrak soal R² biar tak terbaca inkonsisten.
+
+> **Fakta keras di ledger**: `SUBMISSIONS.md`, `GATES.md`, `DECISIONS.md` (D14–D29),
+> `MAP.md`, `ROADMAP.md`. File ini hanya narasi + instruksi kerja.
+
+---
+
+## Riwayat — Session 21 (2026-08-03)
 
 ## Status: **PAPER 4 DRAFT SUDAH DI-REFRESH KE RONDE-9.** Review mata elang menemukan draft
 basi vs DB (n=290→262, vonis 0,137→0,145, R² 0,357/0,355→0,405/0,498, timah 300T→28,9T).
@@ -192,8 +209,7 @@ latih meski tak pernah dianotasi (dua nyaris lolos ke sampel R6).
 
 ## 🔵 HANYA-USER — bottleneck sebenarnya (tertunda 4 bulan, TIDAK bergerak sesi ini)
 
-G1 🟢 · G2 🟢 · **G3 🔴 · G4 🔴 · G5 🔴**. Delapan ronde perbaikan parser tidak menyentuh
-G3/G5 sedikit pun, dan keduanya mustahil dikerjakan agent:
+G1 🟢 · G2 🟢 · **G4 🟢 (2026-08-05) · G3 🔴 · G5 🔴**. G3/G5 mustahil dikerjakan agent:
 
 1. Email co-author hukum (UB/UMM/Unair)
 2. Email penulis paper terdekat (komentar SSRN 6580258) — sinyal eksternal G3
