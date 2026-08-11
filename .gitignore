@@ -33,3 +33,7 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local tooling artifacts (Playwright MCP snapshots, Claude session state)
+.playwright-mcp/
+.claude/
