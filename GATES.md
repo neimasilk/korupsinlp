@@ -29,8 +29,8 @@
 Per 2026-07-29 G1+G2 hijau. **2026-08-05: G4 editor-sim AJC HIJAU** (SEND TO REVIEW,
 D29). **2026-08-11: G3 + G5 HIJAU** — Go Frendi Gunawan ditambahkan sebagai **co-author**
 (keputusan user 11 Agt), membaca draft & menyetujui (G3 sinyal eksternal + G5 pembaca
-manusia). **SEMUA GATE HIJAU per 2026-08-11 → Paper 4 SIAP SUBMIT ke AJC.** Sisanya:
-verifikasi angka final di draft (ronde-9) + build DOCX/PDF + submit via portal Springer.
+manusia). **SEMUA GATE HIJAU per 2026-08-11 → Paper 4 ✅ SUBMITTED ke AJC 11 Agt 2026**
+(SUBMISSIONS.md). Menunggu keputusan editor (~21 hari). Backup venue: EJCPR → IJCJS.
 **Ronde fix 9 SELESAI
 (2026-07-29)**: 3 perkara timah + 3 bug lain dikoreksi (lihat HANDOFF.md §session 20);
 elastisitas vonis~kerugian 0,134→**0,145**, tuntutan 0,117→**0,124**, gap −0,080→**−0,093**;

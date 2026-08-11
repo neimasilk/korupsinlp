@@ -1,17 +1,17 @@
 # Handoff — Session 23 (2026-08-11) → Next
 
-## Status: **SEMUA GATE HIJAU — Paper 4 SIAP SUBMIT ke AJC.** G3 + G5 ditutup 11 Agt:
-**Go Frendi Gunawan ditambahkan sebagai CO-AUTHOR** (keputusan user). Co-author membaca draft &
-menyetujui = sinyal eksternal G3(b) + pembaca manusia G5. Perubahan: title page (2 penulis) +
-Author contributions + cover letter (I→We, signature 2 penulis) + de-anonimisasi "Author (2026a/b/c)"
-→ "Amien (2026a/b/c)" + referensi 2026b dikoreksi ([under review] → SSRN 6574140, CLSC desk-reject
-22 Mei). DOCX/PDF di-rebuild (pandoc xelatex + Times New Roman; glyph ≈,²,–,§ terverifikasi). D30.
+## Status: **✅ PAPER 4 SUBMITTED ke AJC 11 Agt 2026 — menunggu keputusan editor.** Semua gate hijau.
+G3 + G5 ditutup via **co-author Go Frendi Gunawan** (UBHINUS, gofrendiasgard@gmail.com). Submit via
+Editorial Manager AJOC: Original Research · Criminology · double-blind (title page + naskah ter-blind +
+cover letter PDF) · questionnaire (data=no deposit, RS agree, terms) · comments ke editor · funding=none ·
+2 authors: Amien (corresponding) + Gunawan. **Catatan proses:** build PDF + postback EM macet di sesi
+Playwright (anti-bot) → **user approve di browser sendiri**. Terverifikasi: waiting-for-approval list kosong.
 
-**Sisa = AKSI USER (submit):** (1) login portal Springer EM AJC; (2) upload manuscript (DOCX atau PDF
-`reports/paper4_draft.*`) + cover letter (`reports/paper4_cover_letter.md`); (3) isi metadata —
-2 authors: Mukhlis Amien (UBHINUS) + Go Frendi Gunawan (State Alchemists); (4) klasifikasi + abstract
-(di cover letter) + keywords. **Ingat**: angka final = ronde-9 (n=262, elasticity 0.124/0.145); jangan
-pakai SSRN metadata lama (n=291/0.109 — basi). Red flag editor (5) = pertanyaan reviewer, bukan blocker.
+**Berikutnya (setelah menunggu editor):** kalau minor revision → pakai angka ronde-9 (n=262, elasticity
+0.124/0.145); kalau **deposit korpus** mau dilakukan, un-rilis Zenodo v1.1 (D9/D17) + update questionnaire
+"data" di submission. **⚠️ Jangan pakai SSRN metadata lama** (n=291/0.109 — basi). Red flag editor (5) =
+pertanyaan reviewer, bukan blocker: (a) korpus n=262 dokumentasi; (b) benchmark AS; (c) 3 formulasi R²;
+(d) sel temporal/geografis; (e) overgeneralize Asia.
 
 ### Riwayat — Session 22 (2026-08-05)
 

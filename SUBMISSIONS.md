@@ -23,6 +23,7 @@
 |---|---|---|---|
 | 2026-05-25 (±) | Preprint live | SSRN 6580258 | https://ssrn.com/abstract=6580258 |
 | — | **BELUM PERNAH DISUBMIT ke jurnal** ✅ FINAL | (rencana: AJC primary → EJCPR → IJCJS) | Diverifikasi user 2026-07-07: satu-satunya email terkait Paper 4 = tanda terima SSRN ("We are happy to have received your submission... http://ssrn.com/abstract=6580258") — itu preprint, bukan journal submission. |
+| **2026-08-11** | ✅ **SUBMITTED — Asian Journal of Criminology** (Editorial Manager, `editorialmanager.com/ajoc`) | AJC (Scopus Q1, hybrid — rute subscription gratis; Open Choice tidak dipilih) | Submit 11 Agt 2026: Original Research · klasifikasi Criminology · **double-blind** (title page terpisah + naskah ter-blind) · 3 file (title page, blinded manuscript, cover letter) · questionnaire data="no associated data/not deposited" · comments ke editor · funding=none · **2 authors: Amien (corresponding) + Go Frendi Gunawan (gofrendiasgard@gmail.com)**. Semua gate G1–G5 hijau. **Menunggu keputusan editor** (submission→decision ~21 hari). Bukti: log KB `[2026-08-11]`; verifikasi "Submissions Waiting for Approval" kosong. |
 
 **Status akhir: UNSUBMITTED — slate bersih. Kesimpulan "semua paper reject" (2026-07-07) terkoreksi: hanya Paper 2 yang pernah disubmit & ditolak. Paper 4 menunggu gate GATES.md hijau, lalu submit perdana ke AJC.**
 
