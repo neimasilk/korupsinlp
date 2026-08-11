@@ -21,14 +21,17 @@
 |---|---|---|
 | G1 TRUTH | 🟢 | Semua Truth-critique Paper 4 FIXED (DECISIONS D1, D2, D3, D5) per 2026-07-07: benchmark realized AS (0.288) terpasang, klaim diskresi ditulis ulang (diskresi masuk sekali di hulu), paragraf attenuation + 2 disclosure seleksi masuk §5.5. |
 | G2 INSTRUMEN | 🟢 **HIJAU (2026-07-28) — holdout R6 blind n=50: vonis 98,0% [89,5–99,6], kerugian 91,7% [80,4–96,7]**, tuntutan 98,0%, daerah 100%, tahun 100%. Kriteria (vonis ≥90% DAN kerugian ≥90%) **DIPRA-REGISTRASI di D25 sebelum sampling**, beserta aturan penghenti ronde-terakhir — jadi hasil ini tidak bisa dituduh hasil lempar-ulang. Bukti: `data/golden_set/holdout_r6_validated.csv` (+ batch anotator r6_validation_A–E). Diagnosis kunci: gate lama "≥90% pada n=20" secara statistik tak mampu mensertifikasi instrumen 90% (P(gagal)=32%), dan definisi G2 sendiri menuntut ≥50 kasus — 5 ronde n=20 sebelumnya mengukur derau. Detail D26; taksonomi 7 error tersisa juga di D26 | Riwayat: n=30 (07-07) → fix D14. **R1 n=20 blind** (adjudicated): vonis 100%, tuntutan 95%, **kerugian 72%** → fix ronde 2 (`c2ac9a4`): ambang statutori, gap merged, dot-cents, tuntutan tanpa "penjara". **R2 n=20 blind** (adjudicated): tuntutan 100%, tahun 100%, daerah 100%, **vonis 85%** (regresi! kelas baru: preamble memperbaiki+uang pengganti; header "mengadilimenolak" merged → kutipan dissent terambil; dokumen PT "menguatkan"; ejaan "dakwaan primer"), **kerugian 79%** (komponen-vs-total; angka dissent di kasus bebas; angka suap di kasus gratifikasi; gap 225 char) → **fix ronde 3 (`0e0d8eb`)**: semua 6 kelas + aturan pipeline bebas→kerugian NULL; suite 230 passed; 6 PDF gagal diverifikasi end-to-end. Pola: ekor panjang kelas dokumen langka — tiap ronde memunculkan varian baru tapi frekuensinya menurun. Re-ekstraksi ronde 3 berjalan → **holdout R3 = verdict**. Aturan tetap: vonis & kerugian ≥90% adjudicated; holdout gagal = training. Adjudikasi konvensi (dicatat D18/D19): baris multi-terdakwa benar jika nama+tuntutan+vonis konsisten satu terdakwa; NULL ≙ "tidak ada kerugian ditetapkan". |
-| G3 KONTRIBUSI | 🔴 | Klaim novelty ada; sinyal eksternal = 0. Rejection kedua (venue TBD, lihat SUBMISSIONS.md) adalah sinyal eksternal NEGATIF yang harus didiagnosis dulu — paste surat keputusan. |
+| G3 KONTRIBUSI | 🟢 **HIJAU (2026-08-11)** | Klaim novelty ada di cover letter ("first large-scale computational analysis of Indonesian corruption prosecution, using a novel corpus") + intro memposisikan vs prior work (sentencing research studies judges — Medvedeva 2020, Strickson & De La Iglesia 2020; US loss-graduated benchmark). **Sinyal eksternal (b): Go Frendi Gunawan — co-author baru, membaca draft & menyetujui ikut sebagai penulis** (konfirmasi user 11 Agt 2026) = sinyal "kolega membaca". Bersamaan menutup D11 (rekrut co-author hukum/domain). |
 | G4 EDITOR-SIM | 🟢 **HIJAU (2026-08-05)** | Agent SEGAR tanpa konteks pembelaan, diberi HANYA abstrak ronde-9 + cover letter (`reports/paper4_cover_letter.md`) + aims&scope AJC → verdict **SEND TO REVIEW**. Transkrip: `reports/g4_editor_sim_ajc.md` (D29). |
-| G5 HUMAN | 🔴 | 0 pembaca eksternal sejak program dimulai. |
+| G5 HUMAN | 🟢 **HIJAU (2026-08-11)** | **Go Frendi Gunawan membaca draft** (co-author, State Alchemists) — konfirmasi user 11 Agt 2026. Bukti: nama + tanggal di sini; draft dibaca sebagai calon co-author sebelum disetujui. |
 
-**Konsekuensi**: Paper 4 TIDAK disubmit (venue perdana = AJC) sampai minimal G1+G2+G4 hijau.
+**Konsekuensi**: Paper 4 TIDAK disubmit (venue perdana = AJC) sampai semua gate hijau.
 Per 2026-07-29 G1+G2 hijau. **2026-08-05: G4 editor-sim AJC HIJAU** (SEND TO REVIEW,
-D29) — blocker submit tersisa **G3 (sinyal eksternal) + G5 (pembaca manusia)**, keduanya
-HANYA bisa dihijaukan user. **Ronde fix 9 SELESAI
+D29). **2026-08-11: G3 + G5 HIJAU** — Go Frendi Gunawan ditambahkan sebagai **co-author**
+(keputusan user 11 Agt), membaca draft & menyetujui (G3 sinyal eksternal + G5 pembaca
+manusia). **SEMUA GATE HIJAU per 2026-08-11 → Paper 4 SIAP SUBMIT ke AJC.** Sisanya:
+verifikasi angka final di draft (ronde-9) + build DOCX/PDF + submit via portal Springer.
+**Ronde fix 9 SELESAI
 (2026-07-29)**: 3 perkara timah + 3 bug lain dikoreksi (lihat HANDOFF.md §session 20);
 elastisitas vonis~kerugian 0,134→**0,145**, tuntutan 0,117→**0,124**, gap −0,080→**−0,093**;
 rescore 150 anotasi 0 regresi; suite 254 passed. Angka ronde-9 siap masuk paper dengan

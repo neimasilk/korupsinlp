@@ -1,0 +1,182 @@
+- generic [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e167]:
+          - button "More" [ref=e169]:
+            - generic [ref=e171]: More
+    - button "Search" [ref=e46]
+    - link "Shopping Cart" [ref=e48] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e175]: MA
+  - main [ref=e53]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e59]:
+          - 'heading "Step 2: Confirm Key Submission Details" [level=1] [ref=e234]'
+          - heading "Uploaded Paper" [level=2] [ref=e235]
+          - paragraph [ref=e236]: Please upload the PDF file for your paper, and we'll extract the title, abstract and keywords for your review.
+          - generic [ref=e238]:
+            - generic [ref=e241]: Upload PDF
+            - generic [ref=e244]:
+              - generic "paper2_draft.pdf" [ref=e246]:
+                - generic [ref=e248]: paper2_draft.pdf
+              - button "delete" [ref=e249]
+          - heading "Paper Title" [level=2] [ref=e252]
+          - generic [ref=e253]:
+            - generic [ref=e254]:
+              - button "𝐁" [ref=e255] [cursor=pointer]
+              - button "𝑰" [ref=e256] [cursor=pointer]
+              - button "𝐔" [ref=e257] [cursor=pointer]
+              - button "ab" [ref=e258] [cursor=pointer]
+            - generic "Paper Title" [ref=e259]: "Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences"
+          - heading "Abstract" [level=2] [ref=e260]
+          - generic [ref=e261]:
+            - generic [ref=e262]:
+              - button "🔗" [ref=e263] [cursor=pointer]
+              - button "𝐁" [ref=e264] [cursor=pointer]
+              - button "𝑰" [ref=e265] [cursor=pointer]
+              - button "𝐔" [ref=e266] [cursor=pointer]
+              - button "ab" [ref=e267] [cursor=pointer]
+            - generic "Abstract" [ref=e268]: "We computationally analyze 671 Indonesian Supreme Court corruption verdicts to examine what determines sentence severity beyond prosecution demand. Using OLS regression, we find that charge type is independently associated with sentencing severity: Pasal 2 (enrichment) cases receive 0.73 years longer sentences than equivalent cases after controlling for prosecution demand and Pasal 3 (b=0.730, 95% CI [0.299, 1.179], p=0.002, Cohen's d=0.58). Text-derived charge type outperforms structured metadata because judicial reasoning reveals the operative charge rather than all listed charges. We further find that the sentencing discount (sentence/demand ratio, mean 0.78) is entirely unpredictable from any extracted feature (R2=-0.01), indicating judicial opacity: approximately 40% of sentencing variance is not captured by available structured features at current corpus size. Systematic experiments confirm that text mining (TF-IDF, transformer embeddings, domain keywords) cannot reliably improve prediction at this corpus size. Geographic variation is a composition effect (controlled p=0.20), while judge effects are significant (F=1.85, p=0.03) but not predictively useful. Indonesian corruption sentencing is partially predictable from prosecution demand and charge type, but judicial discretion remains opaque from public documents."
+          - heading "Language and Date" [level=2] [ref=e269]
+          - generic [ref=e270]:
+            - generic "Language PDF is written in" [ref=e271]:
+              - generic [ref=e273]: Language PDF is written in
+            - generic [ref=e279]:
+              - generic [ref=e280]: English
+              - combobox "Searchable list" [ref=e282]
+          - generic [ref=e286]:
+            - generic "Date paper was written" [ref=e287]:
+              - generic [ref=e289]: Date paper was written
+            - textbox "Date paper was written" [ref=e290]: 2026-04-14
+          - heading "Keywords" [level=2] [ref=e291]
+          - generic [ref=e293]:
+            - generic [ref=e297]: To add a keyword type the keyword and press enter.
+            - textbox "To add a keyword type the keyword and press enter." [active] [ref=e300]:
+              - /placeholder: Type keyword and press enter
+          - generic [ref=e385] [cursor=pointer]:
+            - button "Corruption sentencing" [ref=e386]:
+              - generic [ref=e388]: Corruption sentencing
+            - button "Dismiss" [ref=e389]
+          - generic [ref=e392] [cursor=pointer]:
+            - button "Judicial discretion" [ref=e393]:
+              - generic [ref=e395]: Judicial discretion
+            - button "Dismiss" [ref=e396]
+          - generic [ref=e399] [cursor=pointer]:
+            - button "Computational legal analysis" [ref=e400]:
+              - generic [ref=e402]: Computational legal analysis
+            - button "Dismiss" [ref=e403]
+          - generic [ref=e406] [cursor=pointer]:
+            - button "Indonesia" [ref=e407]:
+              - generic [ref=e409]: Indonesia
+            - button "Dismiss" [ref=e410]
+          - heading "Publication Details for Manuscript Identification" [level=2] [ref=e301]
+          - heading [level=3]
+          - paragraph [ref=e302]: There are currently no Publication Details.
+          - heading "Add a New Publication Details entry" [level=2] [ref=e303]
+          - generic [ref=e304]:
+            - tablist [ref=e306]:
+              - tab "Has a DOI" [selected] [ref=e308]:
+                - generic [ref=e310]: Has a DOI
+              - tab "Enter the details myself" [ref=e312]:
+                - generic [ref=e314]: Enter the details myself
+            - tabpanel [ref=e316]:
+              - text: Does the version of the paper you are uploading today already have a DOI?
+              - generic [ref=e318]:
+                - generic [ref=e319]:
+                  - generic [ref=e322]: Type your DOI below and press enter to resolve it.
+                  - generic [ref=e323]: (optional)
+                - textbox "Type your DOI below and press enter to resolve it." [ref=e326]:
+                  - /placeholder: Type DOI and press enter
+              - generic [ref=e327]: e.g. 10.1016/S0140-6736(24)00094-1, or https://doi.org/10.1016/S0140-6736(24)00094-1, or doi:10.1016/S0140-6736(24)00094-1
+          - button "Add" [disabled] [ref=e328]:
+            - generic [ref=e330]: Add
+          - heading "Supplementary Data" [level=2] [ref=e331]
+          - generic [ref=e332]:
+            - text: Please share your data! It aids reproducibility and also
+            - link "increases citations Opens in new window" [ref=e333] [cursor=pointer]:
+              - /url: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0230416
+              - generic [ref=e335]: increases citations
+              - generic: Opens in new window
+            - text: for your work and some funders expect it. Please consider your audience when considering a repository, but some of the following may be appropriate. Please include data links in your PDF where possible.
+          - list [ref=e338]:
+            - listitem [ref=e339]:
+              - link "Dryad Opens in new window" [ref=e340] [cursor=pointer]:
+                - /url: https://datadryad.org/stash
+                - generic [ref=e342]: Dryad
+                - generic: Opens in new window
+            - listitem [ref=e345]:
+              - link "Figshare Opens in new window" [ref=e346] [cursor=pointer]:
+                - /url: https://figshare.com/
+                - generic [ref=e348]: Figshare
+                - generic: Opens in new window
+            - listitem [ref=e351]:
+              - link "Kaggle Opens in new window" [ref=e352] [cursor=pointer]:
+                - /url: https://www.kaggle.com/
+                - generic [ref=e354]: Kaggle
+                - generic: Opens in new window
+            - listitem [ref=e357]:
+              - link "Harvard Dataverse Opens in new window" [ref=e358] [cursor=pointer]:
+                - /url: https://dataverse.harvard.edu/
+                - generic [ref=e360]: Harvard Dataverse
+                - generic: Opens in new window
+            - listitem [ref=e363]:
+              - link "Network DataExchange Opens in new window" [ref=e364] [cursor=pointer]:
+                - /url: https://www.ndexbio.org
+                - generic [ref=e366]: Network DataExchange
+                - generic: Opens in new window
+          - button "Save" [ref=e369]:
+            - generic [ref=e371]: Save
+          - button "Previous Step" [ref=e372]:
+            - generic [ref=e374]: Previous Step
+          - button "Next Step" [ref=e375]:
+            - generic [ref=e377]: Next Step
+        - generic [ref=e134]:
+          - heading "Submission Progress" [level=2] [ref=e135]
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - generic [ref=e139]: "!"
+              - button "warning Upload Submission" [ref=e378]: Upload Submission
+            - generic [ref=e143]:
+              - generic [ref=e144]: "2"
+              - button "selected Confirm Key Submission Details" [ref=e379]: Confirm Key Submission Details
+            - generic [ref=e148]:
+              - generic [ref=e149]: "3"
+              - button "initial Author Information" [ref=e380]: Author Information
+            - generic [ref=e153]:
+              - generic [ref=e154]: "4"
+              - button "disable Classify Your Submission" [disabled] [ref=e155]: Classify Your Submission
+            - generic [ref=e158]:
+              - generic [ref=e159]: "5"
+              - button "disable Research Integrity" [disabled] [ref=e160]: Research Integrity
+            - generic [ref=e163]:
+              - generic [ref=e164]: "6"
+              - button "disable Review and Submit" [disabled] [ref=e165]: Review and Submit
+          - paragraph [ref=e412]: Auto-saving in progress
+      - region "Notifications (F8)":
+        - list

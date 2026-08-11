@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e167]:
+          - button "More" [ref=e169]:
+            - generic [ref=e171]: More
+    - button "Search" [ref=e46]
+    - link "Shopping Cart" [ref=e48] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e175]: MA
+  - main [ref=e53]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e59]:
+          - 'heading "Step 6: Review and Submit" [level=1] [ref=e1198]'
+          - heading "Uploaded submission" [level=2] [ref=e1199]
+          - button "Edit Uploaded submission" [ref=e1200]
+          - paragraph [ref=e1202]: Please upload the PDF file for your paper, and we'll extract the title, abstract and keywords for your review.
+          - generic [ref=e1204]:
+            - generic [ref=e1207]: Upload PDF
+            - generic [ref=e1210]:
+              - generic "paper2_draft.pdf" [ref=e1212]:
+                - generic [ref=e1214]: paper2_draft.pdf
+              - button "delete" [ref=e1215]
+          - heading "Content Format" [level=2] [ref=e1218]
+          - button "Edit Content Format" [ref=e1219]
+          - generic [ref=e1221]: Paper
+          - heading "Content Type" [level=2] [ref=e1222]
+          - button "Edit Content Type" [ref=e1223]
+          - generic [ref=e1226]: Content Type is mandatory
+          - heading "Paper Title" [level=2] [ref=e1227]
+          - generic [ref=e1228]: "Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences"
+          - button "Edit Title" [ref=e1229]
+          - heading "Abstract" [level=2] [ref=e1231]
+          - generic [ref=e1232]: "We computationally analyze 671 Indonesian Supreme Court corruption verdicts to examine what determines sentence severity beyond prosecution demand. Using OLS regression, we find that charge type is independently associated with sentencing severity: Pasal 2 (enrichment) cases receive 0.73 years longer sentences than equivalent cases after controlling for prosecution demand and Pasal 3 (b=0.730, 95% CI [0.299, 1.179], p=0.002, Cohen's d=0.58). Text-derived charge type outperforms structured metadata because judicial reasoning reveals the operative charge rather than all listed charges. We further find that the sentencing discount (sentence/demand ratio, mean 0.78) is entirely unpredictable from any extracted feature (R2=-0.01), indicating judicial opacity: approximately 40% of sentencing variance is not captured by available structured features at current corpus size. Systematic experiments confirm that text mining (TF-IDF, transformer embeddings, domain keywords) cannot reliably improve prediction at this corpus size. Geographic variation is a composition effect (controlled p=0.20), while judge effects are significant (F=1.85, p=0.03) but not predictively useful. Indonesian corruption sentencing is partially predictable from prosecution demand and charge type, but judicial discretion remains opaque from public documents."
+          - button "Edit Abstract" [ref=e1233]
+          - heading "Submission language and date" [level=2] [ref=e1235]
+          - button "Edit Submission language and date" [ref=e1236]
+          - text: "Language:"
+          - generic [ref=e1238]: English
+          - text: "Date:"
+          - generic [ref=e1239]: 2026-04-14
+          - heading "Keywords" [level=2] [ref=e1240]
+          - button "Edit Keywords" [ref=e1241]
+          - button "Corruption sentencing" [ref=e1244] [cursor=pointer]:
+            - generic [ref=e1246]: Corruption sentencing
+          - button "Judicial discretion" [ref=e1248] [cursor=pointer]:
+            - generic [ref=e1250]: Judicial discretion
+          - button "Computational legal analysis" [ref=e1252] [cursor=pointer]:
+            - generic [ref=e1254]: Computational legal analysis
+          - button "Indonesia" [ref=e1256] [cursor=pointer]:
+            - generic [ref=e1258]: Indonesia
+          - button "Sentencing disparity" [ref=e1260] [cursor=pointer]:
+            - generic [ref=e1262]: Sentencing disparity
+          - button "Text mining" [ref=e1264] [cursor=pointer]:
+            - generic [ref=e1266]: Text mining
+          - heading "Publication Details for Manuscript Identification" [level=2] [ref=e1267]
+          - button "Edit Publication Details" [ref=e1268]
+          - heading "Authors" [level=2] [ref=e1270]
+          - button "Edit Authors" [ref=e1271]
+          - generic [ref=e1273]:
+            - heading "Mukhlis Amien" [level=3] [ref=e1274]
+            - heading [level=4]
+            - generic [ref=e1280]:
+              - generic [ref=e1282]:
+                - generic [ref=e1283]: Affiliation not provided to SSRN
+                - generic [ref=e1284]: "Email: amien@ubhinus.ac.id"
+                - generic [ref=e1285]: "ORCID: ORCID not provided to SSRN"
+              - generic [ref=e1287]:
+                - generic [ref=e1288]: "Affiliation Role: Role not provided to SSRN"
+                - generic [ref=e1289]: "Role: Contact Author"
+          - heading "Selected classifications" [level=2] [ref=e1292]
+          - button "Edit Selected classifications" [ref=e1293]
+          - button "Criminology eJournal" [ref=e1296] [cursor=pointer]:
+            - generic [ref=e1298]: Criminology eJournal
+          - 'button "Law & Society: Public Law - Crime, Criminal Law, & Punishment eJournal" [ref=e1300] [cursor=pointer]':
+            - generic [ref=e1302]: "Law & Society: Public Law - Crime, Criminal Law, & Punishment eJournal"
+          - heading "JEL codes" [level=2] [ref=e1303]
+          - button "Edit JEL codes" [ref=e1304]
+          - heading "Research integrity" [level=2] [ref=e1306]
+          - button "Edit Research integrity" [ref=e1307]
+          - generic [ref=e1309]: All required fields for this section have been completed.
+          - button "Previous Step" [ref=e1310]:
+            - generic [ref=e1312]: Previous Step
+          - button "Submit" [disabled] [ref=e1313]:
+            - generic [ref=e1315]: Submit
+        - generic [ref=e134]:
+          - heading "Submission Progress" [level=2] [ref=e135]
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - generic [ref=e139]: "!"
+              - button "warning Upload Submission" [ref=e378]: Upload Submission
+            - button "complete Confirm Key Submission Details" [ref=e480]: Confirm Key Submission Details
+            - button "complete Author Information" [ref=e601]: Author Information
+            - button "complete Classify Your Submission" [ref=e1189]: Classify Your Submission
+            - button "complete Research Integrity" [ref=e1317]: Research Integrity
+            - generic [ref=e163]:
+              - generic [ref=e164]: "6"
+              - button "selected Review and Submit" [ref=e1318]: Review and Submit
+      - region "Notifications (F8)":
+        - list

@@ -1,0 +1,157 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - iframe [active] [ref=e31]:
+      - generic [ref=f7e1]:
+        - generic [ref=f7e3]:
+          - generic:
+            - generic:
+              - list:
+                - listitem [ref=f7e4]:
+                  - text: 
+                  - generic [ref=f7e5] [cursor=pointer]:
+                    - text: Article Type
+                    - text: Selection
+                - listitem [ref=f7e6]:  Attach Files
+                - listitem [ref=f7e7]:
+                  - text: 
+                  - generic [ref=f7e8] [cursor=pointer]:
+                    - text: General
+                    - text: Information
+                - listitem [ref=f7e9]:
+                  - text: 
+                  - generic [ref=f7e10] [cursor=pointer]:
+                    - text: Additional
+                    - text: Information
+                - listitem [ref=f7e11]:  Comments
+                - listitem [ref=f7e12]:
+                  - text: 
+                  - generic [ref=f7e13] [cursor=pointer]:
+                    - text: Manuscript
+                    - text: Data
+          - generic [ref=f7e15]:
+            - generic [ref=f7e17]: When possible these fields will be populated with information collected from your uploaded submission file. Steps requiring review will be marked with a warning icon. Please review these fields to be sure we found the correct information and fill in any missing details.
+            - generic [ref=f7e18]:
+              - link "Insert Special Character" [ref=f7e20] [cursor=pointer]:
+                - /url: "javascript:"
+              - tablist [ref=f7e21]:
+                - generic [ref=f7e22]:
+                  - tab "Title" [expanded] [ref=f7e23] [cursor=pointer]: Title
+                  - text:  
+                - generic [ref=f7e106]:
+                  - tab "Abstract" [selected] [ref=f7e107] [cursor=pointer]: Abstract
+                  - tabpanel [ref=f7e127]:
+                    - generic [ref=f7e128]:
+                      - table [ref=f7e129]:
+                        - rowgroup [ref=f7e130]:
+                          - row [ref=f7e131]:
+                            - cell [ref=f7e132]
+                            - cell [ref=f7e133]:
+                              - text: Abstract (required)
+                              - generic [ref=f7e134]: 
+                          - row [ref=f7e135]:
+                            - cell [ref=f7e136]
+                            - cell [ref=f7e137]:
+                              - application [ref=f7e139]:
+                                - toolbar [ref=f7e140]:
+                                  - button [ref=f7e141]
+                                - toolbar [ref=f7e143]:
+                                  - button [disabled] [ref=f7e144]
+                                  - button [disabled] [ref=f7e146]
+                                  - button [ref=f7e148]
+                                  - button [ref=f7e150]
+                                  - button [ref=f7e152]
+                                  - button [disabled] [ref=f7e154]
+                                  - button [disabled] [ref=f7e156]
+                                - toolbar [ref=f7e158]:
+                                  - button [ref=f7e159]
+                                  - button [ref=f7e161]
+                                  - button [ref=f7e163]
+                                - toolbar [ref=f7e165]:
+                                  - button [ref=f7e166]
+                                  - button [ref=f7e168]
+                                  - button [ref=f7e170]
+                                  - button [ref=f7e172]
+                                  - button [ref=f7e174]
+                                  - button [ref=f7e176]
+                                  - button [ref=f7e178]
+                                - toolbar [ref=f7e180]:
+                                  - button [ref=f7e181]
+                                  - button [ref=f7e183]
+                                  - button [disabled] [ref=f7e185]
+                                  - button [ref=f7e187]
+                                - toolbar [ref=f7e189]:
+                                  - button [ref=f7e190]
+                                  - button [disabled] [ref=f7e192]
+                                - toolbar [ref=f7e194]:
+                                  - button [ref=f7e195]
+                                - toolbar [ref=f7e197]:
+                                  - button [ref=f7e198]:
+                                    - generic [ref=f7e199]: Styles
+                                  - button [ref=f7e202]:
+                                    - generic [ref=f7e203]: Format
+                                - toolbar [ref=f7e206]:
+                                  - button [ref=f7e207]
+                                - generic [ref=f7e210]: ▲
+                                - iframe [ref=f7e211]:
+                                  - paragraph [ref=f27e2]: "We computationally analyze 671 Indonesian Supreme Court corruption verdicts to examine what determines sentence severity beyond prosecution demand. Using OLS regression, we find that charge type is independently associated with sentencing severity: Pasal 2 (enrichment) cases receive 0.73 years longer sentences than equivalent cases after controlling for prosecution demand and Pasal 3 (b=0.730, 95% CI [0.299, 1.179], p=0.002, Cohen's d=0.58). Text-derived charge type outperforms structured metadata because judicial reasoning reveals the operative charge rather than all listed charges. We further find that the sentencing discount (sentence/demand ratio, mean 0.78) is entirely unpredictable from any extracted feature (R2=-0.01), indicating judicial opacity: approximately 40% of sentencing variance is not captured by available structured features at current corpus size. Systematic experiments confirm that text mining (TF-IDF, transformer embeddings, domain keywords) cannot reliably improve prediction at this corpus size. Geographic variation is a composition effect (controlled p=0.20), while judge effects are significant (F=1.85, p=0.03) but not predictively useful. Indonesian corruption sentencing is partially predictable from prosecution demand and charge type, but judicial discretion remains opaque from public documents."
+                                - generic [ref=f7e212]: ◢
+                                - group [ref=f7e213]
+                      - table [ref=f7e215]:
+                        - rowgroup [ref=f7e216]:
+                          - row [ref=f7e217]:
+                            - cell [ref=f7e218]:
+                              - button [ref=f7e219]:
+                                - generic [ref=f7e220]: 
+                                - text: Next
+                - generic [ref=f7e109]:
+                  - tab "Keywords" [ref=f7e110] [cursor=pointer]: Keywords
+                  - text: 
+                - generic [ref=f7e112]:
+                  - tab "Authors" [ref=f7e113] [cursor=pointer]: Authors
+                  - text: + + 
+                - generic [ref=f7e115]:
+                  - tab "Funding Information" [ref=f7e116] [cursor=pointer]: Funding Information
+                  - text:  + +
+              - generic [ref=f7e118]:
+                - button " Back" [ref=f7e119]:
+                  - generic [ref=f7e120]: 
+                  - text: Back
+                - button "Save & Submit Later" [ref=f7e121]
+                - button " Build PDF for Approval" [active] [ref=f7e122]:
+                  - generic [ref=f7e123]: 
+                  - text: Build PDF for Approval
+        - log [ref=f7e125]
+        - log [ref=f7e126]
+    - contentinfo

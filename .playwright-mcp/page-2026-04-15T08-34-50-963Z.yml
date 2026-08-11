@@ -1,0 +1,233 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - iframe [active] [ref=e31]:
+      - generic [ref=f7e3]:
+        - generic:
+          - generic:
+            - list:
+              - listitem [ref=f7e4]:
+                - text: 
+                - generic [ref=f7e5] [cursor=pointer]:
+                  - text: Article Type
+                  - text: Selection
+              - listitem [ref=f7e6]:  Attach Files
+              - listitem [ref=f7e7]:
+                - text: 
+                - generic [ref=f7e8] [cursor=pointer]:
+                  - text: General
+                  - text: Information
+              - listitem [ref=f7e9]:
+                - text: 
+                - generic [ref=f7e10] [cursor=pointer]:
+                  - text: Additional
+                  - text: Information
+              - listitem [ref=f7e11]:  Comments
+              - listitem [ref=f7e12]:
+                - text: 
+                - generic [ref=f7e13] [cursor=pointer]:
+                  - text: Manuscript
+                  - text: Data
+        - generic [ref=f7e15]:
+          - generic [ref=f7e17]:
+            - generic [ref=f7e18]:
+              - generic [ref=f7e20]: Cover page (Please put all author information here)
+              - generic [ref=f7e22]: Blinded Manuscript (without any author's affiliations)
+            - generic [ref=f7e25]:
+              - text: Please upload your manuscript without any author names placed within the text (Blinded Manuscript). Subsequently, provide any additional items if needed. You may upload these files individually or as a single zip file.
+              - text: If your data are available online, for example in a repository, you can add a weblink using the “Link(s) to supporting data” option from the dropdown menu, and these will be available to reviewers.
+              - text: In case of any issues, please use the ‘Contact Us’ link.
+              - group [ref=f7e26]:
+                - generic "Tips for authors submitting full source files in LaTeX:" [ref=f7e27]
+                - text: For further LaTeX tips you may refer to this .
+          - generic [ref=f7e28]:
+            - link "Insert Special Character" [ref=f7e30] [cursor=pointer]:
+              - /url: "javascript:"
+            - generic [ref=f7e33]:
+              - generic [ref=f7e36]:
+                - generic [ref=f7e37]: Select Item Type
+                - combobox [ref=f7e38] [cursor=pointer]:
+                  - option "*Cover page (Please put all author information here)" [selected]
+                  - option "*Blinded Manuscript (without any author's affiliations)"
+                  - option "abstract"
+                  - option "attachment to manuscript"
+                  - option "colour figure"
+                  - option "Compressed File"
+                  - option "line figure"
+                  - option "screen"
+                  - option "table"
+                  - option "Authorship change form"
+                  - option "LaTeX Supporting File(s) (if applicable; *.sty, *.bib, *.bbl, *.nls etc.)"
+                  - option "Link(s) to supporting data"
+                - generic [ref=f7e39]: Description
+                - textbox "Cover page (Please put all author information here)" [ref=f7e40]
+              - generic [ref=f7e42]:
+                - button "Browse..." [ref=f7e44] [cursor=pointer]
+                - generic [ref=f7e45]: OR
+                - generic [ref=f7e46]:
+                  - img [ref=f7e47]
+                  - generic [ref=f7e48]:
+                    - text: Drag & Drop
+                    - text: Files Here
+        - generic [ref=f7e50]:
+          - generic [ref=f7e51]:
+            - text: The order in which the attached items appear in the list will be the order in which they appear in the PDF file that is produced. You can re-order the items manually if necessary.
+            - table [ref=f7e53]:
+              - rowgroup [ref=f7e54]:
+                - row [ref=f7e55]:
+                  - cell [ref=f7e56]
+                - row "Change Item Type of all Choose files to Choose Change Now Check All Clear All" [ref=f7e57]:
+                  - cell "Change Item Type of all Choose files to Choose Change Now Check All Clear All" [ref=f7e58]:
+                    - text: Change Item Type of all
+                    - combobox [ref=f7e59] [cursor=pointer]:
+                      - option "Choose" [selected]
+                      - option ".docx"
+                    - text: files to
+                    - combobox [disabled] [ref=f7e60] [cursor=pointer]:
+                      - option "Choose" [selected]
+                    - button "Change Now" [disabled] [ref=f7e61]
+                    - generic [ref=f7e62]:
+                      - link "Check All" [ref=f7e63] [cursor=pointer]:
+                        - /url: javascript:__doPostBack('lnkCheckAll','')
+                      - link "Clear All" [ref=f7e64] [cursor=pointer]:
+                        - /url: javascript:__doPostBack('lnkClearAll','')
+                - row "Order Item Description File Name Size Last Modified Actions Select" [ref=f7e65]:
+                  - columnheader [ref=f7e66]
+                  - columnheader "Order" [ref=f7e67]
+                  - columnheader "Item" [ref=f7e68]
+                  - columnheader "Description" [ref=f7e69]
+                  - columnheader "File Name" [ref=f7e70]
+                  - columnheader "Size" [ref=f7e71]
+                  - columnheader "Last Modified" [ref=f7e72]
+                  - columnheader "Actions" [ref=f7e73]
+                  - columnheader "Select" [ref=f7e74]
+              - rowgroup [ref=f7e75]:
+                - row "1 *Blinded Manuscript (without any author's affiliations) Cover page (Please put all author information here) paper2_draft.docx 29.3 KB 14 Apr 2026 Download" [ref=f7e76]:
+                  - cell [ref=f7e77] [cursor=pointer]
+                  - cell "1" [ref=f7e78]:
+                    - textbox [ref=f7e79]: "1"
+                  - cell "*Blinded Manuscript (without any author's affiliations)" [ref=f7e80]:
+                    - combobox [ref=f7e81] [cursor=pointer]:
+                      - option "*Cover page (Please put all author information here)"
+                      - option "*Blinded Manuscript (without any author's affiliations)" [selected]
+                      - option "abstract"
+                      - option "attachment to manuscript"
+                      - option "colour figure"
+                      - option "line figure"
+                      - option "screen"
+                      - option "table"
+                      - option "Authorship change form"
+                  - cell "Cover page (Please put all author information here)" [ref=f7e82]:
+                    - textbox "Cover page (Please put all author information here)" [ref=f7e83]
+                  - cell "paper2_draft.docx" [ref=f7e84]
+                  - cell "29.3 KB" [ref=f7e85]
+                  - cell "14 Apr 2026" [ref=f7e86]
+                  - cell "Download" [ref=f7e87]:
+                    - link "Download" [ref=f7e88] [cursor=pointer]:
+                      - /url: download.aspx?id=60703&guid=6cbf342b-7d77-4e98-9a3a-d5760464d384&scheme=1
+                  - cell [ref=f7e89]:
+                    - checkbox [checked] [ref=f7e90]
+                - row "2 *Cover page (Please put all author information here) Cover page (Please put all author information here) paper2_title_page.docx 10.5 KB 14 Apr 2026 Download" [ref=f7e91]:
+                  - cell [ref=f7e92] [cursor=pointer]
+                  - cell "2" [ref=f7e93]:
+                    - textbox [ref=f7e94]: "2"
+                  - cell "*Cover page (Please put all author information here)" [ref=f7e95]:
+                    - combobox [ref=f7e96] [cursor=pointer]:
+                      - option "*Cover page (Please put all author information here)" [selected]
+                      - option "*Blinded Manuscript (without any author's affiliations)"
+                      - option "abstract"
+                      - option "attachment to manuscript"
+                      - option "colour figure"
+                      - option "line figure"
+                      - option "screen"
+                      - option "table"
+                      - option "Authorship change form"
+                  - cell "Cover page (Please put all author information here)" [ref=f7e97]:
+                    - textbox "Cover page (Please put all author information here)" [ref=f7e98]
+                  - cell "paper2_title_page.docx" [ref=f7e99]
+                  - cell "10.5 KB" [ref=f7e100]
+                  - cell "14 Apr 2026" [ref=f7e101]
+                  - cell "Download" [ref=f7e102]:
+                    - link "Download" [ref=f7e103] [cursor=pointer]:
+                      - /url: download.aspx?id=60704&guid=759ee78b-661d-4a00-9dfc-01a961b5506f&scheme=1
+                  - cell [ref=f7e104]:
+                    - checkbox [checked] [active] [ref=f7e105]
+                - row "3 attachment to manuscript attachment to manuscript paper2_supplementary.docx 13.7 KB 14 Apr 2026 Download" [ref=f7e106]:
+                  - cell [ref=f7e107] [cursor=pointer]
+                  - cell "3" [ref=f7e108]:
+                    - textbox [ref=f7e109]: "3"
+                  - cell "attachment to manuscript" [ref=f7e110]:
+                    - combobox [ref=f7e111] [cursor=pointer]:
+                      - option "*Cover page (Please put all author information here)"
+                      - option "*Blinded Manuscript (without any author's affiliations)"
+                      - option "abstract"
+                      - option "attachment to manuscript" [selected]
+                      - option "colour figure"
+                      - option "line figure"
+                      - option "screen"
+                      - option "table"
+                      - option "Authorship change form"
+                  - cell "attachment to manuscript" [ref=f7e112]:
+                    - textbox "attachment to manuscript" [ref=f7e113]
+                  - cell "paper2_supplementary.docx" [ref=f7e114]
+                  - cell "13.7 KB" [ref=f7e115]
+                  - cell "14 Apr 2026" [ref=f7e116]
+                  - cell "Download" [ref=f7e117]:
+                    - link "Download" [ref=f7e118] [cursor=pointer]:
+                      - /url: download.aspx?id=60705&guid=6ecd96ca-7dce-45e5-b7e2-a8e67c31aba4&scheme=1
+                  - cell [ref=f7e119]:
+                    - checkbox [ref=f7e120]
+              - rowgroup [ref=f7e121]:
+                - row "Update File Order Download Selections as Zip File Remove" [ref=f7e122]:
+                  - cell "Update File Order" [ref=f7e123]:
+                    - button "Update File Order" [ref=f7e124] [cursor=pointer]
+                  - cell "Download Selections as Zip File" [ref=f7e125]:
+                    - button "Download Selections as Zip File" [ref=f7e126] [cursor=pointer]
+                  - cell "Remove" [ref=f7e127]:
+                    - button "Remove" [ref=f7e128] [cursor=pointer]
+                - row "Check All Clear All" [ref=f7e129]:
+                  - cell [ref=f7e130]
+                  - cell "Check All Clear All" [ref=f7e131]:
+                    - link "Check All" [ref=f7e132] [cursor=pointer]:
+                      - /url: javascript:__doPostBack('lnkCheckAll2','')
+                    - link "Clear All" [ref=f7e133] [cursor=pointer]:
+                      - /url: javascript:__doPostBack('lnkClearAll2','')
+          - generic [ref=f7e135]:
+            - button " Back" [ref=f7e136]:
+              - generic [ref=f7e137]: 
+              - text: Back
+            - button " Proceed" [ref=f7e138]:
+              - generic [ref=f7e139]: 
+              - text: Proceed
+    - contentinfo

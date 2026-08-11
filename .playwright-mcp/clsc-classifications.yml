@@ -1,0 +1,88 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - iframe [active] [ref=e31]:
+      - generic [ref=f32e3]:
+        - generic:
+          - generic:
+            - list:
+              - listitem [ref=f32e4]:
+                - text: 
+                - generic [ref=f32e5] [cursor=pointer]:
+                  - text: Article Type
+                  - text: Selection
+              - listitem [ref=f32e6]:  Attach Files
+              - listitem [ref=f32e7]:
+                - text: 
+                - generic [ref=f32e8] [cursor=pointer]:
+                  - text: General
+                  - text: Information
+              - listitem [ref=f32e9]:
+                - generic [ref=f32e10] [cursor=pointer]:
+                  - text: Additional
+                  - text: Information
+              - listitem [ref=f32e11]: Comments
+              - listitem [ref=f32e12]:
+                - generic [ref=f32e13] [cursor=pointer]:
+                  - text: Manuscript
+                  - text: Data
+        - generic [ref=f32e15]:
+          - generic [ref=f32e16]: Please provide the requested information.
+          - generic [ref=f32e17]:
+            - link "Insert Special Character" [ref=f32e18] [cursor=pointer]:
+              - /url: javascript:popup_specialChars('cris');
+            - tablist [ref=f32e19]:
+              - generic [ref=f32e20]:
+                - tab "Classifications Please provide all required information and make any necessary corrections." [expanded] [selected] [ref=f32e21] [cursor=pointer]:
+                  - text: Classifications
+                  - generic "Please provide all required information and make any necessary corrections." [ref=f32e23]
+                - tabpanel "Classifications Please provide all required information and make any necessary corrections." [ref=f32e24]:
+                  - generic [ref=f32e26]:
+                    - generic [ref=f32e27]: Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                    - generic [ref=f32e28]:
+                      - generic [ref=f32e29]:
+                        - text: Required
+                        - generic [ref=f32e30]: 
+                      - text: Select 1 or more Classifications
+                      - table [ref=f32e32]:
+                        - rowgroup [ref=f32e33]
+                      - button "Add Classifications" [ref=f32e36]
+            - generic [ref=f32e37]:
+              - button " Back" [ref=f32e38]:
+                - generic [ref=f32e39]: 
+                - text: Back
+              - button " Proceed" [ref=f32e40]:
+                - generic [ref=f32e41]: 
+                - text: Proceed
+    - contentinfo

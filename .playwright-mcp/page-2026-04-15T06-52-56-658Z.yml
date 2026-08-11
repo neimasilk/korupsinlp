@@ -1,0 +1,416 @@
+- generic [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e37]:
+          - link "Contact" [ref=e38] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/contactus/
+            - generic [ref=e40]: Contact
+        - listitem [ref=e41]:
+          - generic "Rankings" [ref=e44] [cursor=pointer]:
+            - generic [ref=e46]: Rankings
+    - button "Search" [ref=e51]
+    - link "Shopping Cart" [ref=e53] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e173]: MA
+  - main [ref=e58]:
+    - generic [ref=e60]:
+      - generic [ref=e62]:
+        - generic [ref=e64]:
+          - 'heading "Step 4: Classify Your Submission" [level=1] [ref=e497]'
+          - heading "Classifications" [level=2] [ref=e498]
+          - paragraph [ref=e499]: Please select at least one subject matter classification for your submission, up to a maximum of seven classifications. These classifications will determine which research networks your submission appears, and how it is distributed via our email alerts. These classifications will be checked by our classification team and so may change once they have been reviewed.
+          - generic [ref=e500]:
+            - heading "Selected Classifications" [level=3] [ref=e501]
+            - paragraph [ref=e502]: Hover to see descriptions
+            - separator [ref=e503]
+          - heading "Previous Classifications" [level=3] [ref=e504]
+          - paragraph [ref=e505]: These are classifications that you may have previously used.
+          - separator [ref=e506]
+          - heading "Search SSRN Classifications" [level=3] [ref=e507]
+          - generic [ref=e509]:
+            - generic [ref=e513]: search
+            - generic [ref=e515]:
+              - textbox "search" [active] [ref=e516]:
+                - /placeholder: Type search terms and press enter
+                - text: corruption
+              - button "right icon button" [ref=e517]
+          - paragraph [ref=e619]: "Search Results: (15)"
+          - table [ref=e620]:
+            - rowgroup [ref=e621]:
+              - row "Classification Description" [ref=e622]:
+                - columnheader [ref=e623]
+                - columnheader "Classification" [ref=e624]
+                - columnheader "Description" [ref=e625]
+            - rowgroup [ref=e626]:
+              - 'row "PSN: Corruption This area includes content focused on the relationship between corruption and underdevelopment in the developing world. Research may examine corruption comparatively between developing nations; focus on how corruption can hinder development, or efforts or suggestions to rid developing nations of corruption." [ref=e627] [cursor=pointer]':
+                - cell [ref=e628]
+                - 'cell "PSN: Corruption" [ref=e630]':
+                  - generic [ref=e632]:
+                    - text: "PSN:"
+                    - emphasis [ref=e633]: Corruption
+                - cell "This area includes content focused on the relationship between corruption and underdevelopment in the developing world. Research may examine corruption comparatively between developing nations; focus on how corruption can hinder development, or efforts or suggestions to rid developing nations of corruption." [ref=e634]:
+                  - generic [ref=e636]:
+                    - text: This area includes content focused on the rela
+                    - emphasis [ref=e637]: tion
+                    - text: ship between
+                    - emphasis [ref=e638]: corruption
+                    - text: and underdevelopment in the developing world. Research may examine
+                    - emphasis [ref=e639]: corruption
+                    - text: comparatively between developing na
+                    - emphasis [ref=e640]: tion
+                    - text: s; focus on how
+                    - emphasis [ref=e641]: corruption
+                    - text: can hinder development, or efforts or sugges
+                    - emphasis [ref=e642]: tion
+                    - text: s to rid developing na
+                    - emphasis [ref=e643]: tion
+                    - text: s of
+                    - emphasis [ref=e644]: corruption
+                    - text: .
+              - row "Institutions & Corruption This area includes content focused on the relationship between institutional changes and corruption in the context of economies experiencing institutional change." [ref=e645] [cursor=pointer]:
+                - cell [ref=e646]
+                - cell "Institutions & Corruption" [ref=e648]:
+                  - generic [ref=e650]:
+                    - text: Institu
+                    - emphasis [ref=e651]: tion
+                    - text: s &
+                    - emphasis [ref=e652]: Corruption
+                - cell "This area includes content focused on the relationship between institutional changes and corruption in the context of economies experiencing institutional change." [ref=e653]:
+                  - generic [ref=e655]:
+                    - text: This area includes content focused on the rela
+                    - emphasis [ref=e656]: tion
+                    - text: ship between institu
+                    - emphasis [ref=e657]: tion
+                    - text: al changes and
+                    - emphasis [ref=e658]: corruption
+                    - text: in the context of economies experiencing institu
+                    - emphasis [ref=e659]: tion
+                    - text: al change.
+              - row "Rent-Seeking, Corruption This area includes content that places special emphasis on the effects of rent-seeking behavior and/or corruption in the context of welfare economics and collective decision-making." [ref=e660] [cursor=pointer]:
+                - cell [ref=e661]
+                - cell "Rent-Seeking, Corruption" [ref=e663]:
+                  - generic [ref=e665]:
+                    - text: Rent-Seeking,
+                    - emphasis [ref=e666]: Corruption
+                - cell "This area includes content that places special emphasis on the effects of rent-seeking behavior and/or corruption in the context of welfare economics and collective decision-making." [ref=e667]:
+                  - generic [ref=e669]:
+                    - text: This area includes content that places special emphasis on the effects of rent-seeking behavior and/or
+                    - emphasis [ref=e670]: corruption
+                    - text: in the context of welfare economics and collective decis
+                    - emphasis [ref=e671]: ion
+                    - text: "-making."
+              - row "Bureaucracy; Administrative Processes in Public Organizations; Corruption This area includes content focused on studies of political institutions like government bureaucracies, as well as administrative processes in public organizations, based on economic principles." [ref=e672] [cursor=pointer]:
+                - cell [ref=e673]
+                - cell "Bureaucracy; Administrative Processes in Public Organizations; Corruption" [ref=e675]:
+                  - generic [ref=e677]:
+                    - text: Bureaucracy; Administrative Processes in Public Organiza
+                    - emphasis [ref=e678]: tion
+                    - text: s;
+                    - emphasis [ref=e679]: Corruption
+                - cell "This area includes content focused on studies of political institutions like government bureaucracies, as well as administrative processes in public organizations, based on economic principles." [ref=e680]:
+                  - generic [ref=e682]:
+                    - text: This area includes content focused on studies of political institu
+                    - emphasis [ref=e683]: tion
+                    - text: s like government bureaucracies, as well as administrative processes in public organiza
+                    - emphasis [ref=e684]: tion
+                    - text: s, based on economic principles.
+              - 'row "ERPN: Bankruptcy" [ref=e685] [cursor=pointer]':
+                - cell [ref=e686]
+                - 'cell "ERPN: Bankruptcy" [ref=e688]':
+                  - generic [ref=e690]:
+                    - text: "ERPN: Bank"
+                    - emphasis [ref=e691]: rupt
+                    - text: cy
+                - cell [ref=e692]
+              - row "Disruptive, Impulse-Control, & Conduct Disorders This area includes content focused on developments or innovations to the theory, measurement, diagnosis, and/or evidence-based treatment of disruptive, impulse-control, and conduct disorders. Such disorders involve problems with the self-control of emotions and behaviors that violate the rights of others (e.g., aggression, destruction of property) and/or that result in an individual having significant conflicts with societal norms or authority figures. Disorders include but are not limited to oppositional defiant disorder, intermittent explosive disorder, conduct disorder, antisocial personality disorder, pyromania, and kleptomania." [ref=e693] [cursor=pointer]:
+                - cell [ref=e694]
+                - cell "Disruptive, Impulse-Control, & Conduct Disorders" [ref=e696]:
+                  - generic [ref=e698]:
+                    - text: Dis
+                    - emphasis [ref=e699]: rupti
+                    - text: ve, Impulse-Control, & Conduct Disorders
+                - cell "This area includes content focused on developments or innovations to the theory, measurement, diagnosis, and/or evidence-based treatment of disruptive, impulse-control, and conduct disorders. Such disorders involve problems with the self-control of emotions and behaviors that violate the rights of others (e.g., aggression, destruction of property) and/or that result in an individual having significant conflicts with societal norms or authority figures. Disorders include but are not limited to oppositional defiant disorder, intermittent explosive disorder, conduct disorder, antisocial personality disorder, pyromania, and kleptomania." [ref=e700]:
+                  - generic [ref=e702]:
+                    - text: This area includes content focused on developments or innova
+                    - emphasis [ref=e703]: tion
+                    - text: s to the theory, measurement, diagnosis, and/or evidence-based treatment of dis
+                    - emphasis [ref=e704]: rupti
+                    - text: ve, impulse-control, and conduct disorders. Such disorders involve problems with the self-control of emo
+                    - emphasis [ref=e705]: tion
+                    - text: s and behaviors that violate the rights of others (e.g., aggress
+                    - emphasis [ref=e706]: ion
+                    - text: ", destruc"
+                    - emphasis [ref=e707]: tion
+                    - text: of property) and/or that result in an individual having significant conflicts with societal norms or authority figures. Disorders include but are not limited to opposi
+                    - emphasis [ref=e708]: tion
+                    - text: al defiant disorder, intermittent explosive disorder, conduct disorder, antisocial personality disorder, pyromania, and kleptomania.
+              - 'row "Corrosion eJournal This area includes content on the investigation of the causes of environmental degradation and prevention of failure in materials as well as the development of better methods to protect materials from the debilitating effects of the environment. Topics include: fundamental studies of corrosion, development of environmentally friendly protective coating systems, evolution of corrosive environments, localized corrosion, and predictive modeling of corrosion damage accumulation." [ref=e709] [cursor=pointer]':
+                - cell [ref=e710]
+                - cell "Corrosion eJournal" [ref=e712]:
+                  - generic [ref=e714]:
+                    - emphasis [ref=e715]: Corr
+                    - text: os
+                    - emphasis [ref=e716]: ion
+                    - text: eJournal
+                - 'cell "This area includes content on the investigation of the causes of environmental degradation and prevention of failure in materials as well as the development of better methods to protect materials from the debilitating effects of the environment. Topics include: fundamental studies of corrosion, development of environmentally friendly protective coating systems, evolution of corrosive environments, localized corrosion, and predictive modeling of corrosion damage accumulation." [ref=e717]':
+                  - generic [ref=e719]:
+                    - text: This area includes content on the investiga
+                    - emphasis [ref=e720]: tion
+                    - text: of the causes of environmental degrada
+                    - emphasis [ref=e721]: tion
+                    - text: and preven
+                    - emphasis [ref=e722]: tion
+                    - text: "of failure in materials as well as the development of better methods to protect materials from the debilitating effects of the environment. Topics include: fundamental studies of"
+                    - emphasis [ref=e723]: corr
+                    - text: os
+                    - emphasis [ref=e724]: ion
+                    - text: ", development of environmentally friendly protective coating systems, evolu"
+                    - emphasis [ref=e725]: tion
+                    - text: of
+                    - emphasis [ref=e726]: corr
+                    - text: osive environments, localized
+                    - emphasis [ref=e727]: corr
+                    - text: os
+                    - emphasis [ref=e728]: ion
+                    - text: ", and predictive modeling of"
+                    - emphasis [ref=e729]: corr
+                    - text: os
+                    - emphasis [ref=e730]: ion
+                    - text: damage accumula
+                    - emphasis [ref=e731]: tion
+                    - text: .
+              - row "Types of Offending eJournal Topics can include cybercrime, drug offenses, family and intimate partner violence, organized crime and corruption, sex offenses, human trafficking, terrorism, and white-collar crime." [ref=e732] [cursor=pointer]:
+                - cell [ref=e733]
+                - cell "Types of Offending eJournal" [ref=e735]:
+                  - generic [ref=e737]: Types of Offending eJournal
+                - cell "Topics can include cybercrime, drug offenses, family and intimate partner violence, organized crime and corruption, sex offenses, human trafficking, terrorism, and white-collar crime." [ref=e738]:
+                  - generic [ref=e740]:
+                    - text: Topics can include cybercrime, drug offenses, family and intimate partner violence, organized crime and
+                    - emphasis [ref=e741]: corruption
+                    - text: ", sex offenses, human trafficking, terrorism, and white-collar crime."
+              - 'row "Bankruptcy, Reorganization & Creditors eJournal This area includes content on bankruptcy laws, reorganization, and creditors'' rights.Editor: Barry E. Adler, New York University" [ref=e742] [cursor=pointer]':
+                - cell [ref=e743]
+                - cell "Bankruptcy, Reorganization & Creditors eJournal" [ref=e745]:
+                  - generic [ref=e747]:
+                    - text: Bank
+                    - emphasis [ref=e748]: rupt
+                    - text: cy, Reorganiza
+                    - emphasis [ref=e749]: tion
+                    - text: "& Creditors eJournal"
+                - 'cell "This area includes content on bankruptcy laws, reorganization, and creditors'' rights.Editor: Barry E. Adler, New York University" [ref=e750]':
+                  - generic [ref=e752]:
+                    - text: This area includes content on bank
+                    - emphasis [ref=e753]: rupt
+                    - text: cy laws, reorganiza
+                    - emphasis [ref=e754]: tion
+                    - text: ", and creditors' rights.Editor: Barry E. Adler, New York University"
+              - row "Corrections & Rehabilitation eJournal This area includes content that focuses on issues in criminal corrections and the rehabilitation of criminal offenders. This includes issues related to correctional and rehabilitative strategies, the operations of correctional agencies, and evaluations of corrective and rehabilitative measures. This also includes issues related to punishment and the current state of modern corrections." [ref=e755] [cursor=pointer]:
+                - cell [ref=e756]
+                - cell "Corrections & Rehabilitation eJournal" [ref=e758]:
+                  - generic [ref=e760]:
+                    - emphasis [ref=e761]: Corr
+                    - text: ec
+                    - emphasis [ref=e762]: tion
+                    - text: s & Rehabilita
+                    - emphasis [ref=e763]: tion
+                    - text: eJournal
+                - cell "This area includes content that focuses on issues in criminal corrections and the rehabilitation of criminal offenders. This includes issues related to correctional and rehabilitative strategies, the operations of correctional agencies, and evaluations of corrective and rehabilitative measures. This also includes issues related to punishment and the current state of modern corrections." [ref=e764]:
+                  - generic [ref=e766]:
+                    - text: This area includes content that focuses on issues in criminal
+                    - emphasis [ref=e767]: corr
+                    - text: ec
+                    - emphasis [ref=e768]: tion
+                    - text: s and the rehabilita
+                    - emphasis [ref=e769]: tion
+                    - text: of criminal offenders. This includes issues related to
+                    - emphasis [ref=e770]: corr
+                    - text: ec
+                    - emphasis [ref=e771]: tion
+                    - text: al and rehabilitative strategies, the opera
+                    - emphasis [ref=e772]: tion
+                    - text: s of
+                    - emphasis [ref=e773]: corr
+                    - text: ec
+                    - emphasis [ref=e774]: tion
+                    - text: al agencies, and evalua
+                    - emphasis [ref=e775]: tion
+                    - text: s of
+                    - emphasis [ref=e776]: corr
+                    - text: ective and rehabilitative measures. This also includes issues related to punishment and the current state of modern
+                    - emphasis [ref=e777]: corr
+                    - text: ec
+                    - emphasis [ref=e778]: tion
+                    - text: s.
+              - row "Correlates of Crime eJournal This area includes content that explores the factors that are correlated with crime. Research has identified a number of structural, cultural, personal, and biological factors that are highly associated with the commission of crime. This includes factors that both promote criminal behavior and constrain it, such as biology, gender and sexuality, neighborhoods, poverty and social class, the influence of family and peers, immigration, race and ethnicity, gangs, and guns/gun laws." [ref=e779] [cursor=pointer]:
+                - cell [ref=e780]
+                - cell "Correlates of Crime eJournal" [ref=e782]:
+                  - generic [ref=e784]:
+                    - emphasis [ref=e785]: Corr
+                    - text: elates of Crime eJournal
+                - cell "This area includes content that explores the factors that are correlated with crime. Research has identified a number of structural, cultural, personal, and biological factors that are highly associated with the commission of crime. This includes factors that both promote criminal behavior and constrain it, such as biology, gender and sexuality, neighborhoods, poverty and social class, the influence of family and peers, immigration, race and ethnicity, gangs, and guns/gun laws." [ref=e786]:
+                  - generic [ref=e788]:
+                    - text: This area includes content that explores the factors that are
+                    - emphasis [ref=e789]: corr
+                    - text: elated with crime. Research has identified a number of structural, cultural, personal, and biological factors that are highly associated with the commiss
+                    - emphasis [ref=e790]: ion
+                    - text: of crime. This includes factors that both promote criminal behavior and constrain it, such as biology, gender and sexuality, neighborhoods, poverty and social class, the influence of family and peers, immigra
+                    - emphasis [ref=e791]: tion
+                    - text: ", race and ethnicity, gangs, and guns/gun laws."
+              - 'row "Corrections & Sentencing Law & Policy eJournal Topics include (but are not limited to) prison and jail conditions and life; prisoners'' rights; probation, parole, and re-entry; prison and jail administration; imprisonment and diversionary sentencing, and the death penalty. The eJournal also invites submissions dealing with the implications of incarceration and other criminal punishments for families, communities, and society as a whole. Contributions from all disciplines are welcome.Editors: Sharon Dolovich, University of California, Los Angeles, Margo Schlanger, University of Michigan at Ann Arbor" [ref=e792] [cursor=pointer]':
+                - cell [ref=e793]
+                - cell "Corrections & Sentencing Law & Policy eJournal" [ref=e795]:
+                  - generic [ref=e797]:
+                    - emphasis [ref=e798]: Corr
+                    - text: ec
+                    - emphasis [ref=e799]: tion
+                    - text: s & Sentencing Law & Policy eJournal
+                - 'cell "Topics include (but are not limited to) prison and jail conditions and life; prisoners'' rights; probation, parole, and re-entry; prison and jail administration; imprisonment and diversionary sentencing, and the death penalty. The eJournal also invites submissions dealing with the implications of incarceration and other criminal punishments for families, communities, and society as a whole. Contributions from all disciplines are welcome.Editors: Sharon Dolovich, University of California, Los Angeles, Margo Schlanger, University of Michigan at Ann Arbor" [ref=e800]':
+                  - generic [ref=e802]:
+                    - text: Topics include (but are not limited to) prison and jail condi
+                    - emphasis [ref=e803]: tion
+                    - text: s and life; prisoners' rights; proba
+                    - emphasis [ref=e804]: tion
+                    - text: ", parole, and re-entry; prison and jail administra"
+                    - emphasis [ref=e805]: tion
+                    - text: ; imprisonment and divers
+                    - emphasis [ref=e806]: ion
+                    - text: ary sentencing, and the death penalty. The eJournal also invites submiss
+                    - emphasis [ref=e807]: ion
+                    - text: s dealing with the implica
+                    - emphasis [ref=e808]: tion
+                    - text: s of incarcera
+                    - emphasis [ref=e809]: tion
+                    - text: and other criminal punishments for families, communities, and society as a whole. Contribu
+                    - emphasis [ref=e810]: tion
+                    - text: "s from all disciplines are welcome.Editors: Sharon Dolovich, University of California, Los Angeles, Margo Schlanger, University of Michigan at Ann Arbor"
+              - 'row "White Collar Crime eJournal This area includes content related to Managerial and Corporate Wrongdoing, broadly defined, in both the US and elsewhere. The areas covered include criminal, civil and administrative liability for violations of the securities laws, environmental laws, banking laws, antitrust laws, mail and wire fraud laws, occupational health and safety laws, foreign corrupt practices laws, bribery laws, tax laws, and other similar areas.Editor: Vikramaditya S. Khanna, University of Michigan" [ref=e811] [cursor=pointer]':
+                - cell [ref=e812]
+                - cell "White Collar Crime eJournal" [ref=e814]:
+                  - generic [ref=e816]: White Collar Crime eJournal
+                - 'cell "This area includes content related to Managerial and Corporate Wrongdoing, broadly defined, in both the US and elsewhere. The areas covered include criminal, civil and administrative liability for violations of the securities laws, environmental laws, banking laws, antitrust laws, mail and wire fraud laws, occupational health and safety laws, foreign corrupt practices laws, bribery laws, tax laws, and other similar areas.Editor: Vikramaditya S. Khanna, University of Michigan" [ref=e817]':
+                  - generic [ref=e819]:
+                    - text: This area includes content related to Managerial and
+                    - emphasis [ref=e820]: Cor
+                    - text: porate Wrongdoing, broadly defined, in both the US and elsewhere. The areas covered include criminal, civil and administrative liability for viola
+                    - emphasis [ref=e821]: tion
+                    - text: s of the securities laws, environmental laws, banking laws, antitrust laws, mail and wire fraud laws, occupa
+                    - emphasis [ref=e822]: tion
+                    - text: al health and safety laws, foreign
+                    - emphasis [ref=e823]: corrupt
+                    - text: "practices laws, bribery laws, tax laws, and other similar areas.Editor: Vikramaditya S. Khanna, University of Michigan"
+              - 'row "Corporate Finance: Governance, Corporate Control & Organization eJournal This area includes content focused on empirical and theoretical work on all aspects of governance, including board composition, the internal labor market, managerial compensation, the legal system, and so on. Work on the determinants and implications of the distribution of ownership, antitakeover amendments, the market for corporate control, agency conflicts within the firm, and other issues pertaining to the internal organization of firms are also included as are papers on reorganizations, bankruptcy, and liquidation." [ref=e824] [cursor=pointer]':
+                - cell [ref=e825]
+                - 'cell "Corporate Finance: Governance, Corporate Control & Organization eJournal" [ref=e827]':
+                  - generic [ref=e829]:
+                    - emphasis [ref=e830]: Cor
+                    - text: "porate Finance: Governance,"
+                    - emphasis [ref=e831]: Cor
+                    - text: porate Control & Organiza
+                    - emphasis [ref=e832]: tion
+                    - text: eJournal
+                - cell "This area includes content focused on empirical and theoretical work on all aspects of governance, including board composition, the internal labor market, managerial compensation, the legal system, and so on. Work on the determinants and implications of the distribution of ownership, antitakeover amendments, the market for corporate control, agency conflicts within the firm, and other issues pertaining to the internal organization of firms are also included as are papers on reorganizations, bankruptcy, and liquidation." [ref=e833]:
+                  - generic [ref=e835]:
+                    - text: This area includes content focused on empirical and theoretical work on all aspects of governance, including board composi
+                    - emphasis [ref=e836]: tion
+                    - text: ", the internal labor market, managerial compensa"
+                    - emphasis [ref=e837]: tion
+                    - text: ", the legal system, and so on. Work on the determinants and implica"
+                    - emphasis [ref=e838]: tion
+                    - text: s of the distribu
+                    - emphasis [ref=e839]: tion
+                    - text: of ownership, antitakeover amendments, the market for
+                    - emphasis [ref=e840]: cor
+                    - text: porate control, agency conflicts within the firm, and other issues pertaining to the internal organiza
+                    - emphasis [ref=e841]: tion
+                    - text: of firms are also included as are papers on reorganiza
+                    - emphasis [ref=e842]: tion
+                    - text: s, bank
+                    - emphasis [ref=e843]: rupt
+                    - text: cy, and liquida
+                    - emphasis [ref=e844]: tion
+                    - text: .
+              - row "Options" [ref=e845] [cursor=pointer]:
+                - cell [ref=e846]
+                - cell "Options" [ref=e848]:
+                  - generic [ref=e850]:
+                    - text: O
+                    - emphasis [ref=e851]: ption
+                    - text: s
+                - cell [ref=e852]
+          - separator [ref=e520]
+          - heading "Browse SSRN Classifications" [level=3] [ref=e521]
+          - list [ref=e523]:
+            - listitem [ref=e524]:
+              - generic [ref=e525]:
+                - checkbox "Applied Sciences" [disabled] [ref=e527]
+                - generic [ref=e536] [cursor=pointer]: Applied Sciences
+            - listitem [ref=e537]:
+              - generic [ref=e538]:
+                - checkbox "Health Sciences" [disabled] [ref=e540]
+                - generic [ref=e549] [cursor=pointer]: Health Sciences
+            - listitem [ref=e550]:
+              - generic [ref=e551]:
+                - checkbox "Humanities" [disabled] [ref=e553]
+                - generic [ref=e562] [cursor=pointer]: Humanities
+            - listitem [ref=e563]:
+              - generic [ref=e564]:
+                - checkbox "Life Sciences" [disabled] [ref=e566]
+                - generic [ref=e575] [cursor=pointer]: Life Sciences
+            - listitem [ref=e576]:
+              - generic [ref=e577]:
+                - checkbox "Physical Sciences" [disabled] [ref=e579]
+                - generic [ref=e588] [cursor=pointer]: Physical Sciences
+            - listitem [ref=e589]:
+              - generic [ref=e590]:
+                - checkbox "Social Sciences" [disabled] [ref=e592]
+                - generic [ref=e601] [cursor=pointer]: Social Sciences
+          - separator [ref=e602]
+          - button "Save" [ref=e603]:
+            - generic [ref=e605]: Save
+          - button "Previous Step" [ref=e606]:
+            - generic [ref=e608]: Previous Step
+          - button "Next Step" [ref=e609]:
+            - generic [ref=e611]: Next Step
+        - generic [ref=e139]:
+          - heading "Submission Progress" [level=2] [ref=e140]
+          - generic [ref=e141]:
+            - button "complete Upload Submission" [ref=e390]: Upload Submission
+            - button "complete Confirm Key Submission Details" [ref=e492]: Confirm Key Submission Details
+            - button "complete Author Information" [ref=e613]: Author Information
+            - generic [ref=e158]:
+              - generic [ref=e159]: "4"
+              - button "selected Classify Your Submission" [ref=e614]: Classify Your Submission
+            - generic [ref=e163]:
+              - generic [ref=e164]: "5"
+              - button "initial Research Integrity" [ref=e615]: Research Integrity
+            - generic [ref=e168]:
+              - generic [ref=e169]: "6"
+              - button "disable Review and Submit" [disabled] [ref=e170]: Review and Submit
+          - paragraph [ref=e853]: Auto-saving in progress
+      - region "Notifications (F8)":
+        - list

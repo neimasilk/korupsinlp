@@ -1,0 +1,135 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - iframe [active] [ref=e31]:
+      - generic [ref=f7e1]:
+        - navigation:
+          - heading "Submissions Sent Back to Author" [level=1] [ref=f7e2]
+        - main [ref=f7e3]:
+          - group "Back to Main Menu Submissions Sent Back to Author" [ref=f7e5]:
+            - link "Back to Main Menu Submissions Sent Back to Author" [ref=f7e7] [cursor=pointer]:
+              - /url: AuthorMainMenu.aspx
+              - img "Back to Main Menu" [ref=f7e8]
+              - text: Submissions Sent Back to Author
+            - generic [ref=f7e9]:
+              - text: These submissions have been sent back to you. The 'View Letter' link allows you to see the letter associated with the returned submission.
+              - text: The 'Edit Submission' link allows you to fix or alter your submission. Please use Edit Submission to make changes to the meta-data and to remove and upload new files that make up your submission.
+              - text: The 'Remove Submission' link removes your submission from the system. Please use this ONLY if you would like to permanently remove this submission from the system.
+            - generic [ref=f7e11]:
+              - table "table contains pagination links" [ref=f7e13]:
+                - rowgroup [ref=f7e14]:
+                  - 'row "Page: 1 of 1 (1 total submissions) Results per page 10" [ref=f7e15]':
+                    - 'cell "Page: 1 of 1 (1 total submissions)" [ref=f7e16]'
+                    - cell [ref=f7e17]
+                    - cell "Results per page 10" [ref=f7e18]:
+                      - text: Results per page
+                      - combobox [ref=f7e19]:
+                        - option "10" [selected]
+                        - option "25"
+                        - option "50"
+                        - option "100"
+                        - option "500"
+              - table [ref=f7e20]:
+                - rowgroup [ref=f7e21]:
+                  - row "Action Expand Action Links Clear Sort Manuscript Number Sort Down Title Sort Down Date Submission Began Sort Up Status Date Sort Down Current Status Sort Down" [ref=f7e22]:
+                    - columnheader "Action Expand Action Links Clear Sort" [ref=f7e23]:
+                      - generic [ref=f7e24]:
+                        - text: Action
+                        - link "Expand Action Links" [ref=f7e25] [cursor=pointer]:
+                          - /url: authorSubmissionsSentBack.asp?currentPage=1&collapsedMenu=0
+                          - img "Expand Action Links" [ref=f7e26]
+                        - link "Clear Sort" [ref=f7e27] [cursor=pointer]:
+                          - /url: javascript:clearSort('resort','sort');
+                          - img "Clear Sort" [ref=f7e28]
+                    - columnheader "Manuscript Number Sort Down" [ref=f7e29]:
+                      - text: Manuscript Number
+                      - link "Sort Down" [ref=f7e31] [cursor=pointer]:
+                        - /url: javascript:void(setSort('4|0|DOWN'));
+                        - img "Sort Down" [ref=f7e32]
+                    - columnheader "Title Sort Down" [ref=f7e33]:
+                      - text: Title
+                      - link "Sort Down" [ref=f7e35] [cursor=pointer]:
+                        - /url: javascript:void(setSort('0|0|DOWN'));
+                        - img "Sort Down" [ref=f7e36]
+                    - columnheader "Date Submission Began Sort Up" [ref=f7e37]:
+                      - text: Date Submission Began
+                      - link "Sort Up" [ref=f7e39] [cursor=pointer]:
+                        - /url: javascript:void(setSort('1|0|UP'));
+                        - img "Sort Up" [ref=f7e40]
+                    - columnheader "Status Date Sort Down" [ref=f7e41]:
+                      - text: Status Date
+                      - link "Sort Down" [ref=f7e43] [cursor=pointer]:
+                        - /url: javascript:void(setSort('2|0|DOWN'));
+                        - img "Sort Down" [ref=f7e44]
+                    - columnheader "Current Status Sort Down" [ref=f7e45]:
+                      - text: Current Status
+                      - link "Sort Down" [ref=f7e47] [cursor=pointer]:
+                        - /url: javascript:void(setSort('3|0|DOWN'));
+                        - img "Sort Down" [ref=f7e48]
+                - rowgroup [ref=f7e49]:
+                  - 'row "Action Links View Submission View Letter Edit Submission Approve Submission Remove Submission Send E-mail CRIS-D-26-00272 Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences 14 Apr 2026 15 Apr 2026 Sent Back to Author" [ref=f7e66]':
+                    - cell "Action Links View Submission View Letter Edit Submission Approve Submission Remove Submission Send E-mail" [ref=f7e67]:
+                      - generic [ref=f7e52] [cursor=pointer]: Action Links
+                      - generic [ref=f7e68]:
+                        - link "View Submission" [ref=f7e69] [cursor=pointer]:
+                          - /url: "javascript:viewSubmission(6068, 'CRIS-D-26-00272', 0, '{F99A0A40-390B-4103-8946-E7D37213C708}');"
+                        - link "View Letter" [ref=f7e70] [cursor=pointer]:
+                          - /url: "javascript:popupLetter(168479, '{2235CDF2-DF4E-4DD4-A742-3C2B907FF855}');"
+                        - link "Edit Submission" [active] [ref=f7e71] [cursor=pointer]:
+                          - /url: "javascript:gotoEdit('submit_revision.asp?msid={F99A0A40-390B-4103-8946-E7D37213C708}&docid=6068&ms_num=CRIS%2DD%2D26%2D00272&cont=1');"
+                        - link "Approve Submission" [ref=f7e72] [cursor=pointer]:
+                          - /url: "javascript:warnAuthor(6068, 0, 'AuthorApprovesChangesToSubmission.aspx?docId=6068&msid={F99A0A40-390B-4103-8946-E7D37213C708}&sentBack=True', true, false, false,1);"
+                        - link "Remove Submission" [ref=f7e73] [cursor=pointer]:
+                          - /url: javascript:warnAuthor(6068, 0, 'process_submission_decision.asp?docid=6068&eid=23&rev=0&name=CRIS-D-26-00272&transfer=false', false, 0, 0,1)
+                        - link "Send E-mail" [ref=f7e74] [cursor=pointer]:
+                          - /url: "javascript: openCenterWin75Percent('sendAdHocEmail.asp?arg=q7bt%2fdLBVzI7jsokJoT4kKwqQYcLoN1Uy65gbJbVpV5o8mO8lTkm3ucEk1eI%2bxet','SendAdHocEmail',1,1,0,0,0,0,true);"
+                    - cell "CRIS-D-26-00272" [ref=f7e53]
+                    - 'cell "Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences" [ref=f7e54]'
+                    - cell "14 Apr 2026" [ref=f7e55]
+                    - cell "15 Apr 2026" [ref=f7e56]
+                    - cell "Sent Back to Author" [ref=f7e57]
+              - table "table contains pagination links" [ref=f7e59]:
+                - rowgroup [ref=f7e60]:
+                  - 'row "Page: 1 of 1 (1 total submissions) Results per page 10" [ref=f7e61]':
+                    - 'cell "Page: 1 of 1 (1 total submissions)" [ref=f7e62]'
+                    - cell [ref=f7e63]
+                    - cell "Results per page 10" [ref=f7e64]:
+                      - text: Results per page
+                      - combobox [ref=f7e65]:
+                        - option "10" [selected]
+                        - option "25"
+                        - option "50"
+                        - option "100"
+                        - option "500"
+    - contentinfo

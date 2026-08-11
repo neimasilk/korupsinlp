@@ -1,0 +1,41 @@
+- generic [ref=e2]:
+  - heading "Select Submission Classifications" [level=3] [ref=e4]
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - button "Cancel" [ref=e7] [cursor=pointer]
+      - button "Submit" [disabled] [ref=e8] [cursor=pointer]
+    - generic [ref=e9]:
+      - text: Please identify your manuscript's areas of Interest and specialization by selecting one or more classifications from the list below.
+      - generic [ref=e10]:
+        - text: Click 'Submit' at the bottom of the page when you are done.
+        - text: To save changes you must click "Submit" before you leave this window.
+      - text: (less...)
+    - separator [ref=e11]
+    - table [ref=e12]:
+      - rowgroup [ref=e13]:
+        - 'row "Search: corruption Search Clear [Matching terms display in red text]" [ref=e14]':
+          - 'cell "Search: corruption Search Clear [Matching terms display in red text]" [ref=e15]':
+            - generic [ref=e16]:
+              - text: "Search:"
+              - textbox [ref=e17]: corruption
+              - button "Search" [ref=e18] [cursor=pointer]
+              - button "Clear" [ref=e19] [cursor=pointer]
+              - text: "[Matching terms display in red text]"
+        - 'row "Expand All Collapse All 5: Political corruption by nation, region, type 6: Globalization of crime and corruption Add-> <-Remove Selected Classifications: Select 1 or more Classifications Expand All Collapse All" [ref=e20]':
+          - 'cell "Expand All Collapse All 5: Political corruption by nation, region, type 6: Globalization of crime and corruption Add-> <-Remove Selected Classifications: Select 1 or more Classifications Expand All Collapse All" [ref=e21]':
+            - table [ref=e22]:
+              - rowgroup [ref=e23]:
+                - 'row "Expand All Collapse All 5: Political corruption by nation, region, type 6: Globalization of crime and corruption Add-> <-Remove Selected Classifications: Select 1 or more Classifications" [ref=e24]':
+                  - 'cell "Expand All Collapse All 5: Political corruption by nation, region, type 6: Globalization of crime and corruption" [ref=e25]':
+                    - generic [ref=e26]: Expand All Collapse All
+                    - generic [ref=e30]
+                  - cell "Add-> <-Remove" [ref=e43]:
+                    - table [ref=e44]
+                  - 'cell "Selected Classifications: Select 1 or more Classifications" [ref=e52]':
+                    - generic [ref=e53]: "Selected Classifications: Select 1 or more Classifications"
+                    - generic [ref=e54]
+                - row "Expand All Collapse All" [ref=e55]:
+                  - cell "Expand All Collapse All" [ref=e56]
+  - generic [ref=e57]:
+    - button "Cancel" [ref=e58] [cursor=pointer]
+    - button "Submit" [disabled] [ref=e59] [cursor=pointer]

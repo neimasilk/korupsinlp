@@ -1,0 +1,134 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - main:
+      - iframe [active] [ref=e31]:
+        - generic [active] [ref=f78e1]:
+          - navigation:
+            - heading "Submissions Waiting for Approval by Author" [level=1] [ref=f78e2]
+          - main [ref=f78e3]:
+            - group "Back to Main Menu Submissions Waiting for Approval by Author" [ref=f78e5]:
+              - link "Back to Main Menu Submissions Waiting for Approval by Author" [ref=f78e7] [cursor=pointer]:
+                - /url: AuthorMainMenu.aspx
+                - img "Back to Main Menu" [ref=f78e8]
+                - text: Submissions Waiting for Approval by Author
+              - generic [ref=f78e9]:
+                - text: If no Actions appear for your submission, please wait a few minutes for your PDF to be built. The Actions appear automatically when your PDF is available.
+                - text: The 'Edit Submission' link allows you to fix or alter your submission. Please use Edit Submission to make changes to the meta-data and to remove and upload new files that make up your submission.
+                - text: The 'Remove Submission' link removes your submission from the system. Please use this ONLY if you would like to permanently remove this submission from the system.
+              - generic [ref=f78e11]:
+                - table "table contains pagination links" [ref=f78e13]:
+                  - rowgroup [ref=f78e14]:
+                    - 'row "Page: 1 of 1 (1 total submissions) Results per page 10" [ref=f78e15]':
+                      - 'cell "Page: 1 of 1 (1 total submissions)" [ref=f78e16]'
+                      - cell [ref=f78e17]
+                      - cell "Results per page 10" [ref=f78e18]:
+                        - text: Results per page
+                        - combobox [ref=f78e19]:
+                          - option "10" [selected]
+                          - option "25"
+                          - option "50"
+                          - option "100"
+                          - option "500"
+                - table [ref=f78e20]:
+                  - rowgroup [ref=f78e21]:
+                    - row "Action Expand Action Links Clear Sort Manuscript Number Sort Down Title Sort Down Date Submission Began Sort Up Status Date Sort Down Current Status Sort Down" [ref=f78e22]:
+                      - columnheader "Action Expand Action Links Clear Sort" [ref=f78e23]:
+                        - generic [ref=f78e24]:
+                          - text: Action
+                          - link "Expand Action Links" [ref=f78e25] [cursor=pointer]:
+                            - /url: auth_ndauthApprove.asp?&collapsedMenu=0&collapsedMenu=0
+                            - img "Expand Action Links" [ref=f78e26]
+                          - link "Clear Sort" [ref=f78e27] [cursor=pointer]:
+                            - /url: javascript:clearSort('resort','sort');
+                            - img "Clear Sort" [ref=f78e28]
+                      - columnheader "Manuscript Number Sort Down" [ref=f78e29]:
+                        - text: Manuscript Number
+                        - link "Sort Down" [ref=f78e31] [cursor=pointer]:
+                          - /url: javascript:void(setSort('4|0|DOWN'));
+                          - img "Sort Down" [ref=f78e32]
+                      - columnheader "Title Sort Down" [ref=f78e33]:
+                        - text: Title
+                        - link "Sort Down" [ref=f78e35] [cursor=pointer]:
+                          - /url: javascript:void(setSort('0|0|DOWN'));
+                          - img "Sort Down" [ref=f78e36]
+                      - columnheader "Date Submission Began Sort Up" [ref=f78e37]:
+                        - text: Date Submission Began
+                        - link "Sort Up" [ref=f78e39] [cursor=pointer]:
+                          - /url: javascript:void(setSort('1|0|UP'));
+                          - img "Sort Up" [ref=f78e40]
+                      - columnheader "Status Date Sort Down" [ref=f78e41]:
+                        - text: Status Date
+                        - link "Sort Down" [ref=f78e43] [cursor=pointer]:
+                          - /url: javascript:void(setSort('2|0|DOWN'));
+                          - img "Sort Down" [ref=f78e44]
+                      - columnheader "Current Status Sort Down" [ref=f78e45]:
+                        - text: Current Status
+                        - link "Sort Down" [ref=f78e47] [cursor=pointer]:
+                          - /url: javascript:void(setSort('3|0|DOWN'));
+                          - img "Sort Down" [ref=f78e48]
+                  - rowgroup [ref=f78e49]:
+                    - 'row "Action Links View Submission Edit Submission Approve Submission Remove Submission Send E-mail CRIS-D-26-00272 Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences 14 Apr 2026 15 Apr 2026 Needs Approval" [ref=f78e66]':
+                      - cell "Action Links View Submission Edit Submission Approve Submission Remove Submission Send E-mail" [ref=f78e67]:
+                        - generic [ref=f78e52] [cursor=pointer]: Action Links
+                        - generic [ref=f78e68]:
+                          - link "View Submission" [ref=f78e69] [cursor=pointer]:
+                            - /url: "javascript:viewAuthorPDFs(6068, 'CRIS-D-26-00272', 0, '{F99A0A40-390B-4103-8946-E7D37213C708}', 'R');"
+                          - link "Edit Submission" [ref=f78e70] [cursor=pointer]:
+                            - /url: "javascript:gotoEdit('submit_revision.asp?msid={F99A0A40-390B-4103-8946-E7D37213C708}&docid=6068&ms_num=CRIS-D-26-00272&cont=1');"
+                          - link "Approve Submission" [ref=f78e71] [cursor=pointer]:
+                            - /url: "javascript:warnAuthor(6068, 7733, 'AuthorApprovesChangesToSubmission.aspx?docId=6068&msid={F99A0A40-390B-4103-8946-E7D37213C708}&sentBack=False', true, true, false, 1);"
+                          - link "Remove Submission" [ref=f78e72] [cursor=pointer]:
+                            - /url: javascript:warnAuthor(6068, 7733, 'process_submission_decision.asp?docid=6068&eid=23&rev=0&name=CRIS-D-26-00272&transfer=false', false, 0, 0, 0)
+                          - link "Send E-mail" [ref=f78e73] [cursor=pointer]:
+                            - /url: "javascript: openCenterWin75Percent('sendAdHocEmail.asp?arg=q7bt%2fdLBVzI7jsokJoT4kKwqQYcLoN1Uy65gbJbVpV5o8mO8lTkm3ucEk1eI%2bxet','SendAdHocEmail',1,1,0,0,0,0,true);"
+                      - cell "CRIS-D-26-00272" [ref=f78e53]
+                      - 'cell "Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences" [ref=f78e54]'
+                      - cell "14 Apr 2026" [ref=f78e55]
+                      - cell "15 Apr 2026" [ref=f78e56]
+                      - cell "Needs Approval" [ref=f78e57]
+                - table "table contains pagination links" [ref=f78e59]:
+                  - rowgroup [ref=f78e60]:
+                    - 'row "Page: 1 of 1 (1 total submissions) Results per page 10" [ref=f78e61]':
+                      - 'cell "Page: 1 of 1 (1 total submissions)" [ref=f78e62]'
+                      - cell [ref=f78e63]
+                      - cell "Results per page 10" [ref=f78e64]:
+                        - text: Results per page
+                        - combobox [ref=f78e65]:
+                          - option "10" [selected]
+                          - option "25"
+                          - option "50"
+                          - option "100"
+                          - option "500"
+    - contentinfo

@@ -1,5 +1,10 @@
 # Broken Proportionality: Prosecutorial Demands and State Financial Loss in Indonesian Corruption Cases
 
+**Mukhlis Amien**<sup>1</sup> · **Go Frendi Gunawan**<sup>2</sup>
+
+<sup>1</sup> Department of Informatics, Universitas Bhinneka Nusantara, Malang, Indonesia — amien@ubhinus.ac.id
+<sup>2</sup> State Alchemists
+
 ## Abstract
 
 Does the punishment fit the crime in corruption cases? We estimate the elasticity of prosecution demands (*tuntutan*) with respect to state financial loss (*kerugian negara*) using 262 Indonesian Supreme Court corruption verdicts. The elasticity is 0.124 (bootstrap 95% CI [0.102, 0.150]): a 100-fold increase in state loss produces only a 1.8-fold increase in the prosecution demand. A Rp 10 million case draws a demand of 2.7 years; a Rp 100 billion case — ten thousand times the harm — draws only 8.6 years. Because punishment operates on a bounded scale while loss spans orders of magnitude, *some* compression is mathematically inevitable; the right benchmark is therefore comparative. Indonesia's elasticity is about 43% of the loss-severity gradient US federal courts actually deliver in practice (realized elasticity ≈0.29, computed from US Sentencing Commission outcome data; the guideline table itself implies 0.25–0.35) and is reached with no guidelines at all — loss explains about 30% of demand variation (R²=0.300). Under identical case-fact specifications, sentences are in fact somewhat *more* predictable than demands (R²=0.50 vs 0.40) while still tracking the demand closely (R²=0.64): discretion enters the system once, at the demand stage, and judges partially correct toward case facts rather than purely transmitting it — the sentence-loss elasticity (0.145) modestly exceeds, and is statistically indistinguishable from, the demand-loss elasticity (0.124). Demands have risen over time (from roughly 4.5 years in 2014–2015 to 7.5 years in 2025–2026), and the sentencing discount has widened modestly over the same period. A residual geographic signal persists even after controlling for case magnitude. The compressed elasticity means the marginal expected punishment for escalating corruption is negligible — the system grants an implicit volume discount on large-scale theft. Because the proportionality failure originates upstream in prosecutorial discretion, reform aimed only at judges would leave the binding constraint largely untouched.
@@ -8,7 +13,7 @@ Does the punishment fit the crime in corruption cases? We estimate the elasticit
 
 Punishment should fit the crime. In corruption cases, "the crime" has a clear metric: the state financial loss (*kerugian negara*). A prosecutor deciding how many years to demand for a defendant who stole Rp 10 million faces a qualitatively different case from one involving Rp 100 billion. The question is whether prosecutors actually treat them differently — and if so, by how much.
 
-Sentencing research overwhelmingly studies judges, treating prosecution demands as a given (Author, 2026b; Medvedeva et al., 2020; Strickson & De La Iglesia, 2020). This is a blind spot. Prosecution demands set the anchor from which judges work: in Indonesian corruption cases, prosecution demand alone explains about 64% of sentencing variance (Author, 2026b). If the anchor itself is not proportional to the crime, judicial proportionality is impossible regardless of how carefully judges deliberate.
+Sentencing research overwhelmingly studies judges, treating prosecution demands as a given (Amien, 2026b; Medvedeva et al., 2020; Strickson & De La Iglesia, 2020). This is a blind spot. Prosecution demands set the anchor from which judges work: in Indonesian corruption cases, prosecution demand alone explains about 64% of sentencing variance (Amien, 2026b). If the anchor itself is not proportional to the crime, judicial proportionality is impossible regardless of how carefully judges deliberate.
 
 We test proportionality directly. Using 262 Indonesian Supreme Court corruption verdicts with documented state losses spanning seven orders of magnitude, we estimate the elasticity of prosecution demand with respect to kerugian negara. Indonesia is a useful setting because prosecutors operate without sentencing guidelines and the statutory range (1-20 years) is wide enough to accommodate the graduation observed in comparable systems.
 
@@ -44,7 +49,7 @@ If prosecution demands are inelastic to state loss, the marginal expected punish
 
 The anchoring literature (Tversky & Kahneman, 1974; Englich et al., 2006) suggests that decision-makers anchor to reference points and adjust insufficiently. Prosecutors may be anchored to a "normal" corruption demand range — an internalized sense of what constitutes an appropriate demand for corruption cases — and adjust minimally for case-specific factors including loss magnitude.
 
-In a companion study (Author, 2026c), we documented bidirectional anchoring correction in judicial sentencing: judges pull extreme prosecution demands toward an implicit norm. The present study tests whether a parallel phenomenon exists on the prosecutorial side: do prosecutors compress their demands toward a central range regardless of case severity?
+In a companion study (Amien, 2026c), we documented bidirectional anchoring correction in judicial sentencing: judges pull extreme prosecution demands toward an implicit norm. The present study tests whether a parallel phenomenon exists on the prosecutorial side: do prosecutors compress their demands toward a central range regardless of case severity?
 
 ### 2.4 Prosecutorial Discretion
 
@@ -54,7 +59,7 @@ Prosecutors exercise enormous discretion in determining sentencing demands, yet 
 
 ### 3.1 Corpus
 
-We use CorpusKorupsi (Author, 2026a), a structured dataset of Indonesian Supreme Court corruption verdicts. Of 693 scraped verdicts, 465 are confirmed corruption (tipikor) cases by document-text audit rather than directory label (the scraping directory is global and admits non-corruption matters; we verify each verdict's substantive category). Of these, 265 carry a valid prosecution demand (*tuntutan* > 0), a final sentence (*vonis* > 0), and a documented state financial loss (*kerugian negara* > 0). Three carry an implausible loss below Rp 1 juta (almost certainly extraction errors, the smallest plausible value being Rp 2.2 juta); we drop them, yielding **n=262** for the primary estimate. Losses then range from Rp 2.2 juta to Rp 28.9 trillion (median Rp 2.1 billion), spanning over seven orders of magnitude.
+We use CorpusKorupsi (Amien, 2026a), a structured dataset of Indonesian Supreme Court corruption verdicts. Of 693 scraped verdicts, 465 are confirmed corruption (tipikor) cases by document-text audit rather than directory label (the scraping directory is global and admits non-corruption matters; we verify each verdict's substantive category). Of these, 265 carry a valid prosecution demand (*tuntutan* > 0), a final sentence (*vonis* > 0), and a documented state financial loss (*kerugian negara* > 0). Three carry an implausible loss below Rp 1 juta (almost certainly extraction errors, the smallest plausible value being Rp 2.2 juta); we drop them, yielding **n=262** for the primary estimate. Losses then range from Rp 2.2 juta to Rp 28.9 trillion (median Rp 2.1 billion), spanning over seven orders of magnitude.
 
 **The mega-case (PT Timah).** The largest value in the data is the PT Timah tin-mining case, which appears three times because its case-level loss is attributed identically to three co-defendants. The case illustrates why loss quantification in corruption is contested. The BPKP audit cited a total figure of approximately Rp 300 trillion, but roughly Rp 271 trillion of that is environmental damage that the Supreme Court, on cassation, explicitly held *not* to be state financial loss under the corruption-crime regime; the Court fixed the criminal basis at **Rp 28.9 trillion** of state financial loss. We use Rp 28.9 trillion for the `kerugian_keuangan_negara` variable, because our estimand is the fiscal loss to which the corruption statute attaches. We retain the Rp 300 trillion figure as an alternative specification in a robustness check (Section 4.1). Because the three co-defendant rows are non-independent, we also de-duplicate them in a robustness check; with the corrected 28.9-trillion value this de-duplication barely moves the estimate (elasticity 0.124 → 0.125), confirming the headline does not rest on mega-case leverage.
 
@@ -77,7 +82,7 @@ We use CorpusKorupsi (Author, 2026a), a structured dataset of Indonesian Supreme
 
 **Proportionality test (RQ1).** We estimate the elasticity of prosecution demand with respect to state financial loss using a log-log regression: log(tuntutan) = a + b * log(kerugian). Under proportionality, b = 1.0. We test whether the estimated elasticity is significantly less than 1.0.
 
-**Demand predictability (RQ2).** We model prosecution demand using OLS regression with state financial loss, charge type (Pasal 2, Pasal 3), and year as predictors. We compare the R-squared with the demand-sentence relationship (R-squared = 0.64 from Author, 2026b) to assess relative predictability.
+**Demand predictability (RQ2).** We model prosecution demand using OLS regression with state financial loss, charge type (Pasal 2, Pasal 3), and year as predictors. We compare the R-squared with the demand-sentence relationship (R-squared = 0.64 from Amien, 2026b) to assess relative predictability.
 
 **Temporal and geographic patterns (RQ3).** Temporal trends are assessed using Spearman rank correlation. Geographic variation is tested using Kruskal-Wallis on both raw and residual (controlling for loss magnitude) demands.
 
@@ -112,15 +117,15 @@ The low elasticity is also not an artifact of statutory constraints. The statuto
 
 ### 4.2 Discretion Enters Upstream: Judges Partially Correct Toward Case Facts (RQ2)
 
-How predictable are prosecution demands from observable case features — and, critically, how does that compare with sentences *under the same specification*? Comparing the demand model against the sentence-from-demand benchmark alone would be misleading: the 64% of sentencing variance explained by the demand (Author, 2026b) measures how faithfully judges follow a procedural anchor, not how tightly sentences track case facts. The fair comparison holds the predictor set constant (cleaned sample, n=262):
+How predictable are prosecution demands from observable case features — and, critically, how does that compare with sentences *under the same specification*? Comparing the demand model against the sentence-from-demand benchmark alone would be misleading: the 64% of sentencing variance explained by the demand (Amien, 2026b) measures how faithfully judges follow a procedural anchor, not how tightly sentences track case facts. The fair comparison holds the predictor set constant (cleaned sample, n=262):
 
 | Model (identical predictors where comparable) | R-squared |
 |-------|-----------|
 | tuntutan ~ log(kerugian) + Pasal 2 + Pasal 3 + year | 0.405 |
 | vonis ~ log(kerugian) + Pasal 2 + Pasal 3 + year | 0.498 |
-| vonis ~ tuntutan (anchor model; Author, 2026b) | 0.642 |
+| vonis ~ tuntutan (anchor model; Amien, 2026b) | 0.642 |
 
-Conditional on observable case facts, sentences are *more* predictable than demands (R-squared 0.498 vs 0.405), not equally so. Conditional on the demand, sentences are highly predictable (R-squared 0.642). The pattern admits one coherent reading: **discretion enters the system once — at the demand stage — but judges do not merely transmit it**. They pull sentences modestly toward case facts, leaving sentences somewhat better tethered to the record than the demands they anchor to. This is partial correction, not pure propagation, and it is consistent with the bidirectional anchoring correction documented for judges in companion work (Author, 2026c). The same direction appears in the elasticities: the sentence-loss elasticity (0.145, SE 0.011) modestly exceeds the demand-loss elasticity (0.124, SE 0.012) — judges weight loss slightly more than prosecutors do — though the two are not statistically distinguishable. The proportionality failure documented in Section 4.1 therefore passes through judicial sentencing *damped* rather than amplified: judges blunt it, but they do not close it.
+Conditional on observable case facts, sentences are *more* predictable than demands (R-squared 0.498 vs 0.405), not equally so. Conditional on the demand, sentences are highly predictable (R-squared 0.642). The pattern admits one coherent reading: **discretion enters the system once — at the demand stage — but judges do not merely transmit it**. They pull sentences modestly toward case facts, leaving sentences somewhat better tethered to the record than the demands they anchor to. This is partial correction, not pure propagation, and it is consistent with the bidirectional anchoring correction documented for judges in companion work (Amien, 2026c). The same direction appears in the elasticities: the sentence-loss elasticity (0.145, SE 0.011) modestly exceeds the demand-loss elasticity (0.124, SE 0.012) — judges weight loss slightly more than prosecutors do — though the two are not statistically distinguishable. The proportionality failure documented in Section 4.1 therefore passes through judicial sentencing *damped* rather than amplified: judges blunt it, but they do not close it.
 
 Within the demand model, charge type contributes modestly: Pasal 2 cases receive demands about 0.9 years higher (p=0.062), Pasal 3 cases about 0.5 years lower (p=0.295), and year adds borderline explanatory power (b=+0.11, p=0.085). Loss magnitude, even where significant, leaves the majority of demand variation unexplained.
 
@@ -134,7 +139,7 @@ One reading: as anti-corruption rhetoric has intensified, prosecutors have raise
 
 Raw prosecution demands vary significantly across provinces (Kruskal-Wallis H=57.2, p<0.001 among the 15 provinces with at least five cases). After controlling for state financial loss, most of this variation is absorbed, but a residual geographic signal persists (H=24.8, p=0.036): regions are not interchangeable, though case magnitude explains the bulk of the raw differences. Regions with higher average demands (DKI Jakarta, Sumatera Selatan) handle larger-magnitude cases; what remains after controlling for magnitude is comparatively small.
 
-The same largely-compositional pattern appears in judicial sentencing (Author, 2026b): most of what looks like regional disparity is case mix rather than systematically harsher or softer local prosecutors.
+The same largely-compositional pattern appears in judicial sentencing (Amien, 2026b): most of what looks like regional disparity is case mix rather than systematically harsher or softer local prosecutors.
 
 ## 5. Discussion
 
@@ -144,7 +149,7 @@ An obvious objection is that state financial loss is only one dimension of crime
 
 Three mechanisms may explain the compression:
 
-**Anchoring to norms.** Prosecutors may anchor to an implicit "normal" corruption demand — approximately 5-8 years — and adjust insufficiently for case severity. This parallels the judicial anchoring documented in companion studies (Author, 2026b, 2026c). The statutory range of 1-20 years is broad enough to accommodate proportional demands, but prosecutors appear to use only a narrow band within this range.
+**Anchoring to norms.** Prosecutors may anchor to an implicit "normal" corruption demand — approximately 5-8 years — and adjust insufficiently for case severity. This parallels the judicial anchoring documented in companion studies (Amien, 2026b, 2026c). The statutory range of 1-20 years is broad enough to accommodate proportional demands, but prosecutors appear to use only a narrow band within this range.
 
 **Evidentiary complexity.** Larger corruption cases typically involve more complex financial structures, making it more difficult to establish the full extent of state loss. Prosecutors may discount their demands to reflect evidentiary uncertainty, even when the documented loss is large.
 
@@ -158,7 +163,7 @@ Within a rational-choice framework, this broken proportionality predicts weak de
 
 ### 5.3 Prosecutorial Discretion as the Upstream Problem
 
-Our finding that discretion enters the system once, at the demand stage (Section 4.2), shifts the focus of the proportionality problem upstream. Sentences are in fact somewhat *better* tethered to case facts than demands are (R-squared 0.498 vs 0.405 under identical specifications); what makes sentences *look* orderly is still their faithful anchoring to the demand (R-squared=0.64). The "judicial opacity" identified in Author (2026b) is thus partly *inherited* from prosecutorial opacity — judges anchor to demands that are themselves not proportional to case severity — but only partly: by pulling sentences toward the facts, judges absorb some of the demand's noise rather than transmitting it wholesale.
+Our finding that discretion enters the system once, at the demand stage (Section 4.2), shifts the focus of the proportionality problem upstream. Sentences are in fact somewhat *better* tethered to case facts than demands are (R-squared 0.498 vs 0.405 under identical specifications); what makes sentences *look* orderly is still their faithful anchoring to the demand (R-squared=0.64). The "judicial opacity" identified in Amien (2026b) is thus partly *inherited* from prosecutorial opacity — judges anchor to demands that are themselves not proportional to case severity — but only partly: by pulling sentences toward the facts, judges absorb some of the demand's noise rather than transmitting it wholesale.
 
 Cross-national comparisons support this interpretation. Our sentence-from-demand R-squared of 0.64 is close to the Dutch sentencing benchmark (van Wingerden et al., 2016, R-squared=0.60 with multiple predictors) and exceeds the majority of 28 sentencing regression studies reviewed by Wittenbrink and Niehaus (2022). The roughly 36% of sentencing variance left unexplained is thus not a distinctively Indonesian phenomenon — it is consistent with judicial discretion levels observed globally.
 
@@ -195,20 +200,21 @@ The CorpusKorupsi dataset and analysis code are publicly available at [repositor
 ## Declarations
 
 **Funding.** This research received no external funding.
-**Conflicts of interest.** The author declares no conflicts of interest.
+**Conflicts of interest.** The authors declare no conflicts of interest.
 **Ethics approval.** This study analyzes publicly available court documents published by the Indonesian Supreme Court. No human subjects were involved and no ethics approval was required.
 **Data availability.** The CorpusKorupsi structured dataset and analysis scripts will be made available upon publication.
-**Use of AI-assisted tools.** The author used Claude (Anthropic, Claude Opus) as a computational research assistant for programming, statistical analysis, and manuscript drafting. All analyses were independently verified through reproducible scripts, and the author takes full responsibility for all scientific claims and interpretations.
+**Author contributions.** MA conceived the study, assembled and audited the corpus, and ran the statistical analyses. GFG contributed to the research design, the comparative benchmark, and manuscript revision. Both authors approved the final manuscript.
+**Use of AI-assisted tools.** The authors used Claude (Anthropic) as a computational research assistant for programming, statistical analysis, and manuscript drafting. All analyses were independently verified through reproducible scripts, and the authors take full responsibility for all scientific claims and interpretations.
 
 ## References
 
 Ashworth, A. (2015). *Sentencing and Criminal Justice* (6th ed.). Cambridge University Press.
 
-Author (2026a). CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Verdicts and Sentencing Patterns. [Companion paper]
+Amien, M. (2026a). CorpusKorupsi: A Computational Corpus of Indonesian Supreme Court Corruption Verdicts and Sentencing Patterns. [Companion paper]
 
-Author (2026b). Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences. *Crime, Law and Social Change* [under review].
+Amien, M. (2026b). Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences. SSRN Working Paper No. 6574140. https://ssrn.com/abstract=6574140
 
-Author (2026c). Bidirectional Correction: How Indonesian Judges Override Low Prosecution Demands in Corruption Cases. [Companion paper]
+Amien, M. (2026c). Bidirectional Correction: How Indonesian Judges Override Low Prosecution Demands in Corruption Cases. [Companion paper]
 
 Becker, G. S. (1968). Crime and Punishment: An Economic Approach. *Journal of Political Economy*, 76(2), 169-217. https://doi.org/10.1086/259394
 

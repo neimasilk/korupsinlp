@@ -1,0 +1,272 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e5]:
+      - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+        - /url: https://www.ssrn.com
+        - img [ref=e8]
+      - navigation [ref=e9]:
+        - list [ref=e10]:
+          - listitem [ref=e11]:
+            - generic "Product & Services" [ref=e14] [cursor=pointer]:
+              - generic [ref=e16]: Product & Services
+          - listitem [ref=e19]:
+            - link "Subscribe" [ref=e20] [cursor=pointer]:
+              - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+              - generic [ref=e22]: Subscribe
+          - listitem [ref=e23]:
+            - link "Submit a paper" [ref=e24] [cursor=pointer]:
+              - /url: https://hq.ssrn.com/submission.cfm
+              - generic [ref=e26]: Submit a paper
+          - listitem [ref=e27]:
+            - link "Browse" [ref=e28] [cursor=pointer]:
+              - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+              - generic [ref=e30]: Browse
+          - listitem [ref=e31]:
+            - link "Blog" [ref=e32] [cursor=pointer]:
+              - /url: https://blog.ssrn.com/
+              - generic [ref=e34]: Blog
+          - listitem [ref=e37]:
+            - link "Contact" [ref=e38] [cursor=pointer]:
+              - /url: https://www.ssrn.com/index.cfm/en/contactus/
+              - generic [ref=e40]: Contact
+          - listitem [ref=e41]:
+            - generic "Rankings" [ref=e44] [cursor=pointer]:
+              - generic [ref=e46]: Rankings
+      - button "Search" [ref=e51]
+      - link "Shopping Cart" [ref=e53] [cursor=pointer]:
+        - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+      - link "Create Account" [ref=e55] [cursor=pointer]:
+        - /url: https://hq.ssrn.com/login/pubsigninjoin.cfm
+        - generic [ref=e57]: Create Account
+      - link "Sign In" [ref=e58] [cursor=pointer]:
+        - /url: https://hq.ssrn.com/login/pubsigninjoin.cfm
+        - generic [ref=e62]: Sign In
+    - main [ref=e63]:
+      - generic [ref=e64]:
+        - heading "Tomorrow's Research Today" [level=1] [ref=e65]
+        - paragraph [ref=e66]: SSRN's mission is to rapidly share preprints and other early-stage research, empowering global scholars to help shape a better future. Our open research platform helps researchers solve hard problems by connecting scholars worldwide across a wide range of academic disciplines.
+        - link "Learn more about SSRN" [ref=e67] [cursor=pointer]:
+          - /url: https://blog.ssrn.com/2025/11/20/welcome-to-ssrn/
+          - generic [ref=e69]: Learn more about SSRN
+        - generic [ref=e71]:
+          - generic "Search SSRN by Title, Abstract & Keywords" [ref=e76]:
+            - generic [ref=e77]: Search SSRN by Title, Abstract & Keywords
+          - textbox "Search SSRN by Title, Abstract & Keywords" [ref=e80]
+        - button "Search" [ref=e81]:
+          - generic [ref=e83]: Search
+      - heading "What we offer" [level=2] [ref=e84]
+      - generic [ref=e85]:
+        - link "Share your Research Post your research on SSRN and start getting citations and downloads for your work." [ref=e88] [cursor=pointer]:
+          - /url: https://hq.ssrn.com/submission.cfm
+          - heading "Share your Research" [level=3] [ref=e90]: Share your Research
+          - paragraph [ref=e92]: Post your research on SSRN and start getting citations and downloads for your work.
+        - link "Browse the Research Find the research you need to move your work forward." [ref=e95] [cursor=pointer]:
+          - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+          - heading "Browse the Research" [level=3] [ref=e97]: Browse the Research
+          - paragraph [ref=e99]: Find the research you need to move your work forward.
+        - link "Sign up for Email alerts Get regular updates on the research topics that matter to you." [ref=e102] [cursor=pointer]:
+          - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+          - heading "Sign up for Email alerts" [level=3] [ref=e104]: Sign up for Email alerts
+          - paragraph [ref=e106]: Get regular updates on the research topics that matter to you.
+      - heading "SSRN by the numbers" [level=2] [ref=e107]
+      - heading "over 1.5 Million" [level=3] [ref=e108]
+      - generic [ref=e109]: Full Text Papers
+      - heading "over 1.9 Million" [level=3] [ref=e111]
+      - generic [ref=e112]: Authors
+      - heading "over 300 Million" [level=3] [ref=e114]
+      - generic [ref=e115]: Paper Downloads
+      - heading "over 47 Million" [level=3] [ref=e117]
+      - generic [ref=e118]: Total References
+      - heading "over 2 Million" [level=3] [ref=e120]
+      - generic [ref=e121]: Total Citations
+      - heading "69" [level=3] [ref=e123]
+      - generic [ref=e124]: Disciplines
+      - generic [ref=e125]:
+        - heading "Latest Updates from SSRN" [level=2] [ref=e126]
+        - paragraph [ref=e128]: No blog posts available at the moment...
+        - link "View all updates" [ref=e129] [cursor=pointer]:
+          - /url: category/latest-updates/
+          - generic [ref=e131]: View all updates
+        - paragraph [ref=e132]: Visit SSRN Social Media
+        - link "Visit SSRN on Bluesky" [ref=e133] [cursor=pointer]:
+          - /url: https://bsky.app/profile/ssrn.bsky.social
+        - link "Visit SSRN on Facebook" [ref=e137] [cursor=pointer]:
+          - /url: https://www.facebook.com/SSRNcommunity/
+        - link "Visit SSRN on LinkedIn" [ref=e141] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/social-science-electronic-publishing/
+        - link "Visit SSRN on X (Twitter)" [ref=e145] [cursor=pointer]:
+          - /url: https://x.com/SSRN
+      - generic [ref=e149]:
+        - heading "Meet the Authors" [level=2] [ref=e150]
+        - paragraph [ref=e151]: No authors available at the moment...
+      - generic [ref=e152]:
+        - heading "Authors on SSRN" [level=2] [ref=e153]
+        - paragraph [ref=e154]: No author comments available at the moment...
+      - generic [ref=e155]:
+        - heading "Disciplines" [level=2] [ref=e156]
+        - paragraph [ref=e157]: SSRN provides more than 1.5 Million preprints and research papers from our 1.9 Million in over 69 Disciplines.
+        - generic [ref=e158]:
+          - generic [ref=e166]:
+            - heading "Applied Sciences" [level=3] [ref=e167]:
+              - link "Applied Sciences" [ref=e168] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/applied-sciences/
+                - generic [ref=e170]: Applied Sciences
+            - paragraph [ref=e173]: Applied Sciences are those disciplines, including applied and pure mathematics, that apply existing scientific knowledge to develop practical applications.
+          - generic [ref=e181]:
+            - heading "Health Sciences" [level=3] [ref=e182]:
+              - link "Health Sciences" [ref=e183] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/health-sciences/
+                - generic [ref=e185]: Health Sciences
+            - paragraph [ref=e188]: Health Sciences are those disciplines that address the use of science and technology to the delivery of healthcare.
+        - generic [ref=e189]:
+          - generic [ref=e197]:
+            - heading "Humanities" [level=3] [ref=e198]:
+              - link "Humanities" [ref=e199] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/humanities/
+                - generic [ref=e201]: Humanities
+            - paragraph [ref=e204]: Humanities are those disciplines that investigate human constructs, cultures and concerns, using critical and analytical approaches.
+          - generic [ref=e212]:
+            - heading "Life Sciences" [level=3] [ref=e213]:
+              - link "Life Sciences" [ref=e214] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/life-sciences/
+                - generic [ref=e216]: Life Sciences
+            - paragraph [ref=e219]: Life Sciences are those disciplines that study living organisms, their life processes, and their relationships to each other and their environment.
+        - generic [ref=e220]:
+          - generic [ref=e229]:
+            - heading "Physical Sciences" [level=3] [ref=e230]:
+              - link "Physical Sciences" [ref=e231] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/physical-sciences/
+                - generic [ref=e233]: Physical Sciences
+            - paragraph [ref=e236]: Physical Sciences are those disciplines that study natural sciences, dealing with non-living materials.
+          - generic [ref=e244]:
+            - heading "Social Sciences" [level=3] [ref=e245]:
+              - link "Social Sciences" [ref=e246] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/social-sciences/
+                - generic [ref=e248]: Social Sciences
+            - paragraph [ref=e251]: Social Sciences are those disciplines that study (a) institutions and functioning of human society and the interpersonal relationships of individuals as members of society; (b) a particular phase or aspect of human society.
+      - heading "Network Spotlight" [level=2] [ref=e252]
+      - generic [ref=e253]:
+        - button "Economics Research Network The study of economics looks at the impact of consumption, savings, investment and production on economic growth. The Economics Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in economics in our digital library, speeding up dissemination and providing the scholarly community access to groundbreaking working papers, early stage research and even peer reviewed or published journal articles." [ref=e254] [cursor=pointer]:
+          - generic [ref=e256]:
+            - heading "Economics Research Network" [level=3] [ref=e257]:
+              - link "Economics Research Network" [ref=e258]:
+                - /url: https://www.ssrn.com/index.cfm/en/ern/
+                - generic [ref=e260]: Economics Research Network
+            - paragraph [ref=e263]: The study of economics looks at the impact of consumption, savings, investment and production on economic growth. The Economics Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in economics in our digital library, speeding up dissemination and providing the scholarly community access to groundbreaking working papers, early stage research and even peer reviewed or published journal articles.
+        - button "Medical Research Network Medicine is a broad field within the health sciences discipline that encompasses medical education; research on infectious diseases, illnesses, and health conditions; clinical practice, diagnostic assessments, diagnoses, treatments, and health outcomes. The Medical Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in medicine in our research community, speeding up dissemination and providing the scientific community access to groundbreaking working papers, early-stage research, clinical research, and even peer reviewed or published journal articles." [ref=e264] [cursor=pointer]:
+          - generic [ref=e266]:
+            - heading "Medical Research Network" [level=3] [ref=e267]:
+              - link "Medical Research Network" [ref=e268]:
+                - /url: https://www.ssrn.com/index.cfm/en/medrn/
+                - generic [ref=e270]: Medical Research Network
+            - paragraph [ref=e273]: Medicine is a broad field within the health sciences discipline that encompasses medical education; research on infectious diseases, illnesses, and health conditions; clinical practice, diagnostic assessments, diagnoses, treatments, and health outcomes. The Medical Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in medicine in our research community, speeding up dissemination and providing the scientific community access to groundbreaking working papers, early-stage research, clinical research, and even peer reviewed or published journal articles.
+        - button "Computer Science Research Network Computer Science is the study of computer systems and the impact that design, theory, and development have on society. The Computer Science Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers, early stage research and even peer reviewed or published journal articles. SSRN provides the opportunity to share different outputs of research such as preprints, preliminary or exploratory investigations, book chapters, PhD dissertations, course and teaching materials, presentations, and posters among others." [ref=e274] [cursor=pointer]:
+          - generic [ref=e276]:
+            - heading "Computer Science Research Network" [level=3] [ref=e277]:
+              - link "Computer Science Research Network" [ref=e278]:
+                - /url: https://www.ssrn.com/index.cfm/en/compscirn/
+                - generic [ref=e280]: Computer Science Research Network
+            - paragraph [ref=e283]: Computer Science is the study of computer systems and the impact that design, theory, and development have on society. The Computer Science Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers, early stage research and even peer reviewed or published journal articles. SSRN provides the opportunity to share different outputs of research such as preprints, preliminary or exploratory investigations, book chapters, PhD dissertations, course and teaching materials, presentations, and posters among others.
+      - generic [ref=e284]:
+        - button "Legal Scholarship Network Law is the basis of a functioning modern society. Laws dictate how members of a society must act and proscribe certain acts. From international laws to local ordinances, multiple layers of laws impact our daily lives. An understanding of law is necessary to analyze and understand interactions between individuals, businesses, and governments. The Legal Scholarship Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers and early-stage research." [ref=e285] [cursor=pointer]:
+          - generic [ref=e287]:
+            - heading "Legal Scholarship Network" [level=3] [ref=e288]:
+              - link "Legal Scholarship Network" [ref=e289]:
+                - /url: https://www.ssrn.com/index.cfm/en/lsn/
+                - generic [ref=e291]: Legal Scholarship Network
+            - paragraph [ref=e294]: Law is the basis of a functioning modern society. Laws dictate how members of a society must act and proscribe certain acts. From international laws to local ordinances, multiple layers of laws impact our daily lives. An understanding of law is necessary to analyze and understand interactions between individuals, businesses, and governments. The Legal Scholarship Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers and early-stage research.
+        - button "Political Science Network Political Science looks at how power is distributed and wielded at every level, from the household to globally, and everywhere in between. The Political Science Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers and early-stage research. SSRN provides the opportunity to share different outputs of research such as preprints, preliminary or exploratory investigations, book chapters, PhD dissertations, course and teaching materials, presentations, and posters among others." [ref=e295] [cursor=pointer]:
+          - generic [ref=e297]:
+            - heading "Political Science Network" [level=3] [ref=e298]:
+              - link "Political Science Network" [ref=e299]:
+                - /url: https://www.ssrn.com/index.cfm/en/psn/
+                - generic [ref=e301]: Political Science Network
+            - paragraph [ref=e304]: Political Science looks at how power is distributed and wielded at every level, from the household to globally, and everywhere in between. The Political Science Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers and early-stage research. SSRN provides the opportunity to share different outputs of research such as preprints, preliminary or exploratory investigations, book chapters, PhD dissertations, course and teaching materials, presentations, and posters among others.
+        - button "Earth Science Research Network Earth Science is the study of Earth and its atmosphere. The Earth Science Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers and early-stage research. SSRN provides the opportunity to share different outputs of research such as preprints, preliminary or exploratory investigations, book chapters, PhD dissertations, course and teaching materials, presentations, and posters among others." [ref=e305] [cursor=pointer]:
+          - generic [ref=e307]:
+            - heading "Earth Science Research Network" [level=3] [ref=e308]:
+              - link "Earth Science Research Network" [ref=e309]:
+                - /url: https://www.ssrn.com/index.cfm/en/earthscirn/
+                - generic [ref=e311]: Earth Science Research Network
+            - paragraph [ref=e314]: Earth Science is the study of Earth and its atmosphere. The Earth Science Research Network on SSRN is an open access preprint server that provides a venue for authors to showcase their research papers in our digital library, speeding up the dissemination and providing the scholarly community access to groundbreaking working papers and early-stage research. SSRN provides the opportunity to share different outputs of research such as preprints, preliminary or exploratory investigations, book chapters, PhD dissertations, course and teaching materials, presentations, and posters among others.
+      - link "View community networks" [ref=e315] [cursor=pointer]:
+        - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+        - generic [ref=e317]: View community networks
+      - heading "Accessibility" [level=3] [ref=e318]
+      - link "Section 508 Text Only Pages" [ref=e319] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/section-508/
+        - generic [ref=e321]: Section 508 Text Only Pages
+      - heading "SSRN Quick Links" [level=3] [ref=e322]
+      - link "Submit a Paper" [ref=e323] [cursor=pointer]:
+        - /url: https://hq.ssrn.com/submission.cfm
+        - generic [ref=e325]: Submit a Paper
+      - link "Research Paper Series" [ref=e326] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/rps/
+        - generic [ref=e328]: Research Paper Series
+      - link "Conference Papers" [ref=e329] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/conferences/
+        - generic [ref=e331]: Conference Papers
+      - link "Jobs & Announcements" [ref=e332] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/announcements-jobs/
+        - generic [ref=e334]: Jobs & Announcements
+      - link "Special Topic Hubs" [ref=e335] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/special-topic-hubs/
+        - generic [ref=e337]: Special Topic Hubs
+      - heading "SSRN Rankings" [level=3] [ref=e338]
+      - link "Top Papers" [ref=e339] [cursor=pointer]:
+        - /url: https://hq.ssrn.com/rankings/Ranking_display.cfm?TRN_gID=10
+        - generic [ref=e341]: Top Papers
+      - link "Top Authors" [ref=e342] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/top-authors/
+        - generic [ref=e344]: Top Authors
+      - link "Top Organizations" [ref=e345] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/top-organizations/
+        - generic [ref=e347]: Top Organizations
+      - heading "About SSRN" [level=3] [ref=e348]
+      - link "Network Directors" [ref=e349] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/network-directors/
+        - generic [ref=e351]: Network Directors
+      - link "Announcements" [ref=e352] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/recent-announcements/
+        - generic [ref=e354]: Announcements
+      - link "Contact us" [ref=e355] [cursor=pointer]:
+        - /url: https://www.ssrn.com/index.cfm/en/contactus/
+        - generic [ref=e357]: Contact us
+      - link "FAQs" [ref=e358] [cursor=pointer]:
+        - /url: https://service.elsevier.com/app/home/supporthub/ssrn/
+        - generic [ref=e360]: FAQs
+    - generic [ref=e361]:
+      - contentinfo [ref=e362]:
+        - link "Elsevier home page (opens in a new tab)" [ref=e363] [cursor=pointer]:
+          - /url: https://elsevier.com
+          - generic [ref=e365]:
+            - img [ref=e366]
+            - img [ref=e368]
+        - generic [ref=e370]:
+          - list [ref=e371]:
+            - listitem [ref=e372]:
+              - link "Copyright Opens in a new window" [ref=e373] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/dmca-notice-policy/
+                - generic [ref=e375]: Copyright
+                - generic [ref=e376]: Opens in a new window
+            - listitem [ref=e377]:
+              - link "Terms and Conditions Opens in a new window" [ref=e378] [cursor=pointer]:
+                - /url: https://www.ssrn.com/index.cfm/en/terms-of-use/
+                - generic [ref=e380]: Terms and Conditions
+                - generic [ref=e381]: Opens in a new window
+            - listitem [ref=e382]:
+              - link "Privacy Policy Opens in a new window" [ref=e383] [cursor=pointer]:
+                - /url: https://www.elsevier.com/legal/privacy-policy
+                - generic [ref=e385]: Privacy Policy
+                - generic [ref=e386]: Opens in a new window
+          - generic [ref=e387]: We use cookies to help provide and enhance our service and tailor content.
+          - generic [ref=e388] [cursor=pointer]: Opens in a new window
+          - generic [ref=e389]: "All content on this site: Copyright © Elsevier Inc., its licensors, and contributors. All rights are reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply."
+        - link "RELX home page (opens in a new tab)" [ref=e390] [cursor=pointer]:
+          - /url: https://www.relx.com
+          - generic [ref=e392]:
+            - img [ref=e393]
+            - img [ref=e395]
+      - button "Cookie Settings" [ref=e397]:
+        - generic [ref=e399]: Cookie Settings
+  - alert [ref=e400]

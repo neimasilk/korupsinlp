@@ -1,0 +1,86 @@
+- generic [active]:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - iframe [ref=e31]:
+      - generic [ref=f32e3]:
+        - generic:
+          - generic:
+            - list:
+              - listitem [ref=f32e4]:
+                - text: 
+                - generic [ref=f32e5] [cursor=pointer]:
+                  - text: Article Type
+                  - text: Selection
+              - listitem [ref=f32e6]:  Attach Files
+              - listitem [ref=f32e7]:
+                - generic [ref=f32e8] [cursor=pointer]:
+                  - text: General
+                  - text: Information
+              - listitem [ref=f32e9]:
+                - generic [ref=f32e10] [cursor=pointer]:
+                  - text: Additional
+                  - text: Information
+              - listitem [ref=f32e11]: Comments
+              - listitem [ref=f32e12]:
+                - generic [ref=f32e13] [cursor=pointer]:
+                  - text: Manuscript
+                  - text: Data
+        - generic [ref=f32e15]:
+          - generic [ref=f32e20]:
+            - text: Please upload one file (Title Page), containing the title of your manuscript, all author names (in the correct order), affiliation(s) and address(es) of correspondence.
+            - text: While full source files for LaTeX submissions are encouraged, we understand that you may prefer to submit only a PDF at this stage.
+            - text: This journal has a policy requiring a statement explaining if, how and where supporting data can be accessed. You can provide links to any supporting data via the ‘Supporting Data’ item type, and these will be available to reviewers. Please refer to the Instructions for Authors on the journal website for more details and templates for standard availability statements.
+            - text: In case of any issues, please use the ‘Contact Us’ link.
+            - group [ref=f32e21]:
+              - generic "Tips for authors submitting full source files in LaTeX:" [ref=f32e22]
+              - text: For further LaTeX tips you may refer to this .
+          - generic [ref=f32e23]:
+            - link "Insert Special Character" [ref=f32e25] [cursor=pointer]:
+              - /url: "javascript:"
+            - generic [ref=f32e31]:
+              - button "Browse..." [ref=f32e33] [cursor=pointer]
+              - generic [ref=f32e34]: OR
+              - generic [ref=f32e35]:
+                - img [ref=f32e36]
+                - generic [ref=f32e37]:
+                  - text: Drag & Drop
+                  - text: Files Here
+        - generic [ref=f32e41]:
+          - button " Back" [ref=f32e42]:
+            - generic [ref=f32e43]: 
+            - text: Back
+          - button " Proceed" [ref=f32e44]:
+            - generic [ref=f32e45]: 
+            - text: Proceed
+    - contentinfo

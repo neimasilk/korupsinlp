@@ -1,0 +1,562 @@
+- generic [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e167]:
+          - button "More" [ref=e169]:
+            - generic [ref=e171]: More
+    - button "Search" [ref=e46]
+    - link "Shopping Cart" [ref=e48] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e175]: MA
+  - main [ref=e53]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e59]:
+          - 'heading "Step 4: Classify Your Submission" [level=1] [ref=e485]'
+          - heading "Classifications" [level=2] [ref=e486]
+          - paragraph [ref=e487]: Please select at least one subject matter classification for your submission, up to a maximum of seven classifications. These classifications will determine which research networks your submission appears, and how it is distributed via our email alerts. These classifications will be checked by our classification team and so may change once they have been reviewed.
+          - generic [ref=e488]:
+            - heading "Selected Classifications" [level=3] [ref=e489]
+            - paragraph [ref=e490]: Hover to see descriptions
+            - separator [ref=e491]
+          - heading "Previous Classifications" [level=3] [ref=e492]
+          - paragraph [ref=e493]: These are classifications that you may have previously used.
+          - separator [ref=e494]
+          - heading "Search SSRN Classifications" [level=3] [ref=e495]
+          - generic [ref=e497]:
+            - generic [ref=e501]: search
+            - generic [ref=e503]:
+              - textbox "search" [active] [ref=e504]:
+                - /placeholder: Type search terms and press enter
+                - text: Criminal Justice
+              - button "right icon button" [ref=e505]
+          - paragraph [ref=e607]: "Search Results: (15)"
+          - table [ref=e608]:
+            - rowgroup [ref=e609]:
+              - row "Classification Description" [ref=e610]:
+                - columnheader [ref=e611]
+                - columnheader "Classification" [ref=e612]
+                - columnheader "Description" [ref=e613]
+            - rowgroup [ref=e614]:
+              - 'row "Discrimination, Law & Justice eJournal This area includes content dealing with issues of discrimination, equality, minority rights and subordination, from both critical and noncritical perspectives. We seek projects that examine how law and policy interplay with specific social groups or identities, and how the processes of formal democracy interplay with existing or traditional structures and systems of exclusion or hierarchy. We specifically welcome abstracts and papers that are empirical and/or interdisciplinary in nature, that connect law to society, or that link the domestic to the international, written from a variety of theoretical perspectives.Editor: Francisco (Frank) Valdes, University of Miami" [ref=e615] [cursor=pointer]':
+                - cell [ref=e616]
+                - cell "Discrimination, Law & Justice eJournal" [ref=e618]:
+                  - generic [ref=e620]:
+                    - text: Dis
+                    - emphasis [ref=e621]: crimina
+                    - text: tion, Law &
+                    - emphasis [ref=e622]: Justice
+                    - text: eJour
+                    - emphasis [ref=e623]: nal
+                - 'cell "This area includes content dealing with issues of discrimination, equality, minority rights and subordination, from both critical and noncritical perspectives. We seek projects that examine how law and policy interplay with specific social groups or identities, and how the processes of formal democracy interplay with existing or traditional structures and systems of exclusion or hierarchy. We specifically welcome abstracts and papers that are empirical and/or interdisciplinary in nature, that connect law to society, or that link the domestic to the international, written from a variety of theoretical perspectives.Editor: Francisco (Frank) Valdes, University of Miami" [ref=e624]':
+                  - generic [ref=e626]:
+                    - text: This area includes content dealing with issues of dis
+                    - emphasis [ref=e627]: crimina
+                    - text: tion, equality,
+                    - emphasis [ref=e628]: min
+                    - text: ority rights and subord
+                    - emphasis [ref=e629]: ina
+                    - text: tion, from both
+                    - emphasis [ref=e630]: cri
+                    - emphasis [ref=e631]: tic
+                    - text: al and non
+                    - emphasis [ref=e632]: cri
+                    - emphasis [ref=e633]: tic
+                    - text: al perspectives. We seek projects that exa
+                    - emphasis [ref=e634]: min
+                    - text: e how law and policy interplay with specific social groups or identities, and how the processes of formal democracy interplay with exi
+                    - emphasis [ref=e635]: sti
+                    - text: ng or traditio
+                    - emphasis [ref=e636]: nal
+                    - text: structures and systems of exclusion or hierarchy. We specifically welcome abstracts and papers that are empirical and/or interdiscipl
+                    - emphasis [ref=e637]: ina
+                    - text: ry in nature, that connect law to society, or that link the dome
+                    - emphasis [ref=e638]: stic
+                    - text: to the internatio
+                    - emphasis [ref=e639]: nal
+                    - text: ", written from a variety of theore"
+                    - emphasis [ref=e640]: tic
+                    - text: "al perspectives.Editor: Francisco (Frank) Valdes, University of Miami"
+              - row "Criminal Justice Education eJournal This area is designed for the sharing of teaching materials in criminal justice. All materials related to criminal justice are encouraged. This includes casebooks, reviews of casebooks, lecture notes, class summaries, outlines, supplementary materials (for your own or someone else's book), syllabi, problems sets, PowerPoint presentations, videos, and other teaching materials." [ref=e641] [cursor=pointer]:
+                - cell [ref=e642]
+                - cell "Criminal Justice Education eJournal" [ref=e644]:
+                  - generic [ref=e646]:
+                    - emphasis [ref=e647]: Criminal
+                    - emphasis [ref=e648]: Justice
+                    - text: Education eJour
+                    - emphasis [ref=e649]: nal
+                - cell "This area is designed for the sharing of teaching materials in criminal justice. All materials related to criminal justice are encouraged. This includes casebooks, reviews of casebooks, lecture notes, class summaries, outlines, supplementary materials (for your own or someone else's book), syllabi, problems sets, PowerPoint presentations, videos, and other teaching materials." [ref=e650]:
+                  - generic [ref=e652]:
+                    - text: This area is designed for the sharing of teaching materials in
+                    - emphasis [ref=e653]: criminal
+                    - emphasis [ref=e654]: justice
+                    - text: . All materials related to
+                    - emphasis [ref=e655]: criminal
+                    - emphasis [ref=e656]: justice
+                    - text: are encouraged. This includes casebooks, reviews of casebooks, lecture notes, class summaries, outlines, supplementary materials (for your own or someone else's book), syllabi, problems sets, PowerPoint presentations, videos, and other teaching materials.
+              - row "Criminalistics eJournal This area includes content on the application of various sciences to answer questions relating to the examination and comparison of biological evidence, trace evidence, impression evidence (such as fingerprints, footwear impressions, and tire tracks), controlled substances, ballistics, firearm and toolmark examination, and other evidence in criminal investigations." [ref=e657] [cursor=pointer]:
+                - cell [ref=e658]
+                - cell "Criminalistics eJournal" [ref=e660]:
+                  - generic [ref=e662]:
+                    - emphasis [ref=e663]: Criminal
+                    - text: i
+                    - emphasis [ref=e664]: stic
+                    - text: s eJour
+                    - emphasis [ref=e665]: nal
+                - cell "This area includes content on the application of various sciences to answer questions relating to the examination and comparison of biological evidence, trace evidence, impression evidence (such as fingerprints, footwear impressions, and tire tracks), controlled substances, ballistics, firearm and toolmark examination, and other evidence in criminal investigations." [ref=e666]:
+                  - generic [ref=e668]:
+                    - text: This area includes content on the application of various sciences to answer que
+                    - emphasis [ref=e669]: sti
+                    - text: ons relating to the exa
+                    - emphasis [ref=e670]: mina
+                    - text: tion and comparison of biological evidence, trace evidence, impression evidence (such as fingerprints, footwear impressions, and tire tracks), controlled substances, balli
+                    - emphasis [ref=e671]: stic
+                    - text: s, firearm and toolmark exa
+                    - emphasis [ref=e672]: mina
+                    - text: tion, and other evidence in
+                    - emphasis [ref=e673]: criminal
+                    - text: inve
+                    - emphasis [ref=e674]: sti
+                    - text: gations.
+              - row "Criminal Law, Courts & Procedure eJournal This area includes content that focuses on the administration of the criminal justice system. In particular, this scholarship examines issues related to criminal courts and legal processes within the criminal justice system. Such issues include operations, strategies, and evaluations of a variety of courts and court actors. We are interested in criminal courts of all types and levels, including both state and federal criminal court systems." [ref=e675] [cursor=pointer]:
+                - cell [ref=e676]
+                - cell "Criminal Law, Courts & Procedure eJournal" [ref=e678]:
+                  - generic [ref=e680]:
+                    - emphasis [ref=e681]: Criminal
+                    - text: Law, Courts & Procedure eJour
+                    - emphasis [ref=e682]: nal
+                - cell "This area includes content that focuses on the administration of the criminal justice system. In particular, this scholarship examines issues related to criminal courts and legal processes within the criminal justice system. Such issues include operations, strategies, and evaluations of a variety of courts and court actors. We are interested in criminal courts of all types and levels, including both state and federal criminal court systems." [ref=e683]:
+                  - generic [ref=e685]:
+                    - text: This area includes content that focuses on the ad
+                    - emphasis [ref=e686]: min
+                    - text: istration of the
+                    - emphasis [ref=e687]: criminal
+                    - emphasis [ref=e688]: justice
+                    - text: system. In par
+                    - emphasis [ref=e689]: tic
+                    - text: ular, this scholarship exa
+                    - emphasis [ref=e690]: min
+                    - text: es issues related to
+                    - emphasis [ref=e691]: criminal
+                    - text: courts and legal processes within the
+                    - emphasis [ref=e692]: criminal
+                    - emphasis [ref=e693]: justice
+                    - text: system. Such issues include operations, strategies, and evaluations of a variety of courts and court actors. We are interested in
+                    - emphasis [ref=e694]: criminal
+                    - text: courts of all types and levels, including both state and federal
+                    - emphasis [ref=e695]: criminal
+                    - text: court systems.
+              - row "Gender, Politics & Justice eJournal This area includes content that examines gender differences in crime and access to justice; gender equality, political leadership, and institutions; and other topics in gender, politics, and justice." [ref=e696] [cursor=pointer]:
+                - cell [ref=e697]
+                - cell "Gender, Politics & Justice eJournal" [ref=e699]:
+                  - generic [ref=e701]:
+                    - text: Gender, Poli
+                    - emphasis [ref=e702]: tic
+                    - text: s &
+                    - emphasis [ref=e703]: Justice
+                    - text: eJour
+                    - emphasis [ref=e704]: nal
+                - cell "This area includes content that examines gender differences in crime and access to justice; gender equality, political leadership, and institutions; and other topics in gender, politics, and justice." [ref=e705]:
+                  - generic [ref=e707]:
+                    - text: This area includes content that exa
+                    - emphasis [ref=e708]: min
+                    - text: es gender differences in
+                    - emphasis [ref=e709]: crim
+                    - text: e and access to
+                    - emphasis [ref=e710]: justice
+                    - text: ; gender equality, poli
+                    - emphasis [ref=e711]: tic
+                    - text: al leadership, and in
+                    - emphasis [ref=e712]: sti
+                    - text: tutions; and other topics in gender, poli
+                    - emphasis [ref=e713]: tic
+                    - text: s, and
+                    - emphasis [ref=e714]: justice
+                    - text: .
+              - row [ref=e715] [cursor=pointer]:
+                - cell [ref=e716]
+                - cell "Criminal Law eJournal" [ref=e718]:
+                  - generic [ref=e720]:
+                    - emphasis [ref=e721]: Criminal
+                    - text: Law eJour
+                    - emphasis [ref=e722]: nal
+                - cell [ref=e723]:
+                  - generic [ref=e725]:
+                    - text: "Note: Works that appear in this"
+                    - emphasis [ref=e726]: Criminal
+                    - text: Law eJour
+                    - emphasis [ref=e727]: nal
+                    - text: typically are not eligible for inclusion in the
+                    - emphasis [ref=e728]: Crimin
+                    - text: ology or
+                    - emphasis [ref=e729]: Criminal
+                    - text: Procedure eJour
+                    - emphasis [ref=e730]: nal
+                    - text: s. This area includes content relating to substantive
+                    - emphasis [ref=e731]: criminal
+                    - text: law. Topics include but are not l
+                    - emphasis [ref=e732]: imi
+                    - text: ted to appraisals of exi
+                    - emphasis [ref=e733]: sti
+                    - text: ng offenses, defenses, and related substantive law doctrines and liability rules; proposals for repeal or reform of exi
+                    - emphasis [ref=e734]: sti
+                    - text: ng
+                    - emphasis [ref=e735]: crim
+                    - text: es, defenses, doctrines and liability rules or the enactment of new ones; exa
+                    - emphasis [ref=e736]: mina
+                    - text: tions of the interaction of legislatures, juries, courts and other in
+                    - emphasis [ref=e737]: sti
+                    - text: tutions in the formation of substantive
+                    - emphasis [ref=e738]: criminal
+                    - text: law; and inve
+                    - emphasis [ref=e739]: sti
+                    - text: gations of the relationship between
+                    - emphasis [ref=e740]: criminal
+                    - text: law as a whole and other bodies of law and in
+                    - emphasis [ref=e741]: sti
+                    - text: tutions. Works of all discipl
+                    - emphasis [ref=e742]: ina
+                    - text: ry perspectives (including historical, philosophical, psychological, economic, and sociological) and all methods (empirical, normative, and doctr
+                    - emphasis [ref=e743]: inal
+                    - text: ") are welcome so long as they are scholarly in nature.Editor: Paul H. Robinson, University of Pennsylvania"
+              - row "Crime & Psychology eJournal This area includes content that focuses on issues related to psychology in crime and the criminal justice system. This includes psychological assessments of criminal behavior and examinations of mental health as it relates to the commission of crime. Regarding the criminal justice system, this includes psychological evaluations of actors in the criminal justice system, and research on the nature of psychological work within the criminal justice system." [ref=e744] [cursor=pointer]:
+                - cell [ref=e745]
+                - cell "Crime & Psychology eJournal" [ref=e747]:
+                  - generic [ref=e749]:
+                    - emphasis [ref=e750]: Crim
+                    - text: e & Psychology eJour
+                    - emphasis [ref=e751]: nal
+                - cell "This area includes content that focuses on issues related to psychology in crime and the criminal justice system. This includes psychological assessments of criminal behavior and examinations of mental health as it relates to the commission of crime. Regarding the criminal justice system, this includes psychological evaluations of actors in the criminal justice system, and research on the nature of psychological work within the criminal justice system." [ref=e752]:
+                  - generic [ref=e754]:
+                    - text: This area includes content that focuses on issues related to psychology in
+                    - emphasis [ref=e755]: crim
+                    - text: e and the
+                    - emphasis [ref=e756]: criminal
+                    - emphasis [ref=e757]: justice
+                    - text: system. This includes psychological assessments of
+                    - emphasis [ref=e758]: criminal
+                    - text: behavior and exa
+                    - emphasis [ref=e759]: mina
+                    - text: tions of mental health as it relates to the commission of
+                    - emphasis [ref=e760]: crim
+                    - text: e. Regarding the
+                    - emphasis [ref=e761]: criminal
+                    - emphasis [ref=e762]: justice
+                    - text: system, this includes psychological evaluations of actors in the
+                    - emphasis [ref=e763]: criminal
+                    - emphasis [ref=e764]: justice
+                    - text: system, and research on the nature of psychological work within the
+                    - emphasis [ref=e765]: criminal
+                    - emphasis [ref=e766]: justice
+                    - text: system.
+              - 'row "Law & Society: Public Law - Crime, Criminal Law, & Punishment eJournal This area includes content of empirical or theoretical scholarship on topics related to crime, criminal law, and criminal punishment (including the death penalty), from any disciplinary perspective. Covered topics include victims'' rights, criminal sentencing rules, criminal sentencing procedures, criminal punishment, theories of criminal punishment, alternatives to traditional criminal punishment, criminal law doctrine, and administration of criminal justice.Editor: Jessica Eaglin, Indiana University" [ref=e767] [cursor=pointer]':
+                - cell [ref=e768]
+                - 'cell "Law & Society: Public Law - Crime, Criminal Law, & Punishment eJournal" [ref=e770]':
+                  - generic [ref=e772]:
+                    - text: "Law & Society: Public Law -"
+                    - emphasis [ref=e773]: Crim
+                    - text: e,
+                    - emphasis [ref=e774]: Criminal
+                    - text: Law, & Punishment eJour
+                    - emphasis [ref=e775]: nal
+                - 'cell "This area includes content of empirical or theoretical scholarship on topics related to crime, criminal law, and criminal punishment (including the death penalty), from any disciplinary perspective. Covered topics include victims'' rights, criminal sentencing rules, criminal sentencing procedures, criminal punishment, theories of criminal punishment, alternatives to traditional criminal punishment, criminal law doctrine, and administration of criminal justice.Editor: Jessica Eaglin, Indiana University" [ref=e776]':
+                  - generic [ref=e778]:
+                    - text: This area includes content of empirical or theore
+                    - emphasis [ref=e779]: tic
+                    - text: al scholarship on topics related to
+                    - emphasis [ref=e780]: crim
+                    - text: e,
+                    - emphasis [ref=e781]: criminal
+                    - text: law, and
+                    - emphasis [ref=e782]: criminal
+                    - text: punishment (including the death pe
+                    - emphasis [ref=e783]: nal
+                    - text: ty), from any discipl
+                    - emphasis [ref=e784]: ina
+                    - text: ry perspective. Covered topics include victims' rights,
+                    - emphasis [ref=e785]: criminal
+                    - text: sentencing rules,
+                    - emphasis [ref=e786]: criminal
+                    - text: sentencing procedures,
+                    - emphasis [ref=e787]: criminal
+                    - text: punishment, theories of
+                    - emphasis [ref=e788]: criminal
+                    - text: punishment, alternatives to traditio
+                    - emphasis [ref=e789]: nal
+                    - emphasis [ref=e790]: criminal
+                    - text: punishment,
+                    - emphasis [ref=e791]: criminal
+                    - text: law doctrine, and ad
+                    - emphasis [ref=e792]: min
+                    - text: istration of
+                    - emphasis [ref=e793]: criminal
+                    - emphasis [ref=e794]: justice
+                    - text: ".Editor: Jessica Eaglin, Indiana University"
+              - 'row "Criminology eJournal >Note: Works that appear in this Criminology eJournal typically are not eligible for inclusion in the Criminal Law or Criminal Procedure eJournals. This area includes content in the field of criminology broadly understood. Topics include but are not limited to the causes, consequences, and prevention of crime; the impact of criminal laws and their enforcement; the functioning of criminal-law-enforcement institutions; the political economy of criminal lawmaking and enforcement; and the relationship between the criminal justice system and other social institutions. Works of diverse perspectives and methods are welcome so long as they are scholarly in nature.Note: Works that appear in this Criminology eJournal typically are not eligible for inclusion in the Criminal Law or Criminal Procedure eJournals. Editor: Paul H. Robinson, University of Pennsylvania" [ref=e795] [cursor=pointer]':
+                - cell [ref=e796]
+                - cell "Criminology eJournal" [ref=e798]:
+                  - generic [ref=e800]:
+                    - emphasis [ref=e801]: Crimin
+                    - text: ology eJour
+                    - emphasis [ref=e802]: nal
+                - 'cell ">Note: Works that appear in this Criminology eJournal typically are not eligible for inclusion in the Criminal Law or Criminal Procedure eJournals. This area includes content in the field of criminology broadly understood. Topics include but are not limited to the causes, consequences, and prevention of crime; the impact of criminal laws and their enforcement; the functioning of criminal-law-enforcement institutions; the political economy of criminal lawmaking and enforcement; and the relationship between the criminal justice system and other social institutions. Works of diverse perspectives and methods are welcome so long as they are scholarly in nature.Note: Works that appear in this Criminology eJournal typically are not eligible for inclusion in the Criminal Law or Criminal Procedure eJournals. Editor: Paul H. Robinson, University of Pennsylvania" [ref=e803]':
+                  - generic [ref=e805]:
+                    - text: ">Note: Works that appear in this"
+                    - emphasis [ref=e806]: Crimin
+                    - text: ology eJour
+                    - emphasis [ref=e807]: nal
+                    - text: typically are not eligible for inclusion in the
+                    - emphasis [ref=e808]: Criminal
+                    - text: Law or
+                    - emphasis [ref=e809]: Criminal
+                    - text: Procedure eJour
+                    - emphasis [ref=e810]: nal
+                    - text: s. This area includes content in the field of
+                    - emphasis [ref=e811]: crimin
+                    - text: ology broadly understood. Topics include but are not l
+                    - emphasis [ref=e812]: imi
+                    - text: ted to the causes, consequences, and prevention of
+                    - emphasis [ref=e813]: crim
+                    - text: e; the impact of
+                    - emphasis [ref=e814]: criminal
+                    - text: laws and their enforcement; the functioning of
+                    - emphasis [ref=e815]: criminal
+                    - text: "-law-enforcement in"
+                    - emphasis [ref=e816]: sti
+                    - text: tutions; the poli
+                    - emphasis [ref=e817]: tic
+                    - text: al economy of
+                    - emphasis [ref=e818]: criminal
+                    - text: lawmaking and enforcement; and the relationship between the
+                    - emphasis [ref=e819]: criminal
+                    - emphasis [ref=e820]: justice
+                    - text: system and other social in
+                    - emphasis [ref=e821]: sti
+                    - text: "tutions. Works of diverse perspectives and methods are welcome so long as they are scholarly in nature.Note: Works that appear in this"
+                    - emphasis [ref=e822]: Crimin
+                    - text: ology eJour
+                    - emphasis [ref=e823]: nal
+                    - text: typically are not eligible for inclusion in the
+                    - emphasis [ref=e824]: Criminal
+                    - text: Law or
+                    - emphasis [ref=e825]: Criminal
+                    - text: Procedure eJour
+                    - emphasis [ref=e826]: nal
+                    - text: "s. Editor: Paul H. Robinson, University of Pennsylvania"
+              - 'row "Criminal Procedure eJournal Note: Works that appear in this Criminal Procedure eJournal typically are not eligible for inclusion in the Criminal Law or Criminology eJournals. This area includes content relating to criminal procedure. Topics include but are not limited to assessments of rules of criminal procedure and evidence; proposals for repeal or reform of rules of criminal procedure and evidence; investigations of the interaction of legislatures, juries, courts and other institutions in the formation of rules of criminal procedure and evidence; examinations of the functions of courts, juries, prosecutors, and defense lawyers in criminal adjudication; and evaluations of how rules of criminal and procedure interact with criminal investigations and police functions generally." [ref=e827] [cursor=pointer]':
+                - cell [ref=e828]
+                - cell "Criminal Procedure eJournal" [ref=e830]:
+                  - generic [ref=e832]:
+                    - emphasis [ref=e833]: Criminal
+                    - text: Procedure eJour
+                    - emphasis [ref=e834]: nal
+                - 'cell "Note: Works that appear in this Criminal Procedure eJournal typically are not eligible for inclusion in the Criminal Law or Criminology eJournals. This area includes content relating to criminal procedure. Topics include but are not limited to assessments of rules of criminal procedure and evidence; proposals for repeal or reform of rules of criminal procedure and evidence; investigations of the interaction of legislatures, juries, courts and other institutions in the formation of rules of criminal procedure and evidence; examinations of the functions of courts, juries, prosecutors, and defense lawyers in criminal adjudication; and evaluations of how rules of criminal and procedure interact with criminal investigations and police functions generally." [ref=e835]':
+                  - generic [ref=e837]:
+                    - text: "Note: Works that appear in this"
+                    - emphasis [ref=e838]: Criminal
+                    - text: Procedure eJour
+                    - emphasis [ref=e839]: nal
+                    - text: typically are not eligible for inclusion in the
+                    - emphasis [ref=e840]: Criminal
+                    - text: Law or
+                    - emphasis [ref=e841]: Crimin
+                    - text: ology eJour
+                    - emphasis [ref=e842]: nal
+                    - text: s. This area includes content relating to
+                    - emphasis [ref=e843]: criminal
+                    - text: procedure. Topics include but are not l
+                    - emphasis [ref=e844]: imi
+                    - text: ted to assessments of rules of
+                    - emphasis [ref=e845]: criminal
+                    - text: procedure and evidence; proposals for repeal or reform of rules of
+                    - emphasis [ref=e846]: criminal
+                    - text: procedure and evidence; inve
+                    - emphasis [ref=e847]: sti
+                    - text: gations of the interaction of legislatures, juries, courts and other in
+                    - emphasis [ref=e848]: sti
+                    - text: tutions in the formation of rules of
+                    - emphasis [ref=e849]: criminal
+                    - text: procedure and evidence; exa
+                    - emphasis [ref=e850]: mina
+                    - text: tions of the functions of courts, juries, prosecutors, and defense lawyers in
+                    - emphasis [ref=e851]: criminal
+                    - text: adjudication; and evaluations of how rules of
+                    - emphasis [ref=e852]: criminal
+                    - text: and procedure interact with
+                    - emphasis [ref=e853]: criminal
+                    - text: inve
+                    - emphasis [ref=e854]: sti
+                    - text: gations and pol
+                    - emphasis [ref=e855]: ice
+                    - text: functions generally.
+              - 'row "PSN: Justice" [ref=e856] [cursor=pointer]':
+                - cell [ref=e857]
+                - 'cell "PSN: Justice" [ref=e859]':
+                  - generic [ref=e861]:
+                    - text: "PSN:"
+                    - emphasis [ref=e862]: Justice
+                - cell [ref=e863]
+              - 'row "PSN: International Criminal Court This area includes content focused on the international criminal court. Papers might include the use of the court to prevent human rights abuses or violations of just war statutes. Research might also include how states respond to the court itself, the politics of the court, or any other paper dealing generally with the international criminal court. Papers should not analyze specific cases in front of the court." [ref=e864] [cursor=pointer]':
+                - cell [ref=e865]
+                - 'cell "PSN: International Criminal Court" [ref=e867]':
+                  - generic [ref=e869]:
+                    - text: "PSN: Internatio"
+                    - emphasis [ref=e870]: nal
+                    - emphasis [ref=e871]: Criminal
+                    - text: Court
+                - cell "This area includes content focused on the international criminal court. Papers might include the use of the court to prevent human rights abuses or violations of just war statutes. Research might also include how states respond to the court itself, the politics of the court, or any other paper dealing generally with the international criminal court. Papers should not analyze specific cases in front of the court." [ref=e872]:
+                  - generic [ref=e874]:
+                    - text: This area includes content focused on the internatio
+                    - emphasis [ref=e875]: nal
+                    - emphasis [ref=e876]: criminal
+                    - text: court. Papers might include the use of the court to prevent human rights abuses or violations of
+                    - emphasis [ref=e877]: just
+                    - text: war statutes. Research might also include how states respond to the court itself, the poli
+                    - emphasis [ref=e878]: tic
+                    - text: s of the court, or any other paper dealing generally with the internatio
+                    - emphasis [ref=e879]: nal
+                    - emphasis [ref=e880]: criminal
+                    - text: court. Papers should not a
+                    - emphasis [ref=e881]: nal
+                    - text: yze specific cases in front of the court.
+              - 'row "Law & Society: Criminal Procedure eJournal This area includes content focused on empirical or theoretical scholarship on topics concerning criminal procedure and evidence, from any disciplinary perspective. Covered topics include: individual criminal rights, Fourth Amendment rights, Fifth Amendment rights, judicial control of the police in criminal cases, search and seizure, electronic eavesdropping, wiretapping, interrogation, confessions, lineups, identification, bail, and preventive detention.Editor: Jeannine Bell, Indiana University" [ref=e882] [cursor=pointer]':
+                - cell [ref=e883]
+                - 'cell "Law & Society: Criminal Procedure eJournal" [ref=e885]':
+                  - generic [ref=e887]:
+                    - text: "Law & Society:"
+                    - emphasis [ref=e888]: Criminal
+                    - text: Procedure eJour
+                    - emphasis [ref=e889]: nal
+                - 'cell "This area includes content focused on empirical or theoretical scholarship on topics concerning criminal procedure and evidence, from any disciplinary perspective. Covered topics include: individual criminal rights, Fourth Amendment rights, Fifth Amendment rights, judicial control of the police in criminal cases, search and seizure, electronic eavesdropping, wiretapping, interrogation, confessions, lineups, identification, bail, and preventive detention.Editor: Jeannine Bell, Indiana University" [ref=e890]':
+                  - generic [ref=e892]:
+                    - text: This area includes content focused on empirical or theore
+                    - emphasis [ref=e893]: tic
+                    - text: al scholarship on topics concerning
+                    - emphasis [ref=e894]: criminal
+                    - text: procedure and evidence, from any discipl
+                    - emphasis [ref=e895]: ina
+                    - text: "ry perspective. Covered topics include: individual"
+                    - emphasis [ref=e896]: criminal
+                    - text: rights, Fourth Amendment rights, Fifth Amendment rights, judicial control of the pol
+                    - emphasis [ref=e897]: ice
+                    - text: in
+                    - emphasis [ref=e898]: criminal
+                    - text: "cases, search and seizure, electronic eavesdropping, wiretapping, interrogation, confessions, lineups, identification, bail, and preventive detention.Editor: Jeannine Bell, Indiana University"
+              - row "Juvenile Justice eJournal This area includes content that engages with the analysis of juvenile and youth justice systems, law, policy, and practice aimed at protecting or regulating non-adult offenders. Topics can include juvenile detention, the school to prison pipeline, and diversion or intervention programs." [ref=e899] [cursor=pointer]:
+                - cell [ref=e900]
+                - cell "Juvenile Justice eJournal" [ref=e902]:
+                  - generic [ref=e904]:
+                    - text: Juvenile
+                    - emphasis [ref=e905]: Justice
+                    - text: eJour
+                    - emphasis [ref=e906]: nal
+                - cell "This area includes content that engages with the analysis of juvenile and youth justice systems, law, policy, and practice aimed at protecting or regulating non-adult offenders. Topics can include juvenile detention, the school to prison pipeline, and diversion or intervention programs." [ref=e907]:
+                  - generic [ref=e909]:
+                    - text: This area includes content that engages with the a
+                    - emphasis [ref=e910]: nal
+                    - text: ysis of juvenile and youth
+                    - emphasis [ref=e911]: justice
+                    - text: systems, law, policy, and prac
+                    - emphasis [ref=e912]: tice
+                    - text: aimed at protecting or regulating non-adult offenders. Topics can include juvenile detention, the school to prison pipeline, and diversion or intervention programs.
+              - row "Criminology eJournal This area includes content that focuses broadly on the sociological and academic study of crime. This includes theoretical issues related to the etiology of criminal behavior and victimization, reactions to crime by the public, and comparisons of crime issues across cultures." [ref=e913] [cursor=pointer]:
+                - cell [ref=e914]
+                - cell "Criminology eJournal" [ref=e916]:
+                  - generic [ref=e918]:
+                    - emphasis [ref=e919]: Crimin
+                    - text: ology eJour
+                    - emphasis [ref=e920]: nal
+                - cell "This area includes content that focuses broadly on the sociological and academic study of crime. This includes theoretical issues related to the etiology of criminal behavior and victimization, reactions to crime by the public, and comparisons of crime issues across cultures." [ref=e921]:
+                  - generic [ref=e923]:
+                    - text: This area includes content that focuses broadly on the sociological and academic study of
+                    - emphasis [ref=e924]: crim
+                    - text: e. This includes theore
+                    - emphasis [ref=e925]: tic
+                    - text: al issues related to the etiology of
+                    - emphasis [ref=e926]: criminal
+                    - text: behavior and vict
+                    - emphasis [ref=e927]: imi
+                    - text: zation, reactions to
+                    - emphasis [ref=e928]: crim
+                    - text: e by the public, and comparisons of
+                    - emphasis [ref=e929]: crim
+                    - text: e issues across cultures.
+          - separator [ref=e508]
+          - heading "Browse SSRN Classifications" [level=3] [ref=e509]
+          - list [ref=e511]:
+            - listitem [ref=e512]:
+              - generic [ref=e513]:
+                - checkbox "Applied Sciences" [disabled] [ref=e515]
+                - generic [ref=e524] [cursor=pointer]: Applied Sciences
+            - listitem [ref=e525]:
+              - generic [ref=e526]:
+                - checkbox "Health Sciences" [disabled] [ref=e528]
+                - generic [ref=e537] [cursor=pointer]: Health Sciences
+            - listitem [ref=e538]:
+              - generic [ref=e539]:
+                - checkbox "Humanities" [disabled] [ref=e541]
+                - generic [ref=e550] [cursor=pointer]: Humanities
+            - listitem [ref=e551]:
+              - generic [ref=e552]:
+                - checkbox "Life Sciences" [disabled] [ref=e554]
+                - generic [ref=e563] [cursor=pointer]: Life Sciences
+            - listitem [ref=e564]:
+              - generic [ref=e565]:
+                - checkbox "Physical Sciences" [disabled] [ref=e567]
+                - generic [ref=e576] [cursor=pointer]: Physical Sciences
+            - listitem [ref=e577]:
+              - generic [ref=e578]:
+                - checkbox "Social Sciences" [disabled] [ref=e580]
+                - generic [ref=e589] [cursor=pointer]: Social Sciences
+          - separator [ref=e590]
+          - button "Save" [ref=e591]:
+            - generic [ref=e593]: Save
+          - button "Previous Step" [ref=e594]:
+            - generic [ref=e596]: Previous Step
+          - button "Next Step" [ref=e597]:
+            - generic [ref=e599]: Next Step
+        - generic [ref=e134]:
+          - heading "Submission Progress" [level=2] [ref=e135]
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - generic [ref=e139]: "!"
+              - button "warning Upload Submission" [ref=e378]: Upload Submission
+            - button "complete Confirm Key Submission Details" [ref=e480]: Confirm Key Submission Details
+            - button "complete Author Information" [ref=e601]: Author Information
+            - generic [ref=e153]:
+              - generic [ref=e154]: "4"
+              - button "selected Classify Your Submission" [ref=e602]: Classify Your Submission
+            - generic [ref=e158]:
+              - generic [ref=e159]: "5"
+              - button "initial Research Integrity" [ref=e603]: Research Integrity
+            - generic [ref=e163]:
+              - generic [ref=e164]: "6"
+              - button "disable Review and Submit" [disabled] [ref=e165]: Review and Submit
+          - paragraph [ref=e930]: Auto-saving in progress...
+      - region "Notifications (F8)":
+        - list

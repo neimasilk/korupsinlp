@@ -1,6 +1,21 @@
-# Handoff — Session 22 (2026-08-05) → Next
+# Handoff — Session 23 (2026-08-11) → Next
 
-## Status: **G4 EDITOR-SIM AJC HIJAU — SEND TO REVIEW.** Dijalankan sesuai prosedur gate:
+## Status: **SEMUA GATE HIJAU — Paper 4 SIAP SUBMIT ke AJC.** G3 + G5 ditutup 11 Agt:
+**Go Frendi Gunawan ditambahkan sebagai CO-AUTHOR** (keputusan user). Co-author membaca draft &
+menyetujui = sinyal eksternal G3(b) + pembaca manusia G5. Perubahan: title page (2 penulis) +
+Author contributions + cover letter (I→We, signature 2 penulis) + de-anonimisasi "Author (2026a/b/c)"
+→ "Amien (2026a/b/c)" + referensi 2026b dikoreksi ([under review] → SSRN 6574140, CLSC desk-reject
+22 Mei). DOCX/PDF di-rebuild (pandoc xelatex + Times New Roman; glyph ≈,²,–,§ terverifikasi). D30.
+
+**Sisa = AKSI USER (submit):** (1) login portal Springer EM AJC; (2) upload manuscript (DOCX atau PDF
+`reports/paper4_draft.*`) + cover letter (`reports/paper4_cover_letter.md`); (3) isi metadata —
+2 authors: Mukhlis Amien (UBHINUS) + Go Frendi Gunawan (State Alchemists); (4) klasifikasi + abstract
+(di cover letter) + keywords. **Ingat**: angka final = ronde-9 (n=262, elasticity 0.124/0.145); jangan
+pakai SSRN metadata lama (n=291/0.109 — basi). Red flag editor (5) = pertanyaan reviewer, bukan blocker.
+
+### Riwayat — Session 22 (2026-08-05)
+
+## Status (s22): **G4 EDITOR-SIM AJC HIJAU — SEND TO REVIEW.** Dijalankan sesuai prosedur gate:
 agent SEGAR tanpa konteks pembelaan, diberi HANYA abstrak ronde-9 + cover letter baru
 (`reports/paper4_cover_letter.md`) + aims&scope AJC → verdict **SEND TO REVIEW** (D29,
 transkrip `reports/g4_editor_sim_ajc.md`). Cover letter Paper 4 dibuat (template Paper 2,

@@ -1,0 +1,124 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e167]:
+          - button "More" [ref=e169]:
+            - generic [ref=e171]: More
+    - button "Search" [ref=e46]
+    - link "Shopping Cart" [ref=e48] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e175]: MA
+  - main [ref=e53]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e59]:
+          - heading "Your submission has been received. Thank you." [level=1] [ref=e1541]: Your submission has been received. Thank you.
+          - table [ref=e1543]:
+            - rowgroup [ref=e1544]:
+              - 'row "Title: Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences" [ref=e1545]':
+                - cell "Title:" [ref=e1546]:
+                  - heading "Title:" [level=3] [ref=e1547]
+                - 'cell "Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences" [ref=e1548]':
+                  - 'heading "Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Analysis of Indonesian Corruption Sentences" [level=4] [ref=e1549]'
+              - 'row "Content format: Paper" [ref=e1550]':
+                - cell "Content format:" [ref=e1551]:
+                  - heading "Content format:" [level=3] [ref=e1552]
+                - cell "Paper" [ref=e1553]:
+                  - heading "Paper" [level=4] [ref=e1554]
+              - 'row "Author(s): Mukhlis Amien: Affiliation not provided to SSRN" [ref=e1555]':
+                - cell "Author(s):" [ref=e1556]:
+                  - heading "Author(s):" [level=3] [ref=e1557]
+                - 'cell "Mukhlis Amien: Affiliation not provided to SSRN" [ref=e1558]': "Mukhlis Amien: Affiliation not provided to SSRN"
+              - 'row "SSRN Abstract ID: 6574140" [ref=e1559]':
+                - cell "SSRN Abstract ID:" [ref=e1560]:
+                  - heading "SSRN Abstract ID:" [level=3] [ref=e1561]
+                - cell "6574140" [ref=e1562]:
+                  - heading "6574140" [level=4] [ref=e1563]
+              - 'row "Find your submission: You can review your submission''s status on your My Papers page or the SSRN User HQ If your submission qualifies, you can view your abstract while it is under review at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6574140 To revisit your submission''s abstract page, please save the URL above." [ref=e1564]':
+                - 'cell "Find your submission: You can review your submission''s status on your My Papers page or the SSRN User HQ If your submission qualifies, you can view your abstract while it is under review at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6574140 To revisit your submission''s abstract page, please save the URL above." [ref=e1565]':
+                  - heading "Find your submission:" [level=3] [ref=e1566]
+                  - list [ref=e1567]:
+                    - listitem [ref=e1568]:
+                      - text: You can review your submission's status on your
+                      - link "My Papers page" [ref=e1569] [cursor=pointer]:
+                        - /url: https://hq.ssrn.com/submissions/MyPapers.cfm?partid=11147389
+                        - generic [ref=e1571]: My Papers page
+                      - text: or the
+                      - link "SSRN User HQ" [ref=e1572] [cursor=pointer]:
+                        - /url: https://hq.ssrn.com/UserHome.cfm
+                        - generic [ref=e1574]: SSRN User HQ
+                    - listitem [ref=e1575]:
+                      - text: "If your submission qualifies, you can view your abstract while it is under review at:"
+                      - link "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6574140" [ref=e1576] [cursor=pointer]:
+                        - /url: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6574140
+                        - generic [ref=e1578]: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6574140
+                    - listitem [ref=e1579]: To revisit your submission's abstract page, please save the URL above.
+              - row "What happens next? Our staff will review your submission for completeness. You will receive an email from us as soon as the review is complete." [ref=e1580]:
+                - cell "What happens next? Our staff will review your submission for completeness. You will receive an email from us as soon as the review is complete." [ref=e1581]:
+                  - heading "What happens next?" [level=3] [ref=e1582]
+                  - paragraph [ref=e1583]:
+                    - text: Our staff will review your submission for completeness. You will receive an email from us as soon as the
+                    - link "review" [ref=e1584] [cursor=pointer]:
+                      - /url: https://service.elsevier.com/app/answers/detail/a_id/39255/supporthub/ssrn/p/16539/
+                      - generic [ref=e1586]: review
+                    - text: is complete.
+              - row "Share your submission Take this opportunity to share your submission on your social networks. twitter / x facebook linkedin" [ref=e1587]:
+                - cell "Share your submission Take this opportunity to share your submission on your social networks. twitter / x facebook linkedin" [ref=e1588]:
+                  - heading "Share your submission" [level=3] [ref=e1589]
+                  - paragraph [ref=e1590]: Take this opportunity to share your submission on your social networks.
+                  - button "twitter / x" [ref=e1591]
+                  - button "facebook" [ref=e1593]
+                  - button "linkedin" [ref=e1595]
+              - row "Contact If you have any questions regarding your submission, visit the SSRN Support Center ." [ref=e1597]:
+                - cell "Contact If you have any questions regarding your submission, visit the SSRN Support Center ." [ref=e1598]:
+                  - heading "Contact" [level=3] [ref=e1599]
+                  - paragraph [ref=e1600]:
+                    - text: If you have any questions regarding your submission, visit
+                    - link "the SSRN Support Center" [ref=e1601] [cursor=pointer]:
+                      - /url: https://service.elsevier.com/app/home/supporthub/ssrn/
+                      - generic [ref=e1603]: the SSRN Support Center
+                    - text: .
+              - row "Find the right journal to submit your paper Match your title and abstract on Journal Finder to find a recommended Elsevier journal for your preprint and submit today." [ref=e1604]:
+                - cell "Find the right journal to submit your paper Match your title and abstract on Journal Finder to find a recommended Elsevier journal for your preprint and submit today." [ref=e1605]:
+                  - heading "Find the right journal to submit your paper" [level=3] [ref=e1606]
+                  - paragraph [ref=e1607]: Match your title and abstract on Journal Finder to find a recommended Elsevier journal for your preprint and submit today.
+          - button "Get journal recommendations" [ref=e1608]:
+            - generic [ref=e1610]: Get journal recommendations
+          - button "Go to My Papers" [ref=e1611]:
+            - generic [ref=e1613]: Go to My Papers
+        - generic [ref=e134]:
+          - heading "Submission Progress" [level=2] [ref=e135]
+          - generic [ref=e136]:
+            - button "complete Upload Submission" [ref=e1539]: Upload Submission
+            - button "complete Confirm Key Submission Details" [ref=e480]: Confirm Key Submission Details
+            - button "complete Author Information" [ref=e601]: Author Information
+            - button "complete Classify Your Submission" [ref=e1189]: Classify Your Submission
+            - button "complete Research Integrity" [ref=e1317]: Research Integrity
+            - button "complete Review and Submit" [ref=e1615]: Review and Submit
+      - region "Notifications (F8)":
+        - list

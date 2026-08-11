@@ -1,0 +1,103 @@
+- generic:
+  - generic:
+    - generic:
+      - banner:
+        - generic [ref=e1]:
+          - link "Skip to main content" [ref=e2] [cursor=pointer]:
+            - /url: "#"
+          - generic [ref=e3]:
+            - generic [ref=e4] [cursor=pointer]:
+              - generic [ref=e5]: Mukhlis Amien
+              - text: "|"
+            - link "Logout" [ref=e8] [cursor=pointer]:
+              - /url: logout.asp
+          - generic [ref=e9]:
+            - link "Editorial Manager" [ref=e10] [cursor=pointer]:
+              - /url: http://www.editorialmanager.com/
+              - img "Editorial Manager" [ref=e11]
+            - img [ref=e13]
+          - banner [ref=e15]: Crime, Law and Social Change
+      - navigation:
+        - menu [ref=e17]:
+          - menuitem "Home" [ref=e18] [cursor=pointer]:
+            - link "Home" [ref=e19]:
+              - /url: mainpage.html
+          - menuitem "Main Menu" [ref=e20] [cursor=pointer]:
+            - link "Main Menu" [ref=e21]:
+              - /url: manuscript_status.asp
+          - menuitem "Submit a Manuscript" [ref=e22] [cursor=pointer]:
+            - link "Submit a Manuscript" [ref=e23]:
+              - /url: submit_manuscript.asp
+          - menuitem "About" [ref=e24] [cursor=pointer]:
+            - generic [ref=e26]: About
+          - menuitem "Help" [ref=e27] [cursor=pointer]:
+            - generic [ref=e29]: Help
+    - iframe [active] [ref=e31]:
+      - generic [ref=f7e3]:
+        - generic:
+          - generic:
+            - list:
+              - listitem [ref=f7e4]:
+                - text: 
+                - generic [ref=f7e5] [cursor=pointer]:
+                  - text: Article Type
+                  - text: Selection
+              - listitem [ref=f7e6]:  Attach Files
+              - listitem [ref=f7e7]:
+                - text: 
+                - generic [ref=f7e8] [cursor=pointer]:
+                  - text: General
+                  - text: Information
+              - listitem [ref=f7e9]:
+                - text: 
+                - generic [ref=f7e10] [cursor=pointer]:
+                  - text: Additional
+                  - text: Information
+              - listitem [ref=f7e11]:  Comments
+              - listitem [ref=f7e12]:
+                - text: 
+                - generic [ref=f7e13] [cursor=pointer]:
+                  - text: Manuscript
+                  - text: Data
+        - generic [ref=f7e15]:
+          - generic [ref=f7e16]: Please provide the requested information.
+          - generic [ref=f7e17]:
+            - link "Insert Special Character" [ref=f7e18] [cursor=pointer]:
+              - /url: javascript:popup_specialChars('cris');
+            - tablist [ref=f7e19]:
+              - generic [ref=f7e20]:
+                - tab "Classifications" [expanded] [selected] [ref=f7e21] [cursor=pointer]: Classifications
+                - tabpanel "Classifications" [ref=f7e23]:
+                  - generic [ref=f7e25]:
+                    - generic [ref=f7e26]: Please identify your submission's areas of interest and specialization by selecting one or more classifications.
+                    - generic [ref=f7e27]:
+                      - generic [ref=f7e28]:
+                        - text: Required
+                        - generic [ref=f7e29]: 
+                      - text: Select 1 or more Classifications
+                      - table [ref=f7e31]:
+                        - rowgroup [ref=f7e32]:
+                          - 'row "5: Political corruption by nation, region, type" [ref=f7e33]':
+                            - 'cell "5: Political corruption by nation, region, type" [ref=f7e34]':
+                              - text: "5:"
+                              - link "Political corruption by nation, region, type" [ref=f7e35] [cursor=pointer]:
+                                - /url: javascript:popupClassificationDetail(5)
+                          - 'row "7: Control systems - reactions to crime and deviance - police, courts, regulators, inspectors, corrections and penology" [ref=f7e36]':
+                            - 'cell "7: Control systems - reactions to crime and deviance - police, courts, regulators, inspectors, corrections and penology" [ref=f7e37]':
+                              - text: "7:"
+                              - link "Control systems - reactions to crime and deviance - police, courts, regulators, inspectors, corrections and penology" [ref=f7e38] [cursor=pointer]:
+                                - /url: javascript:popupClassificationDetail(7)
+                          - 'row "8: Sentencing and court procedures" [ref=f7e39]':
+                            - 'cell "8: Sentencing and court procedures" [ref=f7e40]':
+                              - text: "8:"
+                              - link "Sentencing and court procedures" [ref=f7e41] [cursor=pointer]:
+                                - /url: javascript:popupClassificationDetail(8)
+                      - button "Add Classifications" [ref=f7e42]
+            - generic [ref=f7e43]:
+              - button " Back" [ref=f7e44]:
+                - generic [ref=f7e45]: 
+                - text: Back
+              - button " Proceed" [ref=f7e46]:
+                - generic [ref=f7e47]: 
+                - text: Proceed
+    - contentinfo

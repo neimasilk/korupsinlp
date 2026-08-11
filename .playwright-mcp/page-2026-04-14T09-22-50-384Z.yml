@@ -1,0 +1,94 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e167]:
+          - button "More" [ref=e169]:
+            - generic [ref=e171]: More
+    - button "Search" [ref=e46]
+    - link "Shopping Cart" [ref=e48] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e175]: MA
+  - main [ref=e53]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e59]:
+          - paragraph [ref=e1319]:
+            - generic [ref=e1320]:
+              - text: If you would like to submit to the Research Paper Series associated with your institution, please click
+              - link "here" [ref=e1321] [cursor=pointer]:
+                - /url: https://cdn.ssrn.com/ssrn-pages/submission/rpssubmissions
+                - generic [ref=e1323]: here
+              - text: .
+          - 'heading "Step 1: Upload Submission" [level=1] [ref=e1324]'
+          - paragraph [ref=e1325]: Please upload the PDF file for your paper, and we'll extract the title, abstract and keywords for your review.
+          - generic [ref=e1327]:
+            - generic [ref=e1330]: Upload PDF
+            - generic [ref=e1333]:
+              - generic "paper2_draft.pdf" [ref=e1335]:
+                - generic [ref=e1337]: paper2_draft.pdf
+              - button "delete" [ref=e1338]
+          - group "Are you the author, or are you submitting on behalf of someone else?" [ref=e1342]:
+            - generic [ref=e1346]: Are you the author, or are you submitting on behalf of someone else?
+            - generic [ref=e1347]:
+              - generic [ref=e1348]:
+                - radio "I am the Author" [checked] [ref=e1349] [cursor=pointer]
+                - generic [ref=e1352]: I am the Author
+              - generic [ref=e1353]:
+                - radio "I am submitting on behalf of someone else" [ref=e1354] [cursor=pointer]
+                - generic [ref=e1357]: I am submitting on behalf of someone else
+          - heading "Content Format" [level=2] [ref=e1358]
+          - paragraph [ref=e1359]: What is the format of the work you are submitting today - is it a paper, a book chapter or something else? Let us know in the drop down below.
+          - generic [ref=e1365]:
+            - generic [ref=e1366]: Paper
+            - combobox "Searchable list" [ref=e1368]
+          - heading "Content Type" [level=2] [ref=e1372]
+          - paragraph [ref=e1373]: What is the status of the research you are submitting today - is it a preprint, a published article or something else? Let us know in the drop down below.
+          - generic [ref=e1379]:
+            - generic [ref=e1380]: Select an Item
+            - combobox "Searchable list" [ref=e1382]
+          - generic [ref=e1387]: Content Type is mandatory
+          - button "Save" [ref=e1388]:
+            - generic [ref=e1390]: Save
+          - button "Next Step" [ref=e1391]:
+            - generic [ref=e1393]: Next Step
+          - button "Back to Review" [ref=e1394]:
+            - generic [ref=e1396]: Back to Review
+        - generic [ref=e134]:
+          - heading "Submission Progress" [level=2] [ref=e135]
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - generic [ref=e139]: "1"
+              - button "selected Upload Submission" [ref=e1397]: Upload Submission
+            - button "complete Confirm Key Submission Details" [ref=e480]: Confirm Key Submission Details
+            - button "complete Author Information" [ref=e601]: Author Information
+            - button "complete Classify Your Submission" [ref=e1189]: Classify Your Submission
+            - button "complete Research Integrity" [ref=e1317]: Research Integrity
+            - button "complete Review and Submit" [ref=e1399]: Review and Submit
+          - paragraph [ref=e1400]: Auto-saving in progress...
+      - region "Notifications (F8)":
+        - list

@@ -1,0 +1,110 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#maincontent"
+  - banner [ref=e5]:
+    - link "SSRN Homepage" [ref=e6] [cursor=pointer]:
+      - /url: https://www.ssrn.com
+      - img [ref=e8]
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - generic "Product & Services" [ref=e14] [cursor=pointer]:
+            - generic [ref=e16]: Product & Services
+        - listitem [ref=e19]:
+          - link "Subscribe" [ref=e20] [cursor=pointer]:
+            - /url: https://www.ssrn.com/index.cfm/en/subscribe/
+            - generic [ref=e22]: Subscribe
+        - listitem [ref=e23]:
+          - link "Submit a paper" [ref=e24] [cursor=pointer]:
+            - /url: https://hq.ssrn.com/submission.cfm
+            - generic [ref=e26]: Submit a paper
+        - listitem [ref=e27]:
+          - link "Browse" [ref=e28] [cursor=pointer]:
+            - /url: https://papers.ssrn.com/sol3/DisplayJournalBrowse.cfm
+            - generic [ref=e30]: Browse
+        - listitem [ref=e31]:
+          - link "Blog" [ref=e32] [cursor=pointer]:
+            - /url: https://blog.ssrn.com/
+            - generic [ref=e34]: Blog
+        - listitem [ref=e167]:
+          - button "More" [ref=e169]:
+            - generic [ref=e171]: More
+    - button "Search" [ref=e46]
+    - link "Shopping Cart" [ref=e48] [cursor=pointer]:
+      - /url: https://papers.ssrn.com/sol3/ShoppingCart.cfm
+    - img "Avatar" [ref=e175]: MA
+  - main [ref=e53]:
+    - generic [ref=e55]:
+      - generic [ref=e57]:
+        - generic [ref=e59]:
+          - 'heading "Step 5: Research Integrity" [level=1] [ref=e1109]'
+          - heading "Declaration of Interest Statement" [level=2] [ref=e1110]
+          - paragraph [ref=e1111]: All authors should briefly state any personal or financial relationship with other people or organizations that may have or could be perceived to have influenced their study.
+          - generic [ref=e1113]:
+            - generic [ref=e1114]:
+              - generic [ref=e1117]: Declaration of Interest
+              - generic [ref=e1118]: (optional)
+            - textbox "Declaration of Interest" [ref=e1121]
+            - generic [ref=e1123]:
+              - text: 0/4000
+              - generic [ref=e1125]: characters typed
+          - heading "Funder statement" [level=2] [ref=e1126]
+          - paragraph [ref=e1127]: Briefly state who/what funded the research.
+          - generic [ref=e1129]:
+            - generic [ref=e1130]:
+              - generic [ref=e1133]: Funder
+              - generic [ref=e1134]: (optional)
+            - textbox "Funder" [ref=e1137]
+            - generic [ref=e1139]:
+              - text: 0/4000
+              - generic [ref=e1141]: characters typed
+          - heading "Ethics approval statement" [level=2] [ref=e1142]
+          - paragraph [ref=e1143]: In studies with patients/participants, ethics approval must be given. For case studies, written consent is sufficient. Please provide a brief statement for whichever applies.
+          - generic [ref=e1145]:
+            - generic [ref=e1146]:
+              - generic [ref=e1149]: Ethics approval
+              - generic [ref=e1150]: (optional)
+            - textbox "Ethics approval" [ref=e1153]
+            - generic [ref=e1155]:
+              - text: 0/4000
+              - generic [ref=e1157]: characters typed
+          - heading "Terms & conditions" [level=2] [ref=e1158]
+          - paragraph [ref=e1159]: "NOTE: You do not transfer copyright for any papers (or other documents) you post on SSRN. When you upload a paper, you give SSRN the non-exclusive right to post and distribute your paper as described in the \"SSRN Products and Services\" section of the FAQ. You retain the right to remove your paper from SSRN at any time."
+          - paragraph [ref=e1160]:
+            - text: When you provide material to SSRN and accept our
+            - link "Terms of Use Opens in new window" [ref=e1161] [cursor=pointer]:
+              - /url: https://www.ssrn.com/en/index.cfm/terms-of-use/
+              - generic [ref=e1163]: Terms of Use
+              - generic: Opens in new window
+            - text: ", you confirm that your submission does not violate other parties’ copyright or other proprietary rights. You may post your paper to SSRN only if you are the copyright owner, have the copyright owner’s permission, are permitted to do so under your publishing agreement or the publisher’s copyright policies (see"
+            - generic [ref=e1166] [cursor=pointer]:
+              - generic [ref=e1168]: https://www.howcanishareit.com
+              - generic: Opens in new window
+            - text: for more information) or your institution’s license agreement or under a Creative Commons license. Generally, an author can convey this right, unless he or she has granted exclusive electronic rights to a publisher. If you have questions about copyright, please contact the publisher, your librarian or SSRN, and see our FAQ for more information.
+          - generic [ref=e1172]:
+            - checkbox "I have reviewed each file that I am uploading and I have the right to upload this file. I have read and agree to the SSRN Terms and Conditions." [ref=e1173] [cursor=pointer]
+            - generic [ref=e1178] [cursor=pointer]: I have reviewed each file that I am uploading and I have the right to upload this file. I have read and agree to the SSRN Terms and Conditions.
+          - button "Save" [ref=e1179]:
+            - generic [ref=e1181]: Save
+          - button "Previous Step" [ref=e1182]:
+            - generic [ref=e1184]: Previous Step
+          - button "Next Step" [ref=e1185] [cursor=pointer]:
+            - generic [ref=e1187]: Next Step
+        - generic [ref=e134]:
+          - heading "Submission Progress" [level=2] [ref=e135]
+          - generic [ref=e136]:
+            - generic [ref=e138]:
+              - generic [ref=e139]: "!"
+              - button "warning Upload Submission" [ref=e378]: Upload Submission
+            - button "complete Confirm Key Submission Details" [ref=e480]: Confirm Key Submission Details
+            - button "complete Author Information" [ref=e601]: Author Information
+            - button "complete Classify Your Submission" [ref=e1189]: Classify Your Submission
+            - generic [ref=e158]:
+              - generic [ref=e159]: "5"
+              - button "selected Research Integrity" [ref=e1190]: Research Integrity
+            - generic [ref=e163]:
+              - generic [ref=e164]: "6"
+              - button "initial Review and Submit" [ref=e1191]: Review and Submit
+          - paragraph [ref=e1192]: Auto-saving in progress
+      - region "Notifications (F8)":
+        - list

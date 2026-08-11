@@ -16,10 +16,14 @@ We believe this manuscript fits well within the scope of the *Asian Journal of C
 
 The manuscript has not been submitted elsewhere. Code and analysis scripts are available for reproducibility, and the underlying corpus is described with full documentation of its validation. A preprint version has been posted on SSRN (Abstract ID: 6580258).
 
-In accordance with Springer Nature's policy on AI-assisted tools, I disclose that Claude (Anthropic) was used as a computational research assistant for programming, literature search, and manuscript drafting. All analyses were independently verified through reproducible scripts, and I take full responsibility for all scientific claims and interpretations. Full details are provided in the Declarations section of the manuscript.
+In accordance with Springer Nature's policy on AI-assisted tools, we disclose that Claude (Anthropic) was used as a computational research assistant for programming, literature search, and manuscript drafting. All analyses were independently verified through reproducible scripts, and we take full responsibility for all scientific claims and interpretations. Full details are provided in the Declarations section of the manuscript.
 
 Sincerely,
 Mukhlis Amien
 Department of Informatics, Universitas Bhinneka Nusantara, Malang, Indonesia
 Email: amien@ubhinus.ac.id
 ORCID: 0000-0002-1848-167X
+
+Go Frendi Gunawan
+State Alchemists
+
