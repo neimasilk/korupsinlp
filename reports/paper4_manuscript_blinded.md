@@ -192,15 +192,6 @@ Our findings shift the focus of corruption sentencing reform from judges to pros
 
 The CorpusKorupsi dataset and analysis code are publicly available at [repository URL].
 
-## Declarations
-
-**Funding.** This research received no external funding.
-**Conflicts of interest.** The authors declare no conflicts of interest.
-**Ethics approval.** This study analyzes publicly available court documents published by the Indonesian Supreme Court. No human subjects were involved and no ethics approval was required.
-**Data availability.** The CorpusKorupsi structured dataset and analysis scripts will be made available upon publication.
-**Author contributions.** MA conceived the study, assembled and audited the corpus, and ran the statistical analyses. GFG contributed to the research design, the comparative benchmark, and manuscript revision. Both authors approved the final manuscript.
-**Use of AI-assisted tools.** The authors used Claude (Anthropic) as a computational research assistant for programming, statistical analysis, and manuscript drafting. All analyses were independently verified through reproducible scripts, and the authors take full responsibility for all scientific claims and interpretations.
-
 ## References
 
 Ashworth, A. (2015). *Sentencing and Criminal Justice* (6th ed.). Cambridge University Press.
