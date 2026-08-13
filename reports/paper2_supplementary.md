@@ -91,16 +91,16 @@ Every subset containing pasal_2 yields positive improvement. No subset without p
 
 Model 3 (vonis ~ tuntutan + pasal_2 + pasal_3):
 
-| Subsample | n | b(Pasal 2) | 95% CI | p |
-|-----------|---|-----------|--------|---|
-| 50% | 183 | +0.323 | [-0.296, +0.942] | 0.305 |
-| 60% | 220 | +0.304 | [-0.263, +0.872] | 0.292 |
-| 70% | 256 | +0.494 | [-0.028, +1.016] | 0.063 |
-| 80% | 293 | +0.660 | [+0.158, +1.162] | 0.010 |
-| 90% | 330 | +0.614 | [+0.133, +1.096] | 0.013 |
-| 100% | 367 | +0.730 | [+0.267, +1.192] | 0.002 |
+| Subsample | n | b(Pasal 2) | p |
+|-----------|---|-----------|---|
+| 50% | 187 | +0.831 | 0.006 |
+| 60% | 224 | +0.733 | 0.009 |
+| 70% | 261 | +0.811 | 0.001 |
+| 80% | 299 | +0.881 | <0.001 |
+| 90% | 336 | +0.732 | 0.001 |
+| 100% | 374 | +0.905 | <0.001 |
 
-The coefficient reaches significance at 80% of the corpus (n=293) and strengthens progressively. The higher sample requirement reflects the additional Pasal 3 parameter in Model 3.
+The coefficient is significant at every tested subsample size, from 50% (n=187, p=0.006) through 100% (n=374, p<0.001), and does not systematically strengthen or weaken with corpus size.
 
 ### S7. Model Robustness Across Estimators
 
