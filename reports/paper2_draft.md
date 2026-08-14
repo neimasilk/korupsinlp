@@ -256,14 +256,6 @@ The CorpusKorupsi dataset and analysis code are publicly available at [repositor
 
 ## Declarations
 
-**Ethical Approval.** Not applicable. This study analyzes publicly available court documents published by the Indonesian Supreme Court (*Mahkamah Agung*). No human subjects were involved and no ethics approval was required.
-
-**Informed Consent.** Not applicable.
-
-**Statement Regarding Research Involving Human Participants and/or Animals.** Not applicable. This research does not involve human participants or animals. All data consist of publicly available legal documents.
-
-**Funding.** This research received no external funding.
-
 **Author's Contribution.** Sole author; responsible for all aspects of this research including conception and design, data collection and extraction, computational analysis, and manuscript preparation.
 
 **Competing Interests.** The author declares no competing interests.

@@ -40,3 +40,13 @@ Charge Type, Judicial Opacity, and the Limits of Prediction: A Computational Ana
 - Conflicts of interest: None
 - Data availability: Code and structured data at [repository URL]
 - Ethics: Analysis of publicly available court documents; no human subjects
+
+> **Technical check AI & Law (14 Agt 2026).** Editorial support (Bhuvaneswari Rangasamy)
+> minta ethics statement + funding statement DIHAPUS dari badan naskah (alasan: menjaga
+> anonimitas double-anonymous review) dan diisikan di field submission system.
+> Yang dihapus dari `paper2_draft.docx`/`.md`: *Ethical Approval*, *Informed Consent*,
+> *Statement Regarding Research Involving Human Participants and/or Animals*, *Funding*.
+> Yang TETAP di naskah: Author's Contribution, Competing Interests, Availability of Data
+> and Materials, Use of AI-Assisted Tools ("do not change anything else").
+> Isi yang dipindah ke SNAPP: Ethics approval = *not applicable, publicly available court
+> documents, no human subjects*; Funding = *no funding received*.
